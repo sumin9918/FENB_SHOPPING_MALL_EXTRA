@@ -7,7 +7,7 @@ const PATH = {
   DETAIL: '/products/:id',
   ORDER: '/order',
   ORDER_COMPLETE: '/order/ordercomplete',
-  WishList: '/wishlist',
+  WISHLIST: '/wishlist',
 };
 
 export default PATH;
