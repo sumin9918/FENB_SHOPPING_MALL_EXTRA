@@ -28,3 +28,4 @@
 | img      | added/updated images          |
 | init     | added initial files           |
 | ver      | updated version               |
+| chore    | add library                   |
