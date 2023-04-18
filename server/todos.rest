@@ -1,0 +1,70 @@
+GET http://localhost:8000/
+
+###
+
+GET http://localhost:8000/api/products
+
+###
+
+GET http://localhost:8000/api/users
+
+###
+
+PATCH http://localhost:8000/api/users/1
+content-type: application/json
+
+{ "favorite" : true }
+
+###
+
+PATCH http://localhost:8000/api/users/1
+content-type: application/json
+
+{ "favorite" : false }
+
+###
+
+POST http://localhost:8000/api/products
+content-type: application/json
+
+{
+  "product": { 
+    "brand": "addias",
+    "name": "air force",
+    "price": 200000,
+    "color": "white",
+    "description": "에어포스",
+    "gender": "unisex",
+    "category": "sneakers",
+    "imgURL": "/images/products/sneakers",
+    "dateOfManufacture": "2023-04-16"
+  },
+  "sizes": [
+    {"size": 230, "stock": 8},
+    {"size": 235, "stock": 11},
+    {"size": 240, "stock": 2},
+    {"size": 245, "stock": 3},
+    {"size": 250, "stock": 7},
+    {"size": 255, "stock": 1},
+    {"size": 260, "stock": 21},
+    {"size": 265, "stock": 1},
+    {"size": 270, "stock": 18},
+    {"size": 275, "stock": 0},
+    {"size": 280, "stock": 19},
+    {"size": 285, "stock": 0}
+  ]
+}
+
+###
+
+POST http://localhost:8000/api/auth/signin
+content-type: application/json
+
+{ "email": "test@test.com", "password": "test"}
+
+###
+
+# DELETE http://localhost:8000/api/todos/3
+
+# ###
+# DELETE http://localhost:8000/api/todos?completed=true
