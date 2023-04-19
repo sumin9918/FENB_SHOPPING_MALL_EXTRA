@@ -1,4 +1,4 @@
-import { Navbar, Flex, Image, Tabs, Autocomplete, ActionIcon } from '@mantine/core';
+import { Navbar, Flex, Image, Tabs, Autocomplete, ActionIcon, Group, Stack } from '@mantine/core';
 import { BiSearch } from 'react-icons/bi';
 import { SlHandbag } from 'react-icons/sl';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
@@ -22,61 +22,79 @@ const topList = [
 
 const TopList = () => (
   <Navbar.Section>
-    <Flex justify="space-between" align="center">
-      <Link to={PATH.MAIN}>
-        <Image width={100} pl="1rem" src="images/logo/main.svg" alt="486" />
-      </Link>
-      <Flex gap="lg" align="center" direction="row" wrap="nowrap" fz="1.5rem">
-        {topList.map(({ kr, en }) => (
-          <Link key={en} to={PATH[en.toUpperCase()]}>
-            {kr}
-          </Link>
-        ))}
-        <ActionIcon size="xl">
-          <TbMoonFilled size="2.8rem" color="black" />
-        </ActionIcon>
-      </Flex>
+    <Flex gap="lg" align="center" justify="flex-end" fz="1.3rem" color="#222222">
+      {topList.map(({ kr, en }) => (
+        <Link key={en} to={PATH[en.toUpperCase()]}>
+          {kr}
+        </Link>
+      ))}
+      <ActionIcon size="xl">
+        <TbMoonFilled size="2.8rem" color="black" />
+      </ActionIcon>
     </Flex>
   </Navbar.Section>
 );
 
-const BottomList = () => (
-  <Navbar.Section grow mt="md">
+const MainList = () => (
+  <Navbar.Section>
+    <Flex justify="flex-end" align="center" gap="xl">
+      <Autocomplete
+        size="xl"
+        icon={<BiSearch size="2rem" />}
+        placeholder="제조사명, 상품명"
+        data={['서버데이터', '넣을', '예정', '입니다.']}
+        radius="xl"
+      />
+      <Link to={PATH.WISHLIST}>
+        <ActionIcon size="xl">
+          <BsFillSuitHeartFill size="2.8rem" color="tomato" />
+        </ActionIcon>
+      </Link>
+      <Link to={PATH.CART}>
+        <ActionIcon size="xl">
+          <SlHandbag size="2.8rem" />
+        </ActionIcon>
+      </Link>
+    </Flex>
+  </Navbar.Section>
+);
+
+const BottomList = ({ isBottomShow }) => (
+  <Navbar.Section grow mt="md" w="1200px" maw="1200px" m="auto" h="auto">
     <Flex justify="space-between">
-      <Tabs>
-        <Tabs.List sx={{ border: 'none' }}>
-          {categoryList.map(({ kr, en }) => (
-            <Tabs.Tab key={en} value={en} fz="1.6rem">
-              <Link to={PATH.CATEGORY}>{kr}</Link>
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
-      </Tabs>
-      <Flex align="center" gap="md">
-        <Autocomplete
-          icon={<BiSearch />}
-          placeholder="제조사명, 상품명"
-          data={['서버데이터', '넣을', '예정', '입니다.']}
-        />
-        <Link to={PATH.WISHLIST}>
-          <ActionIcon size="xl">
-            <BsFillSuitHeartFill size="2.8rem" color="red" />
-          </ActionIcon>
-        </Link>
-        <Link to={PATH.CART}>
-          <ActionIcon size="xl">
-            <SlHandbag size="2.8rem" />
-          </ActionIcon>
-        </Link>
-      </Flex>
+      {isBottomShow && (
+        <Tabs
+          color="dark"
+          sx={{
+            'button[data-active]': {
+              fontWeight: 'bold',
+            },
+          }}>
+          <Tabs.List sx={{ border: 'none' }}>
+            {categoryList.map(({ kr, en }) => (
+              <Tabs.Tab key={en} value={en} fz="1.6rem">
+                <Link to={PATH.CATEGORY}>{kr}</Link>
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+        </Tabs>
+      )}
     </Flex>
   </Navbar.Section>
 );
 
 const NavigationBar = ({ isBottomShow = true }) => (
-  <Navbar maw={1200} h="auto" m="auto" fz="1.2rem" sx={{ border: 'none' }}>
-    <TopList />
-    {isBottomShow && <BottomList />}
+  <Navbar height="auto" position={{ top: 0, left: 0, border: '1px solid #ced4da' }}>
+    <Group position="apart" spacing={0} w="1200px" m="auto">
+      <Link to={PATH.MAIN}>
+        <Image width={180} pl="1rem" src="images/logo/main.svg" alt="486" />
+      </Link>
+      <Stack>
+        <TopList />
+        <MainList />
+      </Stack>
+    </Group>
+    <BottomList isBottomShow={isBottomShow} />
   </Navbar>
 );
 
