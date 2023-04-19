@@ -60,7 +60,7 @@ content-type: application/json
 POST http://localhost:8000/api/auth/signin
 content-type: application/json
 
-{ "email": "test@test.com", "password": "test"}
+{ "email": "test@test.com", "password": "test123"}
 
 ###
 
