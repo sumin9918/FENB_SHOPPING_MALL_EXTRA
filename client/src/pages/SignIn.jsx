@@ -14,7 +14,7 @@ import { userState } from '../recoil/atoms';
 
 // styled emotion
 const SignUpLink = styled(Link)`
-  margin-left: 10px;
+  margin-left: 1rem;
 
   color: blue;
 
@@ -63,12 +63,14 @@ const InputContainer = ({ inputType, id, name, control, trigger, placeholder }) 
   return (
     <Container>
       <TextInput
-        size="xl"
-        mb={20}
+        w="40rem"
+        h="3.8rem"
+        // size="xl"
+        mb="3.5rem"
         type={inputType}
-        value={field.value}
-        placeholder={placeholder}
         label={name}
+        placeholder={placeholder}
+        value={field.value}
         autoComplete="off"
         onChange={handleChange}
         error={error && isDirty ? error.message : null}
@@ -125,28 +127,32 @@ const SignIn = () => {
   return (
     <Stack
       align="center"
+      h="75.5rem"
+      p="0"
+      m="0"
       sx={{
         input: {
+          padding: '0',
           fontSize: '1.6rem',
           border: 'none',
           borderBottomStyle: 'solid',
-          borderBottomWidth: '0.0625rem',
+          borderBottomWidth: '0.07rem',
           borderBottomColor: '#ced4da',
         },
         label: {
           fontSize: '1.6rem',
         },
         div: {
+          padding: '0',
           fontSize: '1.6rem',
         },
       }}>
       <h2>
         <Image
-          width={600}
-          mb={50}
-          maw={600}
+          width="40rem"
+          mb="2rem"
+          maw="60rem"
           mx="auto"
-          radius="md"
           src="images/logo/loginPageLogo.svg"
           alt="loginPageLogoImage"
         />
@@ -162,16 +168,16 @@ const SignIn = () => {
         />
         <InputContainer inputType="password" id="password" name="비밀번호" control={control} trigger={trigger} />
         <Button
-          w={500}
-          h={52}
+          w="40rem"
+          h="5.2rem"
+          p="0"
           color={!isValid ? 'gray' : 'dark'}
           radius="md"
-          size="lg"
           disabled={!isValid}
           onClick={handleSubmit(handleLogin)}>
           로그인
         </Button>
-        <Center mt={30}>
+        <Center mt="2rem">
           회원이 아니신가요?
           <SignUpLink to={'/signup'}>회원가입</SignUpLink>
         </Center>
