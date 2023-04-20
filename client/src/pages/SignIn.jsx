@@ -3,7 +3,6 @@ import axios from 'axios';
 import styled from '@emotion/styled';
 import { Button, Image, Stack, Center, Title } from '@mantine/core';
 import { notifications, Notifications } from '@mantine/notifications';
-
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
@@ -74,7 +73,7 @@ const SignIn = () => {
         color: 'red',
         autoClose: 2000,
         title: '알림',
-        message: error.response.data.error,
+        message: error.response.data.error ? error.response.data.error : error.message,
         sx: { div: { fontSize: '1.5rem' } },
       });
     }
