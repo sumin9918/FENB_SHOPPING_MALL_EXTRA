@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
 import { Button, Image, Stack, Center, Title } from '@mantine/core';
-import { notifications, Notifications } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
@@ -165,7 +165,6 @@ const SignUp = () => {
           <SignUpLink to={'/signup'}>회원가입</SignUpLink>
         </Center> */}
       </form>
-      <Notifications position="top-center" />
     </Stack>
   );
 };
