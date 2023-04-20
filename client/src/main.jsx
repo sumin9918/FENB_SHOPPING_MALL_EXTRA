@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <ReactQueryDevtools />
         <GlobalStyle />
         <App />
-        <Notifications position="top-center" />
+        {/* <Notifications position="top-center" /> */}
       </QueryClientProvider>
     </RecoilRoot>
   </React.StrictMode>

@@ -1,14 +1,15 @@
 import React from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
-import { TextInput, Button, Container, Image, Stack, Center, Title } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
+import { Button, Image, Stack, Center, Title } from '@mantine/core';
+import { notifications, Notifications } from '@mantine/notifications';
+
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { useForm, useController } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { debounce } from 'lodash';
+import { FormInputContainer } from '../components';
 import { userState } from '../recoil/atoms';
 // import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 
@@ -32,53 +33,6 @@ const validationSchema = z.object({
   email: z.string().email({ message: '이메일 주소를 정확히 입력해주세요.' }),
   password: z.string().regex(/^[A-Za-z0-9]{6,12}$/, { message: '영문 또는 숫자를 6~12자 입력하세요.' }),
 });
-
-// InputContainer Component
-const InputContainer = ({ inputType, id, name, control, trigger, placeholder, withAsterisk = false }) => {
-  const {
-    field,
-    fieldState: { isDirty, error },
-  } = useController({
-    name: id,
-    control,
-    defaultValue: '',
-  });
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkValidation = React.useCallback(
-    debounce(() => {
-      trigger(id);
-
-      if (id === 'password' && isDirty) trigger('confirmPassword');
-    }, 300),
-    [isDirty]
-  );
-
-  const handleChange = e => {
-    field.onChange(e);
-
-    checkValidation();
-  };
-
-  return (
-    <Container>
-      <TextInput
-        withAsterisk={withAsterisk}
-        w="40rem"
-        h="3.8rem"
-        // size="xl"
-        mb="3.5rem"
-        type={inputType}
-        label={name}
-        placeholder={placeholder}
-        value={field.value}
-        autoComplete="off"
-        onChange={handleChange}
-        error={error && isDirty ? error.message : null}
-      />
-    </Container>
-  );
-};
 
 // SignIn Component
 const SignIn = () => {
@@ -121,6 +75,7 @@ const SignIn = () => {
         autoClose: 2000,
         title: '알림',
         message: error.response.data.error,
+        sx: { div: { fontSize: '1.5rem' } },
       });
     }
   };
@@ -159,7 +114,7 @@ const SignIn = () => {
         />
       </Title>
       <form noValidate>
-        <InputContainer
+        <FormInputContainer
           inputType="text"
           id="email"
           name="이메일 주소"
@@ -167,7 +122,7 @@ const SignIn = () => {
           control={control}
           trigger={trigger}
         />
-        <InputContainer inputType="password" id="password" name="비밀번호" control={control} trigger={trigger} />
+        <FormInputContainer inputType="password" id="password" name="비밀번호" control={control} trigger={trigger} />
         <Button
           w="40rem"
           h="5.2rem"
@@ -183,6 +138,7 @@ const SignIn = () => {
           <SignUpLink to={'/signup'}>회원가입</SignUpLink>
         </Center>
       </form>
+      <Notifications position="top-center" />
     </Stack>
   );
 };
