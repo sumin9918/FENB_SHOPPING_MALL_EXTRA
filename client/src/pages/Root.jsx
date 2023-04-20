@@ -1,10 +1,11 @@
 import { Outlet } from 'react-router-dom';
-import { NavigationBar } from '../components';
+import { Footer, NavigationBar } from '../components';
 
 const Root = () => (
   <>
     <NavigationBar />
     <Outlet />
+    <Footer />
   </>
 );
 
