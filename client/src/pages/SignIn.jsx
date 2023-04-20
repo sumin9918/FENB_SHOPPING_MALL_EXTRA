@@ -10,13 +10,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { FormInputContainer } from '../components';
 import { userState } from '../recoil/atoms';
-// import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 
-// styled emotion
+// Styled Link
 const SignUpLink = styled(Link)`
   margin-left: 1rem;
 
-  color: blue;
+  color: black;
 
   &:visited {
     color: blue;

@@ -1,31 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import styled from '@emotion/styled';
-import { Button, Image, Stack, Center, Title } from '@mantine/core';
+import { Button, Stack, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { FormInputContainer } from '../components';
-import { userState } from '../recoil/atoms';
-// import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
-
-// styled emotion
-// const SignUpLink = styled(Link)`
-//   margin-left: 1rem;
-
-//   color: blue;
-
-//   &:visited {
-//     color: blue;
-//   }
-
-//   &:hover {
-//     color: purple;
-//   }
-// `;
 
 // zod Validation
 const validationSchema = z
@@ -42,10 +23,8 @@ const validationSchema = z
 
 // SignUp Component
 const SignUp = () => {
-  const setUsers = useSetRecoilState(userState);
-
   const navigate = useNavigate();
-  const { state } = useLocation();
+  // const { state } = useLocation();
 
   const {
     handleSubmit,
@@ -69,15 +48,9 @@ const SignUp = () => {
         password: data.password,
       });
 
-      setUsers({ ...response.data });
       console.log(response.data); // 서버 응답을 출력
 
       navigate('/signin');
-      // if (state) {
-      //   navigate(state);
-      // } else {
-      //   navigate('/signup');
-      // }
     } catch (error) {
       notifications.show({
         color: 'red',
@@ -160,10 +133,6 @@ const SignUp = () => {
           onClick={handleSubmit(handleSignUp)}>
           가입하기
         </Button>
-        {/* <Center mt="2rem">
-          회원이 아니신가요?
-          <SignUpLink to={'/signup'}>회원가입</SignUpLink>
-        </Center> */}
       </form>
     </Stack>
   );
