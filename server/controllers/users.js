@@ -1,17 +1,17 @@
 // Mock data
 let users = [
   {
-    email: 'test@test.com',
-    password: 'test',
-    name: '이동규',
+    email: "test@test.com",
+    password: "test123",
+    name: "이동규",
     favoriteIds: [2, 3, 4],
   },
 ];
 
 const defaultUser = {
-  email: '',
-  password: '',
-  name: '',
+  email: "",
+  password: "",
+  name: "",
   favoriteIds: [],
 };
 
@@ -32,7 +32,8 @@ const addFavoriteId = (id, favorite, decode) => {
   );
 };
 
-const findUser = (email, password) => users.find((user) => user.email === email && user.password === password);
+const findUser = (email, password) =>
+  users.find((user) => user.email === email && user.password === password);
 
 const getUsers = () => users;
 
