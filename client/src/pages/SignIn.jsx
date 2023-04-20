@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
-import { TextInput, Button, Container, Image, Stack, Center } from '@mantine/core';
+import { TextInput, Button, Container, Image, Stack, Center, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -148,7 +148,7 @@ const SignIn = () => {
           fontSize: '1.6rem',
         },
       }}>
-      <h2>
+      <Title order={2}>
         <Image
           width="40rem"
           mb="2rem"
@@ -157,7 +157,7 @@ const SignIn = () => {
           src="images/logo/loginPageLogo.svg"
           alt="loginPageLogoImage"
         />
-      </h2>
+      </Title>
       <form noValidate>
         <InputContainer
           inputType="text"
