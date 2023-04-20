@@ -34,7 +34,7 @@ const validationSchema = z.object({
 });
 
 // InputContainer Component
-const InputContainer = ({ inputType, id, name, control, trigger, placeholder }) => {
+const InputContainer = ({ inputType, id, name, control, trigger, placeholder, withAsterisk = false }) => {
   const {
     field,
     fieldState: { isDirty, error },
@@ -63,6 +63,7 @@ const InputContainer = ({ inputType, id, name, control, trigger, placeholder }) 
   return (
     <Container>
       <TextInput
+        withAsterisk={withAsterisk}
         w="40rem"
         h="3.8rem"
         // size="xl"
