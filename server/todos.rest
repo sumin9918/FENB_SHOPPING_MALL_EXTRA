@@ -1,3 +1,5 @@
+### 유저 정보 가져오기
+GET http://localhost:8000/api/users
 
 ### 상품리스트 가져오기
 GET http://localhost:8000/api/products
@@ -35,6 +37,20 @@ content-type: application/json
 
 // { "email" : "test@test.com" }
 { "email" : "new@new.com" }
+
+### 회원가입 확인
+POST http://localhost:8000/api/auth/signup
+content-type: application/json
+
+{
+  "email" : "test1@test.com",
+  "name": "이동규",
+  "phone": "010-1234-5678",
+  "password": "test123",
+  "mainAddress": "",
+  "detailAddress": "",
+  "postcode": ""
+}
 
 ### 장바구니에 상품 추가
 POST http://localhost:8000/api/carts/5

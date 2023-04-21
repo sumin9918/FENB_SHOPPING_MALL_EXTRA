@@ -3,10 +3,9 @@ const router = require('express').Router();
 
 const { getUsers, getUser } = require('../controllers/users');
 
-// router.get('/', (req, res) => {
-//   const { email, name } = getUsers();
-//   res.send({ email, name });
-// });
+router.get('/', (req, res) => {
+  res.send(getUsers());
+});
 
 router.get('/me', (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);

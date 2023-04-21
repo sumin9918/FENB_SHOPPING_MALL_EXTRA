@@ -57,6 +57,7 @@ const addAddress = ({ email, address }) => {
 
 const getUsers = () => users;
 const getUser = (email) => users.find((user) => user.email === email);
+const confirmUser = (email, password) => users.find((user) => user.email === email && user.password === password);
 
 const hasUser = (email, password) => users.some((user) => user.email === email && user.password === password);
 
@@ -68,5 +69,6 @@ module.exports = {
   hasUser,
   getUsers,
   getUser,
+  confirmUser,
   checkDuplicateEmail,
 };
