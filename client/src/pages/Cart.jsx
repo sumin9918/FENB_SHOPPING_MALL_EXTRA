@@ -109,8 +109,8 @@ const user = {
 };
 
 // 임시 atom
-const userState = atom({
-  key: 'userState',
+const cartState = atom({
+  key: 'cartState',
   default: user,
 });
 
@@ -157,7 +157,7 @@ const Cart = () => (
 const CartList = () => {
   // 전역상태
   // ------------------------------------------------------------------------------------
-  const userInfo = useRecoilValue(userState);
+  const userInfo = useRecoilValue(cartState);
   const { carts } = userInfo;
   // ------------------------------------------------------------------------------------
 
@@ -195,7 +195,7 @@ const CartItem = ({ cart }) => {
 
   // 전역상태
   // ------------------------------------------------------------------------------------
-  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [userInfo, setUserInfo] = useRecoilState(cartState);
   const { carts } = userInfo;
 
   const handleQuantity = e => {
@@ -297,7 +297,7 @@ const Receipt = () => {
 
   // 전역 상태
   // ------------------------------------------------------------------------------------
-  const userInfo = useRecoilValue(userState);
+  const userInfo = useRecoilValue(cartState);
   const { carts } = userInfo;
 
   const totalPrice = carts.reduce((acc, cur) => acc + cur.quantity * cur.price, 0);
