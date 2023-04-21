@@ -25,6 +25,9 @@ GET http://localhost:8000/api/order
 ### 결제하기
 GET http://localhost:8000/api/order/pay
 
+### 캐러셀 가져오기
+GET http://localhost:8000/api/carousel
+
 ### 특정 유저(accessToken)의 관심상품 추가/제거(관심상품 추가, 상품의 좋아요 개수 증가 / 관심상품 제거, 상품의 좋아요 개수 감소)
 POST http://localhost:8000/api/favorites
 content-type: application/json

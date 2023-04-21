@@ -6,6 +6,7 @@ const favorites = require('./favorites');
 const carts = require('./carts');
 const categories = require('./categories');
 const order = require('./order');
+const carousel = require('./carousel');
 
 router.use('/products', products);
 router.use('/users', users);
@@ -14,5 +15,6 @@ router.use('/favorites', favorites);
 router.use('/carts', carts);
 router.use('/categories', categories);
 router.use('/order', order);
+router.use('/carousel', carousel);
 
 module.exports = router;
