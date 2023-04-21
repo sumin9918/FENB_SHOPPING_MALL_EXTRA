@@ -1,70 +1,62 @@
-GET http://localhost:8000/
 
-###
-
+### 상품리스트 가져오기
 GET http://localhost:8000/api/products
 
-###
+### 특정 유저(accessToken)의 정보 가져오기(패스워드 제외)
+GET http://localhost:8000/api/users/me
 
-GET http://localhost:8000/api/users
+### 로그아웃
+GET http://localhost:8000/api/auth/signout
 
-###
+### 네비게이션에 나열할 카테고리 리스트 가져오기
+GET http://localhost:8000/api/categories
 
-PATCH http://localhost:8000/api/users/1
+### 특정 유저(accessToken)의 장바구니 데이터 가져오기
+GET http://localhost:8000/api/carts
+
+### 특정 유저(accessToken)의 관심상품 리스트 가져오기
+GET http://localhost:8000/api/favorites
+
+### 주문하기
+GET http://localhost:8000/api/order
+
+### 결제하기
+GET http://localhost:8000/api/order/pay
+
+### 특정 유저(accessToken)의 관심상품 추가/제거(관심상품 추가, 상품의 좋아요 개수 증가 / 관심상품 제거, 상품의 좋아요 개수 감소)
+POST http://localhost:8000/api/favorites
 content-type: application/json
 
-{ "favorite" : true }
+{ "id" : 1 }
 
-###
-
-PATCH http://localhost:8000/api/users/1
+### 회원가입시 이메일 중복 확인
+POST http://localhost:8000/api/auth/signup/check
 content-type: application/json
 
-{ "favorite" : false }
+// { "email" : "test@test.com" }
+{ "email" : "new@new.com" }
 
-###
-
-POST http://localhost:8000/api/products
+### 장바구니에 상품 추가
+POST http://localhost:8000/api/carts/5
 content-type: application/json
 
-{
-  "product": { 
-    "brand": "addias",
-    "name": "air force",
-    "price": 200000,
-    "color": "white",
-    "description": "에어포스",
-    "gender": "unisex",
-    "category": "sneakers",
-    "imgURL": "/images/products/sneakers",
-    "dateOfManufacture": "2023-04-16"
-  },
-  "sizes": [
-    {"size": 230, "stock": 8},
-    {"size": 235, "stock": 11},
-    {"size": 240, "stock": 2},
-    {"size": 245, "stock": 3},
-    {"size": 250, "stock": 7},
-    {"size": 255, "stock": 1},
-    {"size": 260, "stock": 21},
-    {"size": 265, "stock": 1},
-    {"size": 270, "stock": 18},
-    {"size": 275, "stock": 0},
-    {"size": 280, "stock": 19},
-    {"size": 285, "stock": 0}
-  ]
-}
+// { "selectedSize" : 260, "quantity" : 1 }
+{ "selectedSize" : 255, "quantity" : 10 }
 
-###
-
+### 로그인 기능
 POST http://localhost:8000/api/auth/signin
 content-type: application/json
 
 { "email": "test@test.com", "password": "test123"}
 
-###
+### 장바구니 사이즈(고정), 수량 변경
+PATCH http://localhost:8000/api/carts/3
+content-type: application/json
 
-# DELETE http://localhost:8000/api/todos/3
+{ "quantity" : 1 }
+//{ "quantity" : 20 }
 
-# ###
-# DELETE http://localhost:8000/api/todos?completed=true
+
+### 장바구니 특정 상품 삭제
+DELETE http://localhost:8000/api/carts/3
+content-type: application/json

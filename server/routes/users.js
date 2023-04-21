@@ -1,15 +1,19 @@
+const jwt = require('jsonwebtoken');
 const router = require('express').Router();
 
-const favorite = require('../middleware/favorite');
+const { getUsers, getUser } = require('../controllers/users');
 
-const users = require('../controllers/users');
+// router.get('/', (req, res) => {
+//   const { email, name } = getUsers();
+//   res.send({ email, name });
+// });
 
-router.get('/', (req, res) => {
-  res.send(users.getUsers());
-});
+router.get('/me', (req, res) => {
+  const { email } = jwt.decode(req.cookies.accessToken);
 
-router.patch('/:id', favorite, (req, res) => {
-  res.send(users.getUsers());
+  const { email: myEmail, name, address, phoneNumber } = getUser(email);
+
+  res.send({ email: myEmail, name, address, phoneNumber });
 });
 
 module.exports = router;
