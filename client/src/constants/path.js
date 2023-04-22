@@ -4,7 +4,7 @@ const PATH = {
   SIGNUP: '/signup',
   CART: '/cart',
   CATEGORY: '/category',
-  DETAIL: '/products/:id',
+  PRODUCTS: '/products',
   ORDER: '/order',
   ORDER_COMPLETE: '/order/ordercomplete',
   WISHLIST: '/wishlist',
