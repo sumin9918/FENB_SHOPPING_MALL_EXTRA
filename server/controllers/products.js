@@ -1,4 +1,5 @@
 const { BRANDS, COLORS, GENDER, CATEGORIES } = require('../constants/products');
+const { findStock } = require('./stocks');
 
 let products = [
   {
@@ -313,12 +314,14 @@ let products = [
   BRANDS, COLORS, GENDER, CATEGORIES;
 }
 const getProducts = () =>
-  products.map(({ brand, category, gender, color, ...rest }) => ({
+  products.map(({ id, brand, category, gender, color, ...rest }) => ({
     ...rest,
+    id,
     brand: BRANDS[brand],
     category: CATEGORIES[category],
     gender: GENDER[gender],
     color: COLORS[color],
+    stocks: findStock(id),
   }));
 
 const findProduct = (id) => products.find((product) => product.id === id);
