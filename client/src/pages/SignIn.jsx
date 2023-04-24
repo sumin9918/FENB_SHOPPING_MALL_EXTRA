@@ -8,6 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { FormInputContainer } from '../components';
 import { userState } from '../recoil/atoms';
 
@@ -35,6 +36,7 @@ const validationSchema = z.object({
 // SignIn Component
 const SignIn = () => {
   const setUsers = useSetRecoilState(userState);
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -61,6 +63,7 @@ const SignIn = () => {
 
       setUsers({ ...response.data });
       console.log(response.data); // 서버 응답을 출력
+      queryClient.removeQueries({ queryKey: ['user'] });
 
       if (state) {
         navigate(state);

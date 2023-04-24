@@ -1,10 +1,12 @@
-import { Navbar, Flex, Image, Tabs, Autocomplete, ActionIcon, Group, Stack } from '@mantine/core';
+import { Navbar, Flex, Image, Tabs, Autocomplete, ActionIcon, Group, Stack, Text } from '@mantine/core';
 import { BiSearch } from 'react-icons/bi';
 import { SlHandbag } from 'react-icons/sl';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
 import { TbMoonFilled } from 'react-icons/tb';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { PATH } from '../constants';
+import { getUserInfo, signOut } from '../api';
 
 const categoryList = [
   { kr: '운동화', en: 'sneakers' },
@@ -21,16 +23,32 @@ const topList = [
 ];
 
 const TopList = () => {
+  const { data, refetch } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUserInfo,
+  });
   const { pathname } = useLocation();
+
+  const handleSignOutClick = async () => {
+    await signOut();
+    await refetch();
+  };
 
   return (
     <Navbar.Section pt="xs">
       <Flex gap="lg" align="center" justify="flex-end" fz="1.3rem" color="#222222">
-        {topList.map(({ kr, en }) => (
-          <Link key={en} to={PATH[en.toUpperCase()]} state={pathname}>
-            {kr}
-          </Link>
-        ))}
+        {data.email ? (
+          <>
+            <Text onClick={handleSignOutClick}>로그아웃</Text>
+            <Text>{data.name}님 환영합니다.</Text>
+          </>
+        ) : (
+          topList.map(({ kr, en }) => (
+            <Link key={en} to={PATH[en.toUpperCase()]} state={pathname}>
+              {kr}
+            </Link>
+          ))
+        )}
         <ActionIcon size="xl">
           <TbMoonFilled size="2.8rem" color="black" />
         </ActionIcon>
@@ -80,9 +98,11 @@ const BottomList = () => (
         }}>
         <Tabs.List sx={{ border: 'none' }}>
           {categoryList.map(({ kr, en }) => (
-            <Tabs.Tab key={en} value={en} fz="1.6rem">
-              <Link to={PATH.CATEGORY}>{kr}</Link>
-            </Tabs.Tab>
+            <Link to={PATH.CATEGORY} key={en}>
+              <Tabs.Tab value={en} fz="1.6rem">
+                {kr}
+              </Tabs.Tab>
+            </Link>
           ))}
         </Tabs.List>
       </Tabs>
