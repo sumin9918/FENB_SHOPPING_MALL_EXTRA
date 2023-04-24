@@ -8,3 +8,4 @@ export { default as Category } from './Category';
 export { default as Products } from './Products';
 export { default as Order } from './Order';
 export { default as OrderComplete } from './OrderComplete';
+export { default as NotFound } from './NotFound';

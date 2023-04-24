@@ -1,9 +1,24 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-import { Root, Cart, Category, Main, Order, OrderComplete, Products, SignIn, SignUp, WishList } from './pages';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Suspense } from 'react';
+import { Loader } from '@mantine/core';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import {
+  Root,
+  Cart,
+  Category,
+  Main,
+  Order,
+  OrderComplete,
+  Products,
+  SignIn,
+  SignUp,
+  WishList,
+  NotFound,
+} from './pages';
 import { PATH } from './constants';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Root />,
@@ -33,7 +48,7 @@ const router = createBrowserRouter([
         element: <Category />,
       },
       {
-        path: `${PATH.PRODUCTS}:id`,
+        path: `${PATH.PRODUCTS}/:id`,
         element: <Products />,
       },
       {
@@ -44,10 +59,37 @@ const router = createBrowserRouter([
         path: PATH.ORDER_COMPLETE,
         element: <OrderComplete />,
       },
+      {
+        path: '/*',
+        element: <NotFound />,
+      },
     ],
   },
 ]);
 
-const App = () => <RouterProvider router={router} />;
+const App = () => {
+  const { reset } = useQueryErrorResetBoundary();
+
+  return (
+    <Suspense
+      fallback={
+        <Loader
+          size="6rem"
+          color="pink"
+          variant="dots"
+          pos="absolute"
+          top="50%"
+          left="50%"
+          sx={{
+            transform: 'translate3d(-3rem, -3rem, 0)',
+          }}
+        />
+      }>
+      <ErrorBoundary fallbackRender={NotFound} onReset={reset}>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
+    </Suspense>
+  );
+};
 
 export default App;
