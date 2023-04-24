@@ -2,10 +2,11 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 
 const { getUserCart, removeAllCart } = require('../controllers/carts');
-const { getStocks, changeStock } = require('../controllers/stocks');
+const { changeStock } = require('../controllers/stocks');
 const { cartStockCheck } = require('../middleware/stock');
+const { authCheck } = require('../middleware/auth');
 
-router.get('/', cartStockCheck, (req, res) => {
+router.get('/', authCheck, cartStockCheck, (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);
   const isEmpty = getUserCart(email).products.length < 0;
 
@@ -14,7 +15,7 @@ router.get('/', cartStockCheck, (req, res) => {
   res.send({ message: '결제 페이지로 이동합니다.' });
 });
 
-router.get('/pay', cartStockCheck, (req, res) => {
+router.get('/pay', authCheck, cartStockCheck, (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);
 
   // 상품 사이즈 별 수량 변경하기
@@ -23,6 +24,7 @@ router.get('/pay', cartStockCheck, (req, res) => {
 
   // 유저 장바구니 비우기
   removeAllCart(email);
+  res.send({ message: '결제가 완료되었습니다.' });
 });
 
 module.exports = router;

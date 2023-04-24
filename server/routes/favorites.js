@@ -3,14 +3,15 @@ const router = require('express').Router();
 
 const { toggleProductFavorite, findProduct } = require('../controllers/products');
 const { addFavoriteProduct, removeFavoriteProduct, hasFavorite, getMyFavorites } = require('../controllers/favorites');
+const { authCheck } = require('../middleware/auth');
 
-router.get('/', (req, res) => {
+router.get('/me', authCheck, (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);
 
   res.send(getMyFavorites(email).products);
 });
 
-router.post('/', (req, res) => {
+router.post('/me', authCheck, (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);
   const id = +req.body.id;
 
