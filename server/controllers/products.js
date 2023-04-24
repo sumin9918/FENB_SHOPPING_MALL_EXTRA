@@ -1,5 +1,4 @@
-const { BRANDS, COLORS, GENDER, CATEGORIES } = require('../constants/products');
-const { findStock } = require('./stocks');
+const { v4: uuidv4 } = require('uuid');
 
 let products = [
   {
@@ -310,19 +309,7 @@ let products = [
 //   products = [{ id: generateNextId(), favorites: 0, ...newProduct }, ...products];
 // };
 
-{
-  BRANDS, COLORS, GENDER, CATEGORIES;
-}
-const getProducts = () =>
-  products.map(({ id, brand, category, gender, color, ...rest }) => ({
-    ...rest,
-    id,
-    brand: BRANDS[brand],
-    category: CATEGORIES[category],
-    gender: GENDER[gender],
-    color: COLORS[color],
-    stocks: findStock(id),
-  }));
+const getProducts = () => products;
 
 const findProduct = (id) => products.find((product) => product.id === id);
 
