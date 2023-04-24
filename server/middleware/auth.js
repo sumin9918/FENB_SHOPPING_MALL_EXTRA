@@ -10,6 +10,7 @@ const authCheck = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+    req.locals = decoded;
 
     next();
   } catch (e) {

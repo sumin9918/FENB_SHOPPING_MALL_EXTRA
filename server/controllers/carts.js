@@ -1,15 +1,15 @@
 let carts = [
   {
-    email: "test@test.com",
+    email: 'test@test.com',
     products: [
       {
         id: 3,
 
         category: 0,
         color: 3,
-        name: "나이키 에어포스",
+        name: '나이키 에어포스',
         price: 89300,
-        imgURL: "https://via.placeholder.com/440x440",
+        imgURL: 'https://via.placeholder.com/440x440',
 
         selectedSize: 230,
         quantity: 2,
@@ -22,9 +22,9 @@ let carts = [
 
         category: 0,
         color: 1,
-        name: "울트라 부스트 라이트",
+        name: '울트라 부스트 라이트',
         price: 139000,
-        imgURL: "https://via.placeholder.com/440x440",
+        imgURL: 'https://via.placeholder.com/440x440',
 
         selectedSize: 265,
         quantity: 1,
@@ -35,7 +35,7 @@ let carts = [
     ],
   },
   {
-    email: "test1@test.com",
+    email: 'test1@test.com',
     products: [
       {
         id: 1,
@@ -49,14 +49,9 @@ let carts = [
   },
 ];
 
-const addCart = ({ email, id, selectedSize, quantity = 1 }) => {
+const addCart = (newProduct) => {
   carts = carts.map((cart) =>
-    cart.email === email
-      ? {
-          ...cart,
-          products: [{ id, selectedSize, quantity }, ...cart.products],
-        }
-      : cart
+    cart.email === email ? { ...cart, products: [{ ...newProduct }, ...cart.products] } : cart
   );
 };
 
@@ -64,17 +59,26 @@ const getCarts = () => carts;
 
 const getUserCart = (email) => carts.find((cart) => cart.email === email);
 
-const getUserCartProduct = (id, products) =>
-  products.find((product) => product.id === id);
+const getUserCartProduct = (id, products) => products.find((product) => product.id === id);
 
-const changeCart = ({ email, id, payload }) => {
+const getUserCartSelectProductStock = (products, id) =>
+  products.reduce(
+    (acc, cur) => {
+      if (cur.id === id) {
+        acc.selectedSize = cur.selectedSize;
+        acc.quantity += cur.quantity;
+      }
+      return acc;
+    },
+    { selectedSize: null, quantity: 0 }
+  );
+
+const changeCart = ({ email, id, quantity }) => {
   carts = carts.map((cart) =>
     cart.email === email
       ? {
           ...cart,
-          products: cart.products.map((product) =>
-            product.id === id ? { ...product, ...payload } : product
-          ),
+          products: cart.products.map((product) => (product.id === id ? { ...product, quantity } : product)),
         }
       : cart
   );
@@ -92,9 +96,7 @@ const removeCart = ({ email, id }) => {
 };
 
 const removeAllCart = (email) => {
-  carts = carts.map((cart) =>
-    cart.email === email ? { ...cart, products: [] } : cart
-  );
+  carts = carts.map((cart) => (cart.email === email ? { ...cart, products: [] } : cart));
 };
 
 module.exports = {
@@ -105,4 +107,5 @@ module.exports = {
   getUserCart,
   getUserCartProduct,
   removeAllCart,
+  getUserCartSelectProductStock,
 };
