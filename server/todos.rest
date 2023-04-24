@@ -59,11 +59,11 @@ content-type: application/json
 }
 
 ### 장바구니에 상품 추가
-POST http://localhost:8000/api/carts/me/5
+POST http://localhost:8000/api/carts/me/3
 content-type: application/json
 
 // { "selectedSize" : 260, "quantity" : 1 }
-{ "selectedSize" : 255, "quantity" : 10 }
+{ "selectedSize" : 230 }
 
 ### 로그인 기능
 POST http://localhost:8000/api/auth/signin
@@ -71,12 +71,25 @@ content-type: application/json
 
 { "email": "test@test.com", "password": "test123"}
 
+### 주소 추가
+POST http://localhost:8000/api/users/me/address
+content-type: application/json
+
+{ "recipient": "최수민", "recipientPhone": "011-1234-5678", "mainAddress": "서울시 강남구", "detailAddress": "미왕빌딩 10층", "postcode": "123456"}
+
 ### 장바구니 사이즈(고정), 수량 변경
 PATCH http://localhost:8000/api/carts/me/3
 content-type: application/json
 
-{ "quantity" : 1 }
+{ "quantity" : 6 }
 //{ "quantity" : 20 }
+
+### 기본 배송지 변경
+PATCH http://localhost:8000/api/users/me/address/6bc27060-9b9c-4f53-b20f-992dbf19dad5
+content-type: application/json
+
+{"postcode": "000000"}
+
 
 
 ### 장바구니 특정 상품 삭제
