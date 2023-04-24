@@ -14,10 +14,10 @@ GET http://localhost:8000/api/auth/signout
 GET http://localhost:8000/api/categories
 
 ### 특정 유저(accessToken)의 장바구니 데이터 가져오기
-GET http://localhost:8000/api/carts
+GET http://localhost:8000/api/carts/me
 
 ### 특정 유저(accessToken)의 관심상품 리스트 가져오기
-GET http://localhost:8000/api/favorites
+GET http://localhost:8000/api/favorites/me
 
 ### 주문하기
 GET http://localhost:8000/api/order
@@ -28,14 +28,17 @@ GET http://localhost:8000/api/order/pay
 ### 캐러셀 가져오기
 GET http://localhost:8000/api/carousel
 
+### 로그인 유무 확인
+GET http://localhost:8000/api/auth/verify
+
 ### 특정 유저(accessToken)의 관심상품 추가/제거(관심상품 추가, 상품의 좋아요 개수 증가 / 관심상품 제거, 상품의 좋아요 개수 감소)
-POST http://localhost:8000/api/favorites
+POST http://localhost:8000/api/favorites/me
 content-type: application/json
 
 { "id" : 1 }
 
 ### 회원가입시 이메일 중복 확인
-POST http://localhost:8000/api/auth/signup/check
+POST http://localhost:8000/api/auth/signup/email
 content-type: application/json
 
 // { "email" : "test@test.com" }
@@ -56,7 +59,7 @@ content-type: application/json
 }
 
 ### 장바구니에 상품 추가
-POST http://localhost:8000/api/carts/5
+POST http://localhost:8000/api/carts/me/5
 content-type: application/json
 
 // { "selectedSize" : 260, "quantity" : 1 }
@@ -69,7 +72,7 @@ content-type: application/json
 { "email": "test@test.com", "password": "test123"}
 
 ### 장바구니 사이즈(고정), 수량 변경
-PATCH http://localhost:8000/api/carts/3
+PATCH http://localhost:8000/api/carts/me/3
 content-type: application/json
 
 { "quantity" : 1 }
