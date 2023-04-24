@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import {
   Container,
   Stack,
@@ -17,109 +16,40 @@ import {
 import styled from '@emotion/styled';
 import { FaAngleDoubleRight } from 'react-icons/fa';
 import { BiTrash } from 'react-icons/bi';
+import { useCartsQuery, useChangeQuantityMutation, useRemoveCartMutation } from '../hooks/carts';
 import { PATH } from '../constants';
 
-// mock data
-const products = [
-  {
-    id: 1,
-    brand: 'adidas',
-    category: 'snikers',
-    name: 'ultra boost 21',
-    price: 63900,
-    description: 'adidas adidas adidas adidas adidas',
-    imgURL: 'https://via.placeholder.com/150x150',
-    dateOfManufacture: new Date('2021-4-15'),
-    favorites: 123,
-    gender: 'men',
-    color: 'white',
-    stocks: [
-      { size: 230, stock: 19 },
-      { size: 235, stock: 23 },
-      { size: 240, stock: 30 },
-      { size: 245, stock: 14 },
-      { size: 250, stock: 20 },
-      { size: 255, stock: 37 },
-      { size: 260, stock: 0 },
-      { size: 265, stock: 10 },
-      { size: 270, stock: 2 },
-      { size: 275, stock: 1 },
-      { size: 280, stock: 16 },
-      { size: 285, stock: 28 },
-    ],
-  },
-  {
-    id: 2,
-    brand: 'nike',
-    category: 'sandal',
-    name: 'nike airmax coco',
-    price: 138000,
-    description: 'nike nike nike nike nike',
-    imgURL: 'img/sneakers.jpg',
-    dateOfManufacture: new Date('2022-7-29'),
-    favorites: 234,
-    gender: 'men',
-    color: 'navy',
-    stocks: [
-      { size: 230, stock: 19 },
-      { size: 235, stock: 23 },
-      { size: 240, stock: 30 },
-      { size: 245, stock: 14 },
-      { size: 250, stock: 20 },
-      { size: 255, stock: 37 },
-      { size: 260, stock: 0 },
-      { size: 265, stock: 10 },
-      { size: 270, stock: 2 },
-      { size: 275, stock: 1 },
-      { size: 280, stock: 16 },
-      { size: 285, stock: 28 },
-    ],
-  },
+const CATEGORIES = [
+  { en: 'sneakers', kr: '운동화' },
+  { en: 'sandal', kr: '샌달' },
+  { en: 'slipper', kr: '슬리퍼' },
+  { en: 'walking', kr: '워킹화' },
+  { en: 'shoes', kr: '구두' },
+  { en: 'etc', kr: '기타' },
 ];
 
-// 임시 데이터
-const user = {
-  email: 'test@test.com',
-  password: 'test',
-  name: '이동규',
-  favoriteIds: [2, 3, 4],
-  addresses: [],
-  carts: [
-    {
-      id: 1,
-      category: 'snikers',
-      color: 'white',
-      name: 'ultra boost 21',
-      price: 63900,
-      imgURL: 'https://via.placeholder.com/150x150',
-      selectedSize: 230,
-      quantity: 2,
-    },
-    {
-      id: 2,
-      category: 'sandal',
-      color: 'navy',
-      name: 'nike airmax coco',
-      price: 138000,
-      imgURL: 'https://via.placeholder.com/150x150',
-      selectedSize: 250,
-      quantity: 1,
-    },
-  ],
-};
-
-// 임시 atom
-const cartState = atom({
-  key: 'cartState',
-  default: user,
-});
+const COLORS = [
+  { color: '#8D429F', en: 'purple', kr: '보라색' },
+  { color: '#000', en: 'black', kr: '검정색' },
+  { color: '#E7352B', en: 'red', kr: '빨간색' },
+  { color: '#F36B26', en: 'orange', kr: '주황색' },
+  { color: '#1790C8', en: 'blue', kr: '파란색' },
+  { color: '#ffffff', en: 'white', kr: '흰색' },
+  { color: '#825D41', en: 'brown', kr: '갈색' },
+  { color: '#7BBA3C', en: 'green', kr: '초록색' },
+  { color: '#FED533', en: 'yellow', kr: '노란색' },
+  { color: 'navy', en: 'navy', kr: '남색' },
+  { color: 'beige', en: 'beige', kr: '베이지' },
+  { color: '#808080', en: 'gray', kr: '회색' },
+  { color: '#F0728F', en: 'pink', kr: '분홍색' },
+];
 
 // Styled Components
 const QuantityInput = styled(NumberInput)`
   textalign: 'center';
 
   input {
-    width: rem(54);
+    width: ${rem(54)};
   }
 
   input:disabled {
@@ -155,11 +85,7 @@ const Cart = () => (
 );
 
 const CartList = () => {
-  // 전역상태
-  // ------------------------------------------------------------------------------------
-  const userInfo = useRecoilValue(cartState);
-  const { carts } = userInfo;
-  // ------------------------------------------------------------------------------------
+  const { data: carts } = useCartsQuery();
 
   return (
     <Stack w="66.66667%" pl="0.8rem" pr="10rem" spacing={0} fluid="true">
@@ -185,32 +111,14 @@ const NoCartItem = () => (
 );
 
 const CartItem = ({ cart }) => {
-  const handlers = useRef(null);
+  const { id, category, color, name, price, imgURL, selectedSize, quantity, stocks } = cart;
 
-  const { id, category, color, name, price, imgURL, selectedSize, quantity } = cart;
+  const handlers = useRef();
 
-  const maxQuantity = products
-    .find(products => products.id === id)
-    .stocks.find(({ size }) => size === selectedSize).stock;
+  const { mutate: changeQuantity } = useChangeQuantityMutation();
+  const { mutate: removeCart } = useRemoveCartMutation();
 
-  // 전역상태
-  // ------------------------------------------------------------------------------------
-  const [userInfo, setUserInfo] = useRecoilState(cartState);
-  const { carts } = userInfo;
-
-  const handleQuantity = e => {
-    const newCarts = carts.map(cart => (cart.id === id ? { ...cart, quantity: e } : cart));
-
-    setUserInfo({ ...userInfo, carts: newCarts });
-  };
-
-  const handleRemove = id => () => {
-    const newCarts = carts.filter(cart => cart.id !== id);
-
-    setUserInfo({ ...userInfo, carts: newCarts });
-  };
-
-  // ------------------------------------------------------------------------------------
+  const maxQuantity = stocks.find(({ size }) => size === selectedSize).stock;
 
   return (
     <Stack w="100%" py="2.4rem" spacing={0} c="rgb(117,117,117)" sx={{ borderBottom: '1px solid rgb(117,117,117)' }}>
@@ -222,7 +130,7 @@ const CartItem = ({ cart }) => {
             minWidth: '180px',
             paddingRight: '16px',
           }}>
-          <Link to={`/products/:${id}`}>
+          <Link to={`${PATH.PRODUCTS}/${id}`}>
             <Image src={imgURL} alt={name} withPlaceholder />
           </Link>
         </div>
@@ -230,10 +138,10 @@ const CartItem = ({ cart }) => {
           <Group position="apart" grow="true" spacing={0} align="flex-start">
             <Stack align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
               <Title fz="1.6rem" fw={500} c="#111" sx={{ cursor: 'pointer' }}>
-                <Link to={`/products/:${id}`}>{name}</Link>
+                <Link to={`${PATH.PRODUCTS}/${id}`}>{name}</Link>
               </Title>
-              <Text>{category}</Text>
-              <Text>{color}</Text>
+              <Text>{CATEGORIES[category].kr}</Text>
+              <Text>{COLORS[color].kr}</Text>
               <Text>사이즈 {selectedSize}</Text>
               <Group spacing="0.4rem">
                 <Text sx={{ verticalAlign: 'bottom' }}>수량</Text>
@@ -247,14 +155,13 @@ const CartItem = ({ cart }) => {
                 </ActionIcon>
                 <QuantityInput
                   hideControls
-                  disabled={true}
-                  value={quantity}
-                  onChange={handleQuantity}
-                  handlersRef={handlers}
+                  size="lg"
                   max={maxQuantity}
                   min={1}
-                  size="lg"
-                  styles={{ input: { width: rem(54), textAlign: 'center', ':disabled': { bg: '#fff' } } }}
+                  disabled={true}
+                  handlersRef={handlers}
+                  value={quantity}
+                  onChange={e => changeQuantity({ id, quantity: e })}
                 />
                 <ActionIcon
                   size={rem(42)}
@@ -282,7 +189,7 @@ const CartItem = ({ cart }) => {
           <div style={{ marginTop: '24px' }}>
             <BiTrash
               style={{ width: '24px', height: '24px', verticalAlign: 'top', cursor: 'pointer' }}
-              onClick={handleRemove(id)}
+              onClick={() => removeCart(id)}
             />
           </div>
         </Stack>
@@ -295,13 +202,10 @@ const CartItem = ({ cart }) => {
 const Receipt = () => {
   const navigate = useNavigate();
 
-  // 전역 상태
-  // ------------------------------------------------------------------------------------
-  const userInfo = useRecoilValue(cartState);
-  const { carts } = userInfo;
-
-  const totalPrice = carts.reduce((acc, cur) => acc + cur.quantity * cur.price, 0);
-  // ------------------------------------------------------------------------------------
+  const { data: countCarts } = useCartsQuery({ select: carts => carts.length });
+  const { data: totalPrice } = useCartsQuery({
+    select: carts => carts.reduce((acc, cart) => acc + cart.quantity * cart.price, 0),
+  });
 
   return (
     <Stack w="33.33333%" px="0.8rem" py="0.8rem" mb="2.4rem" spacing={0}>
@@ -326,7 +230,7 @@ const Receipt = () => {
           <Text>{totalPrice.toLocaleString()} 원</Text>
         </Group>
       </div>
-      <OrderButton disabled={!carts.length} onClick={() => navigate(PATH.ORDER)}>
+      <OrderButton disabled={!countCarts} onClick={() => navigate(PATH.ORDER)}>
         주문결제
       </OrderButton>
     </Stack>
