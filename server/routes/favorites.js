@@ -4,11 +4,21 @@ const router = require('express').Router();
 const { toggleProductFavorite, findProduct } = require('../controllers/products');
 const { addFavoriteProduct, removeFavoriteProduct, hasFavorite, getMyFavorites } = require('../controllers/favorites');
 const { authCheck } = require('../middleware/auth');
+const { BRANDS, CATEGORIES, GENDER, COLORS } = require('../constants/products');
 
 router.get('/me', authCheck, (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);
 
-  res.send(getMyFavorites(email).products);
+  res.send(
+    getMyFavorites(email).products.map(({ id, brand, category, gender, color, ...rest }) => ({
+      ...rest,
+      id,
+      brand: BRANDS[brand],
+      category: CATEGORIES[category],
+      gender: GENDER[gender],
+      color: COLORS[color],
+    }))
+  );
 });
 
 router.post('/me', authCheck, (req, res) => {
