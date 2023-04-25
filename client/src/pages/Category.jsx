@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { FaCheck } from 'react-icons/fa';
@@ -16,8 +16,11 @@ import {
   SimpleGrid,
   Image,
   Text,
+  Flex,
 } from '@mantine/core';
+import { Link } from 'react-router-dom';
 import { fetchProducts } from '../api';
+import { PATH } from '../constants';
 
 const prices = [
   { rangeIdx: 0, text: '0 - 50,000원' },
@@ -91,16 +94,8 @@ const Header = () => (
   </Group>
 );
 
-const Filters = ({
-  sizeFilters,
-  colorFilters,
-  handleCheckPrice,
-  handleSelectedSize,
-  handleSelectColor,
-  handleCheckGender,
-  handleCheckBrand,
-}) => (
-  <ScrollArea h={1000} offsetScrollbars>
+const Filters = ({ sizeFilters, colorFilters, handleCheckFilters }) => (
+  <ScrollArea h={1000} offsetScrollbars w="270px">
     <Container
       sx={{
         width: '240px',
@@ -116,7 +111,7 @@ const Filters = ({
           <Accordion.Panel>
             <Stack>
               {prices.map(({ rangeIdx, text }) => (
-                <Checkbox key={rangeIdx} size="lg" label={text} onChange={() => handleCheckPrice(rangeIdx)} />
+                <Checkbox key={rangeIdx} size="lg" label={text} onChange={() => handleCheckFilters({ rangeIdx })} />
               ))}
             </Stack>
           </Accordion.Panel>
@@ -132,7 +127,7 @@ const Filters = ({
                   variant="default"
                   radius="md"
                   selected={sizeFilters.at(i)}
-                  onClick={() => handleSelectedSize(size)}>
+                  onClick={() => handleCheckFilters({ selectedSize: size })}>
                   {size}
                 </SizeButton>
               ))}
@@ -151,7 +146,7 @@ const Filters = ({
                       color={color}
                       size={'3.0rem'}
                       selected={colorFilters.at(i)}
-                      onClick={() => handleSelectColor(en)}>
+                      onClick={() => handleCheckFilters({ selectedColor: en })}>
                       {colorFilters.at(i) && (
                         <FaCheck size={'1.2rem'} color={en === 'white' || en === 'beige' ? 'black' : 'white'} />
                       )}
@@ -171,7 +166,7 @@ const Filters = ({
           <Accordion.Panel>
             <Stack>
               {gender.map(({ en, kr }) => (
-                <Checkbox key={en} size="lg" label={kr} onChange={() => handleCheckGender(en)} />
+                <Checkbox key={en} size="lg" label={kr} onChange={() => handleCheckFilters({ genderEn: en })} />
               ))}
             </Stack>
           </Accordion.Panel>
@@ -182,7 +177,7 @@ const Filters = ({
           <Accordion.Panel>
             <Stack>
               {brands.map(({ en, kr }) => (
-                <Checkbox key={en} size="lg" label={kr} onChange={() => handleCheckBrand(en)} />
+                <Checkbox key={en} size="lg" label={kr} onChange={() => handleCheckFilters({ brand: en })} />
               ))}
             </Stack>
           </Accordion.Panel>
@@ -193,150 +188,103 @@ const Filters = ({
 );
 
 const ResultProducts = () => {
+  // 서버에서 받아온 data를 products로 저장
   const { data: products } = useQuery({ queryKey: ['products'], queryFn: fetchProducts });
 
-  // console.log(products);
-
-  // 서버에서 받아온 products를 저장한 상태
   const [currentProducts, setCurrentProducts] = useState(products);
 
   // filters states
-  const [priceFilters, setPriceFilters] = useState(Array.from({ length: prices.length }, () => false));
-  const [sizeFilters, setSizeFilters] = useState(Array.from({ length: sizes.length }, () => false));
-  const [colorFilters, setColorFilters] = useState(Array.from({ length: colors.length }, () => false));
-  const [genderFilters, setGenderFilters] = useState(Array.from({ length: gender.length }, () => false));
-  const [brandFilters, setBrandFilters] = useState(Array.from({ length: brands.length }, () => false));
+  const [filters, setFilters] = useState({
+    priceFilters: Array.from({ length: prices.length }, () => false),
+    sizeFilters: Array.from({ length: sizes.length }, () => false),
+    colorFilters: Array.from({ length: colors.length }, () => false),
+    genderFilters: Array.from({ length: gender.length }, () => false),
+    brandFilters: Array.from({ length: brands.length }, () => false),
+  });
 
-  const handleCheckPrice = rangeIdx => {
-    const newPriceFilter = priceFilters.map((filter, i) => (i === rangeIdx ? !filter : filter));
+  const handleCheckFilters = ({ rangeIdx, selectedSize, selectedColor, genderEn, brand }) => {
+    const newFilters = {
+      priceFilters: filters.priceFilters.map((filter, i) => (rangeIdx === i ? !filter : filter)),
+      sizeFilters: filters.sizeFilters.map((filter, i) => (selectedSize === sizes.at(i) ? !filter : filter)),
+      colorFilters: filters.colorFilters.map((filter, i) => (selectedColor === colors.at(i).en ? !filter : filter)),
+      genderFilters: filters.genderFilters.map((filter, i) => (genderEn === gender.at(i).en ? !filter : filter)),
+      brandFilters: filters.brandFilters.map((filter, i) => (brand === brands.at(i).en ? !filter : filter)),
+    };
 
-    setPriceFilters(newPriceFilter);
+    setFilters({ ...filters, ...newFilters });
 
-    const newProducts = [
-      ...newPriceFilter.map((filter, i) =>
-        filter
-          ? i !== priceFilters.length - 1
-            ? products.filter(({ price }) => i * 50000 <= price && price < (i + 1) * 50000)
-            : products.filter(({ price }) => i * 50000 <= price)
-          : []
-      ),
+    const { priceFilters, sizeFilters, colorFilters, genderFilters, brandFilters } = newFilters;
+
+    //   const filteredPrice = [
+    //     ...priceFilters.map((filter, i) =>
+    //       filter
+    //         ? i !== priceFilters.length - 1
+    //           ? products.filter(({ price }) => i * 50000 <= price && price < (i + 1) * 50000)
+    //           : products.filter(({ price }) => i * 50000 <= price)
+    //         : []
+    //     ),
+    //   ].flat();
+
+    // const filteredSize = [
+    //   ...new Set(
+    //     [
+    //       ...sizeFilters.map((filter, i) =>
+    //         filter
+    //           ? products.filter(({ stocks }) => stocks.some(({ size, stock }) => size === sizes.at(i) && stock > 0))
+    //           : []
+    //       ),
+    //     ].flat()
+    //   ),
+    // ];
+
+    const filteredColor = [
+      ...colorFilters.map((filter, i) => (filter ? products.filter(({ color }) => color.en === colors.at(i).en) : [])),
     ].flat();
 
-    setCurrentProducts(newProducts);
+    console.log(products[0].color);
 
-    const toggleAll = newPriceFilter.every(v => v === false);
+    // const filteredGender = [
+    //   ...genderFilters.map((filter, i) => (filter ? filteredColor.filter(({ details }) => i === details.gender) : [])),
+    // ].flat();
 
-    if (toggleAll) {
-      setCurrentProducts(products);
-    }
-  };
+    // const filteredBrand = [
+    //   ...brandFilters.map((filter, i) => (filter ? filteredGender.filter(({ brand }) => i === brand) : [])),
+    // ].flat();
 
-  const handleSelectedSize = selectedSize => {
-    const newSizeFilters = sizeFilters.map((filter, i) => (sizes.at(i) === selectedSize ? !filter : filter));
+    console.log(filteredColor);
 
-    setSizeFilters(newSizeFilters);
-
-    const newProducts = [
-      ...newSizeFilters.map((filter, i) =>
-        filter
-          ? products.filter(({ details }) => details.sizes.some(({ size, stock }) => size === sizes.at(i) && stock > 0))
-          : []
-      ),
-    ].flat();
-
-    setCurrentProducts([...new Set(newProducts)]);
-
-    const toggleAll = newSizeFilters.every(v => v === false);
-
-    if (toggleAll) {
-      setCurrentProducts(products);
-    }
-  };
-
-  const handleSelectColor = selectedColor => {
-    const newColorFilters = colorFilters.map((filter, i) => (colors.at(i).en === selectedColor ? !filter : filter));
-
-    setColorFilters(newColorFilters);
-
-    const newProducts = [
-      ...newColorFilters.map((filter, i) => (filter ? products.filter(({ details }) => i === details.color) : [])),
-    ].flat();
-
-    setCurrentProducts(newProducts);
-
-    const toggleAll = newColorFilters.every(v => v === false);
-
-    if (toggleAll) {
-      setCurrentProducts(products);
-    }
-  };
-
-  const handleCheckGender = en => {
-    const newGenderFilter = genderFilters.map((filter, i) => (en === gender.at(i).en ? !filter : filter));
-
-    setGenderFilters(newGenderFilter);
-
-    const newProducts = [
-      ...newGenderFilter.map((filter, i) => (filter ? products.filter(({ details }) => i === details.gender) : [])),
-    ].flat();
-
-    setCurrentProducts(newProducts);
-
-    const toggleAll = newGenderFilter.every(v => v === false);
-
-    if (toggleAll) {
-      setCurrentProducts(products);
-    }
-  };
-
-  const handleCheckBrand = en => {
-    const newBrandFilter = brandFilters.map((filter, i) => (en === brands.at(i).en ? !filter : filter));
-
-    setBrandFilters(newBrandFilter);
-
-    const newProducts = [
-      ...newBrandFilter.map((filter, i) => (filter ? products.filter(({ brand }) => i === brand) : [])),
-    ].flat();
-
-    setCurrentProducts(newProducts);
-
-    const toggleAll = newBrandFilter.every(v => v === false);
-
-    if (toggleAll) {
-      setCurrentProducts(products);
-    }
+    setCurrentProducts(filteredColor);
   };
 
   return (
-    <Group align="flex-start" position="apart" noWrap="true">
+    <Flex sx={{ gap: '10px' }}>
       <Filters
-        sizeFilters={sizeFilters}
-        colorFilters={colorFilters}
-        handleCheckPrice={handleCheckPrice}
-        handleSelectedSize={handleSelectedSize}
-        handleSelectColor={handleSelectColor}
-        handleCheckGender={handleCheckGender}
-        handleCheckBrand={handleCheckBrand}
+        sizeFilters={filters.sizeFilters}
+        colorFilters={filters.colorFilters}
+        handleCheckFilters={handleCheckFilters}
+        sx={{ zIndex: 100 }}
       />
       <SimpleGrid cols={3}>
         {currentProducts.map(({ id, imgURL, name, price, features, color }) => (
-          <Stack key={id} sx={{ fontSize: '1.6rem' }}>
-            <Image src={imgURL} alt="Product Image" />
-            <Stack spacing="xs" sx={{ padding: '0 1rem' }}>
-              <Text fz="2rem" fw="bold">
-                {name}
-              </Text>
-              <Text fw={700}>{features.emphasize}</Text>
-              <Text fw={500}>{features.character}</Text>
-              <Text color="#757575">{colors.at(color).kr}</Text>
-              <Text fw="bold" sx={{ lineHeight: '2em' }}>
-                {`${price.toLocaleString()} 원`}
-              </Text>
+          <Link key={id} to={`${PATH.PRODUCTS}/${id}`} state={id}>
+            <Stack sx={{ fontSize: '1.6rem', cursor: 'pointer' }}>
+              <Image src={imgURL} alt="Product Image" />
+              <Stack spacing="xs" sx={{ padding: '0 1rem' }}>
+                <Text fz="2rem" fw="bold">
+                  {name}
+                </Text>
+                <Text fw={700}>{features.emphasize}</Text>
+                <Text fw={500}>{features.character}</Text>
+                <Text color="#757575">{colors.at(color).kr}</Text>
+                <Text fw="bold" sx={{ lineHeight: '2em' }}>
+                  {`${price.toLocaleString()} 원`}
+                </Text>
+              </Stack>
             </Stack>
-          </Stack>
+          </Link>
         ))}
       </SimpleGrid>
-    </Group>
+    </Flex>
   );
 };
 
