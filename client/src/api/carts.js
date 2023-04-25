@@ -11,7 +11,7 @@ export const fetchCarts = async () => {
 
 // cart 추가
 // 수량(quantity)은 언제나 1개
-export const addCart = async ({ id, selectedSize }) => axios.patch(`${url}/${id}`, { selectedSize });
+export const addCart = async ({ id, selectedSize }) => axios.post(`${url}/${id}`, { selectedSize });
 
 // cart 수량 변경
 export const changeQuantity = async ({ id, quantity }) => axios.patch(`${url}/${id}`, { quantity });

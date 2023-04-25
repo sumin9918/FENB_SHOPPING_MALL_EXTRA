@@ -9,14 +9,14 @@ const useGenericMutation = ({ queryKey, mutationFn, onMutate: expected }) => {
     async onMutate(variables) {
       await queryClient.cancelQueries({ queryKey });
 
-      const previousCarts = queryClient.getQueryData(queryKey);
+      const previousValues = queryClient.getQueryData(queryKey);
 
       queryClient.setQueryData(queryKey, expected(variables));
 
-      return { previousCarts };
+      return { previousValues };
     },
     onError(err, variables, context) {
-      queryClient.setQueryData(queryKey, context.previousCarts);
+      queryClient.setQueryData(queryKey, context.previousValues);
     },
     onSettled() {},
   });

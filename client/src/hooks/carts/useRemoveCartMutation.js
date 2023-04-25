@@ -1,4 +1,4 @@
-import useGenericMutation from './useGenericMutation';
+import useGenericMutation from '../useGenericMutation';
 import { removeCart } from '../../api/carts';
 import { CARTS_QUERY_KEY } from '../../constants';
 
