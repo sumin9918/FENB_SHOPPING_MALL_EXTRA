@@ -346,9 +346,7 @@ const getStocks = () => stocks;
 const findStock = (id) => stocks.find((stock) => stock.id === id).products;
 
 const findDetailStock = ({ id, selectedSize }) => findStock(id).find((stock) => stock.size === selectedSize);
-
 const changeStock = ({ id, selectedSize, quantity }) => {
-  console.log({ id, selectedSize, quantity });
   stocks = stocks.map((stock) =>
     stock.id === id
       ? {
