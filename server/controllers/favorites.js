@@ -1,3 +1,8 @@
+const defaultFavorite = {
+  email: '',
+  products: [],
+};
+
 let favorites = [
   {
     email: 'test@test.com',
@@ -20,6 +25,10 @@ let favorites = [
     ],
   },
 ];
+
+const createUser = (email) => {
+  favorites = [...favorites, { ...defaultFavorite, email }];
+};
 
 const addFavoriteProduct = ({ email, product }) => {
   favorites = favorites.map((favorite) =>
@@ -46,4 +55,4 @@ const hasFavorite = ({ email, id }) => {
   return products.some((product) => product.id === id);
 };
 
-module.exports = { addFavoriteProduct, getMyFavorites, getFavorites, hasFavorite, removeFavoriteProduct };
+module.exports = { createUser, addFavoriteProduct, getMyFavorites, getFavorites, hasFavorite, removeFavoriteProduct };

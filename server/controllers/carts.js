@@ -1,3 +1,8 @@
+const defaultCart = {
+  email: '',
+  products: [],
+};
+
 let carts = [
   {
     email: 'test@test.com',
@@ -34,20 +39,11 @@ let carts = [
       },
     ],
   },
-  {
-    email: 'test1@test.com',
-    products: [
-      {
-        id: 1,
-        selectedSize: 265,
-        quantity: 5,
-        // stocks: [
-        // ...
-        // ]
-      },
-    ],
-  },
 ];
+
+const createUser = (email) => {
+  carts = [...carts, { ...defaultCart, email }];
+};
 
 const addCart = (newProduct) => {
   carts = carts.map((cart) =>
@@ -100,6 +96,7 @@ const removeAllCart = (email) => {
 };
 
 module.exports = {
+  createUser,
   addCart,
   getCarts,
   changeCart,
