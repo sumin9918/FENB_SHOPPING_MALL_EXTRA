@@ -1,8 +1,19 @@
-import { Navbar, Flex, Image, Tabs, Autocomplete, ActionIcon, Group, Stack, Text } from '@mantine/core';
+import {
+  useMantineColorScheme,
+  Navbar,
+  Flex,
+  Image,
+  Tabs,
+  Autocomplete,
+  ActionIcon,
+  Group,
+  Stack,
+  Text,
+} from '@mantine/core';
 import { BiSearch } from 'react-icons/bi';
 import { SlHandbag } from 'react-icons/sl';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
-import { TbMoonFilled } from 'react-icons/tb';
+import { TbMoonFilled, TbSunFilled } from 'react-icons/tb';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { PATH } from '../constants';
@@ -23,6 +34,9 @@ const topList = [
 ];
 
 const TopList = () => {
+  // KKW darkmode Test
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
   const { data, refetch } = useQuery({
     queryKey: ['user'],
     queryFn: getUserInfo,
@@ -49,8 +63,13 @@ const TopList = () => {
             </Link>
           ))
         )}
-        <ActionIcon size="xl">
-          <TbMoonFilled size="2.8rem" color="black" />
+        <ActionIcon
+          size="xl"
+          onClick={() => toggleColorScheme()}
+          sx={theme => ({
+            color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.dark[6],
+          })}>
+          {colorScheme === 'dark' ? <TbSunFilled size="2.8rem" /> : <TbMoonFilled size="2.8rem" />}
         </ActionIcon>
       </Flex>
     </Navbar.Section>
@@ -85,44 +104,56 @@ const MainList = () => {
   );
 };
 
-const BottomList = () => (
-  <Navbar.Section grow mt="md" w="1200px" maw="1200px" m="auto" h="auto">
-    <Flex justify="space-between">
-      <Tabs
-        color="dark"
-        sx={{
-          'button[data-active]': {
-            fontWeight: 'bold',
-            borderWidth: '.2rem',
-          },
-        }}>
-        <Tabs.List sx={{ border: 'none' }}>
-          {categoryList.map(({ kr, en }) => (
-            <Link to={PATH.CATEGORY} key={en}>
-              <Tabs.Tab value={en} fz="1.6rem">
-                {kr}
-              </Tabs.Tab>
-            </Link>
-          ))}
-        </Tabs.List>
-      </Tabs>
-    </Flex>
-  </Navbar.Section>
-);
+const BottomList = () => {
+  const { colorScheme } = useMantineColorScheme();
 
-const NavigationBar = () => (
-  <Navbar height="auto" position={{ top: 0, left: 0, border: '1px solid #ced4da' }}>
-    <Group position="apart" spacing={0} w="120rem" m="auto">
-      <Link to={PATH.MAIN}>
-        <Image width="10rem" pl="1rem" src="images/logo/main.svg" alt="486" />
-      </Link>
-      <Stack>
-        <TopList />
-        <MainList />
-      </Stack>
-    </Group>
-    <BottomList />
-  </Navbar>
-);
+  return (
+    <Navbar.Section grow mt="md" w="1200px" maw="1200px" m="auto" h="auto">
+      <Flex justify="space-between">
+        <Tabs
+          color={colorScheme === 'dark' ? 'gray.0' : 'dark'}
+          sx={{
+            'button[data-active]': {
+              fontWeight: 'bold',
+              borderWidth: '.2rem',
+            },
+          }}>
+          <Tabs.List sx={{ border: 'none' }}>
+            {categoryList.map(({ kr, en }) => (
+              <Link to={PATH.CATEGORY} key={en}>
+                <Tabs.Tab value={en} fz="1.6rem">
+                  {kr}
+                </Tabs.Tab>
+              </Link>
+            ))}
+          </Tabs.List>
+        </Tabs>
+      </Flex>
+    </Navbar.Section>
+  );
+};
+
+const NavigationBar = () => {
+  const { colorScheme } = useMantineColorScheme();
+
+  return (
+    <Navbar height="auto" position={{ top: 0, left: 0, borderBottom: '1px solid #ced4da' }}>
+      <Group position="apart" spacing={0} w="120rem" m="auto">
+        <Link to={PATH.MAIN}>
+          {colorScheme === 'dark' ? (
+            <Image width="10rem" pl="1rem" src="images/logo/darkmodeMainLogo.svg" alt="486" />
+          ) : (
+            <Image width="10rem" pl="1rem" src="images/logo/main.svg" alt="486" />
+          )}
+        </Link>
+        <Stack>
+          <TopList />
+          <MainList />
+        </Stack>
+      </Group>
+      <BottomList />
+    </Navbar>
+  );
+};
 
 export default NavigationBar;

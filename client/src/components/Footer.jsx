@@ -1,4 +1,5 @@
 import {
+  useMantineColorScheme,
   Container,
   Footer as MantineFooter,
   Flex,
@@ -33,63 +34,79 @@ const services = [
   },
 ];
 
-const Creator = () => (
-  <Stack>
-    {creators.map(({ name, role, githubURL, mbti }) => (
-      <Flex key={name} gap="md" justify="flex-start">
-        <span>{name}</span>
-        <span>{role}</span>
-        <span>{mbti}</span>
-        <Tooltip label="깃허브">
-          <Anchor href={githubURL} target="_blank">
-            <BsGithub />
-          </Anchor>
-        </Tooltip>
-      </Flex>
-    ))}
-  </Stack>
-);
+const Creator = () => {
+  const { colorScheme } = useMantineColorScheme();
 
-const Menus = () => (
-  <Group>
-    {menus.map(({ title, contents }) => (
-      <Stack key={title} w="16rem" spacing="xs">
-        <Text fz="1.6rem" fw="bold">
-          {title}
-        </Text>
-        {contents.map(content => (
-          <Text key={content} c="rgba(34,34,34,.5)" fz="1.3rem">
-            {content}
+  return (
+    <Stack>
+      {creators.map(({ name, role, githubURL, mbti }) => (
+        <Flex key={name} gap="md" justify="flex-start">
+          <Text c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'}>{name}</Text>
+          <Text c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'}>{role}</Text>
+          <Text c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'}>{mbti}</Text>
+          <Tooltip label="깃허브">
+            <Anchor href={githubURL} target="_blank">
+              <BsGithub />
+            </Anchor>
+          </Tooltip>
+        </Flex>
+      ))}
+    </Stack>
+  );
+};
+
+const Menus = () => {
+  const { colorScheme } = useMantineColorScheme();
+
+  return (
+    <Group>
+      {menus.map(({ title, contents }) => (
+        <Stack key={title} w="16rem" spacing="xs">
+          <Text fz="1.6rem" fw="bold">
+            {title}
           </Text>
-        ))}
-      </Stack>
-    ))}
-  </Group>
-);
+          {contents.map(content => (
+            <Text key={content} c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'} fz="1.3rem">
+              {content}
+            </Text>
+          ))}
+        </Stack>
+      ))}
+    </Group>
+  );
+};
 
-const ServiceArea = () => (
-  <Group w="28rem">
-    {services.map(({ title, phone, limitTime, notification }) => (
-      <Stack key={title}>
-        <Text fz="1.6rem" fw="bold">
-          {title} {phone}
-        </Text>
-        <Text c="rgba(34,34,34,.5)">{limitTime}</Text>
-        <p>{notification}</p>
-        <Button w="11rem" color="dark">
-          자주 묻는 질문
-        </Button>
-      </Stack>
-    ))}
-  </Group>
-);
+const ServiceArea = () => {
+  const { colorScheme } = useMantineColorScheme();
 
-const BusinessTitle = () => (
-  <Text c="rgba(34,34,34,.5)" w="65rem">
-    팬비 주식회사 · 대표 우재규민 사업자등록번호 : 486-486486 사업자정보확인통신판매업 : 제 2023-A-00000001호
-    사업장소재지 : 서울특별시 강남구 강남대로 364 (역삼동), 미왕빌딩 10층 서비스 : FENB
-  </Text>
-);
+  return (
+    <Group w="28rem">
+      {services.map(({ title, phone, limitTime, notification }) => (
+        <Stack key={title}>
+          <Text fz="1.6rem" fw="bold">
+            {title} {phone}
+          </Text>
+          <Text c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'}>{limitTime}</Text>
+          <p>{notification}</p>
+          <Button w="11rem" color={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
+            자주 묻는 질문
+          </Button>
+        </Stack>
+      ))}
+    </Group>
+  );
+};
+
+const BusinessTitle = () => {
+  const { colorScheme } = useMantineColorScheme();
+
+  return (
+    <Text c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'} w="65rem">
+      팬비 주식회사 · 대표 우재규민 사업자등록번호 : 486-486486 사업자정보확인통신판매업 : 제 2023-A-00000001호
+      사업장소재지 : 서울특별시 강남구 강남대로 364 (역삼동), 미왕빌딩 10층 서비스 : FENB
+    </Text>
+  );
+};
 
 const Footer = () => (
   <MantineFooter sx={{ borderTop: '1px solid #ced4da' }} fz="1.3rem">
