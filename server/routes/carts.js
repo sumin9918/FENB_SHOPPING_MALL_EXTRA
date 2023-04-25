@@ -58,7 +58,7 @@ router.patch('/me/:id', authCheck, cartStockCheck, (req, res) => {
   res.send({ message: '장바구니 상품이 변경되었습니다.' });
 });
 
-router.delete('/:id', cartStockCheck, (req, res) => {
+router.delete('/me/:id', cartStockCheck, (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);
   const id = +req.params.id;
 
