@@ -27,7 +27,7 @@ router.post('/me/:id', authCheck, (req, res) => {
 
   // 이번에 요청한 상품의 재고 확인
   const { products } = getUserCart(email);
-  const cartProduct = getUserCartSelectProductStock(products, id);
+  const cartProduct = getUserCartSelectProductStock(products, id, selectedSize);
   const { stock } = findDetailStock({ id, selectedSize });
 
   if (stock < quantity + (cartProduct.quantity ?? 0)) {
@@ -35,7 +35,9 @@ router.post('/me/:id', authCheck, (req, res) => {
   }
 
   const product = findProduct(id);
-  addCart({ email, selectedSize, quantity, ...product });
+
+  if (cartProduct.quantity) changeCart({ email, id, quantity: quantity + cartProduct.quantity });
+  else addCart({ email, selectedSize, quantity, ...product });
 
   res.send({ message: '장바구니에 상품이 정상적으로 추가되었습니다.' });
 });
@@ -58,11 +60,13 @@ router.patch('/me/:id', authCheck, cartStockCheck, (req, res) => {
   res.send({ message: '장바구니 상품이 변경되었습니다.' });
 });
 
+// 삭제
 router.delete('/me/:id', cartStockCheck, (req, res) => {
   const { email } = jwt.decode(req.cookies.accessToken);
   const id = +req.params.id;
 
   removeCart({ email, id });
+  res.send({ message: '장바구니 상품이 삭제되었습니다.' });
 });
 
 module.exports = router;

@@ -67,16 +67,13 @@ const getUserCart = (email) => carts.find((cart) => cart.email === email);
 
 const getUserCartProduct = (id, products) => products.find((product) => product.id === id);
 
-const getUserCartSelectProductStock = (products, id) =>
+const getUserCartSelectProductStock = (products, id, selectedSize) =>
   products.reduce(
     (acc, cur) => {
-      if (cur.id === id) {
-        acc.selectedSize = cur.selectedSize;
-        acc.quantity += cur.quantity;
-      }
+      if (cur.id === id && cur.selectedSize === selectedSize) acc.quantity += cur.quantity;
       return acc;
     },
-    { selectedSize: null, quantity: 0 }
+    { selectedSize, quantity: 0 }
   );
 
 const changeCart = ({ email, id, quantity }) => {

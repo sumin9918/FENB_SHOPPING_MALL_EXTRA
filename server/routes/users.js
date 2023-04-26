@@ -1,6 +1,13 @@
 const router = require('express').Router();
 
-const { getUser, addAddress, changeDefaultAddress, editAddress, deleteAddress } = require('../controllers/users');
+const {
+  getUser,
+  addAddress,
+  changeDefaultAddress,
+  editAddress,
+  deleteAddress,
+  moveFrontDefaultAddress,
+} = require('../controllers/users');
 const { authCheck } = require('../middleware/auth');
 const { checkAddress } = require('../middleware/address');
 
@@ -14,7 +21,7 @@ router.get('/me', authCheck, (req, res) => {
 
 router.post('/me/address', authCheck, (req, res) => {
   const { email } = req.locals;
-  const { recipient, recipientPhone, mainAddress, detailAddress, postcode } = req.body;
+  const { recipient, recipientPhone, mainAddress, detailAddress, postcode, isDefault = null } = req.body;
 
   if (!recipient || !recipientPhone || !mainAddress || !detailAddress || !postcode)
     return res.status(406).send({ message: '모든 정보를 입력해주세요.' });
@@ -25,7 +32,9 @@ router.post('/me/address', authCheck, (req, res) => {
     mainAddress,
     detailAddress,
     postcode,
+    isDefault,
   });
+  moveFrontDefaultAddress(email);
 
   res.send({ id });
 });
@@ -35,6 +44,7 @@ router.patch('/me/address/default/:id', authCheck, checkAddress, (req, res) => {
   const id = req.params.id;
 
   changeDefaultAddress(email, id);
+  moveFrontDefaultAddress(email);
   res.send({ message: '기본 배송지가 변경되었습니다.' });
 });
 

@@ -89,15 +89,19 @@ const hasAddress = (email, id) =>
   );
 
 // 추가
-const addAddress = (email, newAddress) => {
+const addAddress = (email, { isDefault, ...address }) => {
   const id = uuidv4();
-  const isDefault = users.length === 0;
+  const newAddress = {
+    id,
+    isDefault: isDefault ?? users.length === 0,
+    ...address,
+  };
 
   users = users.map((user) =>
     user.email === email
       ? {
           ...user,
-          addresses: [{ id, ...newAddress, isDefault }, ...user.addresses],
+          addresses: [newAddress, ...user.addresses],
         }
       : user
   );
@@ -105,26 +109,35 @@ const addAddress = (email, newAddress) => {
   return id;
 };
 
-// 기본 배송지 변경 + 기본 배송지는 배열 맨앞으로 이동
-const changeDefaultAddress = (email, addressId) =>
-  (users = users.map((user) => {
-    if (user.email === email) {
-      const changedAddress = user.addresses.map((address) => ({
-        ...address,
-        isDefault: address.id === addressId,
-      }));
+// 기본 배송지 변경
+const changeDefaultAddress = (email, addressId) => {
+  users = users.map((user) =>
+    user.email === email
+      ? {
+          ...user,
+          addresses: user.addresses.map((address) => ({
+            ...address,
+            isDefault: address.id === addressId,
+          })),
+        }
+      : user
+  );
+};
 
-      return {
-        ...user,
-        addresses: [
-          ...changedAddress.find((address) => address.id === addressId),
-          ...changedAddress.filter((address) => address.id !== addressId),
-        ],
-      };
-    }
-
-    return user;
-  }));
+// 기본 배송지는 배열 맨앞으로 이동
+const moveFrontDefaultAddress = (email, addressId) => {
+  users = users.map((user) =>
+    user.email === email
+      ? {
+          ...user,
+          addresses: [
+            user.addresses.find((address) => address.isDefault),
+            ...user.addresses.filter((address) => !address.isDefault),
+          ],
+        }
+      : user
+  );
+};
 
 // 배송지 수정
 const editAddress = (email, id, newAddress) => {
@@ -172,6 +185,7 @@ module.exports = {
   confirmUser,
   checkDuplicateEmail,
   changeDefaultAddress,
+  moveFrontDefaultAddress,
   editAddress,
   deleteAddress,
 };

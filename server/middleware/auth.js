@@ -14,7 +14,7 @@ const authCheck = (req, res, next) => {
 
     next();
   } catch (e) {
-    return res.send({ isSignIn: false });
+    return res.status(401).send({ isSignIn: false });
   }
 };
 
