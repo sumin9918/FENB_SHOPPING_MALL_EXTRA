@@ -14,10 +14,11 @@ import { BiSearch } from 'react-icons/bi';
 import { SlHandbag } from 'react-icons/sl';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
 import { TbMoonFilled, TbSunFilled } from 'react-icons/tb';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { Link, useLocation } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { PATH } from '../constants';
-import { getUserInfo, signOut } from '../api';
+import { signOut } from '../api';
+import { userState } from '../recoil/atoms';
 
 const categoryList = [
   { kr: '운동화', en: 'sneakers' },
@@ -34,27 +35,24 @@ const topList = [
 ];
 
 const TopList = () => {
-  // KKW darkmode Test
+  const [user, setUser] = useRecoilState(userState);
+
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-  const { data, refetch } = useQuery({
-    queryKey: ['user'],
-    queryFn: getUserInfo,
-  });
   const { pathname } = useLocation();
 
   const handleSignOutClick = async () => {
     await signOut();
-    await refetch();
+    setUser(null);
   };
 
   return (
     <Navbar.Section pt="xs">
       <Flex gap="lg" align="center" justify="flex-end" fz="1.3rem" color="#222222">
-        {data.email ? (
+        {user?.email ? (
           <>
             <Text onClick={handleSignOutClick}>로그아웃</Text>
-            <Text>{data.name}님 환영합니다.</Text>
+            <Text>{user?.username}님 환영합니다.</Text>
           </>
         ) : (
           topList.map(({ kr, en }) => (

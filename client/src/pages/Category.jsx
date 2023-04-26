@@ -78,7 +78,9 @@ const SizeButton = styled(Button)`
 
 const Header = () => (
   <Group position="apart">
-    <Container sx={{ margin: '0', padding: '15px 0', fontSize: '2.4rem' }}>카테고리 이름 / 검색문자열(숫자)</Container>
+    <Container sx={{ margin: '0', padding: '1.5rem 0', fontSize: '2.4rem' }}>
+      카테고리 이름 / 검색문자열(숫자)
+    </Container>
     <Select
       size="xl"
       maxDropdownHeight={500}
@@ -95,10 +97,10 @@ const Header = () => (
 );
 
 const Filters = ({ sizeFilters, colorFilters, handleCheckFilters }) => (
-  <ScrollArea h={1000} offsetScrollbars w="270px">
+  <ScrollArea h="100rem" offsetScrollbars w="27rem">
     <Container
       sx={{
-        width: '240px',
+        width: '24rem',
         flexDirection: 'column',
         padding: '0',
       }}>
@@ -257,7 +259,7 @@ const ResultProducts = () => {
   };
 
   return (
-    <Flex sx={{ gap: '10px' }}>
+    <Flex sx={{ gap: '1rem' }}>
       <Filters
         sizeFilters={filters.sizeFilters}
         colorFilters={filters.colorFilters}
@@ -289,7 +291,7 @@ const ResultProducts = () => {
 };
 
 const Category = () => (
-  <Container sx={{ minWidth: '1200px', maxWidth: '1920px', padding: '0 8rem' }}>
+  <Container sx={{ minWidth: '120rem', maxWidth: '192rem', padding: '0 8rem' }}>
     <Header />
     <ResultProducts />
   </Container>

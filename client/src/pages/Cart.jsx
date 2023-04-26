@@ -12,6 +12,7 @@ import {
   NumberInput,
   ActionIcon,
   rem,
+  useMantineColorScheme,
 } from '@mantine/core';
 import styled from '@emotion/styled';
 import { FaAngleDoubleRight } from 'react-icons/fa';
@@ -46,7 +47,7 @@ const COLORS = [
 
 // Styled Components
 const QuantityInput = styled(NumberInput)`
-  textalign: 'center';
+  text-align: 'center';
 
   input {
     width: ${rem(54)};
@@ -54,7 +55,7 @@ const QuantityInput = styled(NumberInput)`
 
   input:disabled {
     background: transparent;
-    color: rgb(17, 17, 17);
+    color: #868e96;
     cursor: default;
   }
 `;
@@ -65,13 +66,12 @@ const OrderButton = styled(Button)`
   padding: 1.8rem 2.4rem;
   border-radius: 30px;
   height: 6rem;
-  background-color: #171717;
   color: #fff;
   font-size: 1.6rem;
   font-weight: 'bold';
 
   :hover {
-    background-color: #171717;
+    background-color: #228be6;
   }
 `;
 
@@ -99,22 +99,31 @@ const CartList = () => {
   );
 };
 
-const NoCartItem = () => (
-  <Container py="4rem" c="rgb(17,17,17)">
-    <Title>장바구니에 물건이 없습니다</Title>
-    <Space h="xl" />
-    <Link to={PATH.MAIN}>
-      <Text style={{ color: 'rgba(117,117,117)', verticalAlign: 'bottom' }}>
-        <FaAngleDoubleRight
-          style={{ verticalAlign: 'middle', transform: 'transLate3d(0, -1px, 0)', marginRight: '4px' }}
-        />
-        <span style={{ fontWeight: 'bold', color: 'rgb(17,17,17)' }}>FENB</span>의 신발들을 둘러보세요
-      </Text>
-    </Link>
-  </Container>
-);
+const NoCartItem = () => {
+  const { colorScheme } = useMantineColorScheme();
+
+  return (
+    <Container py="4rem" c={colorScheme === 'dark' ? 'gray.6' : 'rgb(17,17,17)'}>
+      <Title>장바구니에 물건이 없습니다</Title>
+      <Space h="xl" />
+      <Link to={PATH.MAIN}>
+        <Text color={colorScheme === 'dark' ? 'gray.6' : 'rgba(117,117,117)'} style={{ verticalAlign: 'bottom' }}>
+          <FaAngleDoubleRight
+            style={{ verticalAlign: 'middle', transform: 'transLate3d(0, -1px, 0)', marginRight: '4px' }}
+          />
+          <Text span weight="bold" color={colorScheme === 'dark' ? 'gray.6' : 'rgb(17,17,17)'}>
+            FENB
+          </Text>
+          의 신발들을 둘러보세요
+        </Text>
+      </Link>
+    </Container>
+  );
+};
 
 const CartItem = ({ cart }) => {
+  const { colorScheme } = useMantineColorScheme();
+
   const { id, category, color, name, price, imgURL, selectedSize, quantity, stocks } = cart;
 
   const handlers = useRef();
@@ -125,7 +134,12 @@ const CartItem = ({ cart }) => {
   const maxQuantity = stocks?.find(({ size }) => size === selectedSize).stock;
 
   return (
-    <Stack w="100%" py="2.4rem" spacing={0} c="rgb(117,117,117)" sx={{ borderBottom: '1px solid rgb(117,117,117)' }}>
+    <Stack
+      w="100%"
+      py="2.4rem"
+      spacing={0}
+      c={colorScheme === 'dark' ? 'gray.6' : 'rgb(117,117,117)'}
+      sx={{ borderBottom: '1px solid rgb(117,117,117)' }}>
       <Group align="flex-start">
         <div
           style={{
@@ -141,7 +155,7 @@ const CartItem = ({ cart }) => {
         <Stack justify="space-between" grow="true" spacing={0} sx={{ flex: 1 }}>
           <Group position="apart" grow="true" spacing={0} align="flex-start">
             <Stack align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
-              <Title fz="1.6rem" fw={500} c="#111" sx={{ cursor: 'pointer' }}>
+              <Title fz="1.6rem" fw={500} c={colorScheme === 'dark' ? 'gray.6' : '#111'} sx={{ cursor: 'pointer' }}>
                 <Link to={`${PATH.PRODUCTS}/${id}`} state={id}>
                   {name}
                 </Link>
@@ -185,9 +199,9 @@ const CartItem = ({ cart }) => {
               py="0.2rem"
               spacing={0}
               maw="fit-content"
-              c="#111"
+              c={colorScheme === 'dark' ? 'gray.6' : '#111'}
               ta="right">
-              <Title fz="1.8rem" fw={500} c="#111">
+              <Title fz="1.8rem" fw={500} c={colorScheme === 'dark' ? 'gray.6' : '#111'}>
                 {(price * quantity).toLocaleString()}
               </Title>
             </Stack>
@@ -200,12 +214,13 @@ const CartItem = ({ cart }) => {
           </div>
         </Stack>
       </Group>
-      <Text c="#111">무료 배송</Text>
+      <Text c={colorScheme === 'dark' ? 'gray.6' : '#111'}>무료 배송</Text>
     </Stack>
   );
 };
 
 const OrderHistory = () => {
+  const { colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
 
   const { data: countCarts } = useCartsQuery({ select: carts => carts.length });
@@ -231,12 +246,15 @@ const OrderHistory = () => {
           position="apart"
           my="1.2rem"
           py="2.4rem"
-          style={{ borderBottom: '1px solid black', borderTop: '1px solid black' }}>
+          style={{ borderBottom: '1px solid rgb(117,117,117)', borderTop: '1px solid rgb(117,117,117)' }}>
           <Text>총 결제 금액</Text>
           <Text>{totalPrice.toLocaleString()} 원</Text>
         </Group>
       </div>
-      <OrderButton disabled={!countCarts} onClick={() => navigate(PATH.ORDER)}>
+      <OrderButton
+        disabled={!countCarts}
+        color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+        onClick={() => navigate(PATH.ORDER)}>
         주문결제
       </OrderButton>
     </Stack>

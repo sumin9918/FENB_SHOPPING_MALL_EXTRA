@@ -6,9 +6,10 @@ import { notifications } from '@mantine/notifications';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
+import { useSetRecoilState } from 'recoil';
 import { FormInput } from '../components';
 import { signinSchema } from '../schema';
+import { userState } from '../recoil/atoms';
 
 // Styled Link
 const SignUpLink = styled(Link)`
@@ -23,7 +24,7 @@ const SignUpLink = styled(Link)`
 // SignIn Component
 const SignIn = () => {
   const { colorScheme } = useMantineColorScheme();
-  const queryClient = useQueryClient();
+  const setUser = useSetRecoilState(userState);
 
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -39,6 +40,8 @@ const SignIn = () => {
         password: data.password,
       });
 
+      setUser(response.data);
+
       notifications.show({
         color: 'blue',
         autoClose: 2000,
@@ -46,8 +49,6 @@ const SignIn = () => {
         message: `${response.data.username}님 환영합니다.`,
         sx: { div: { fontSize: '1.5rem' } },
       });
-
-      queryClient.removeQueries({ queryKey: ['user'] });
 
       if (state) {
         navigate(state);

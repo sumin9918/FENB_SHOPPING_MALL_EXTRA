@@ -2,7 +2,18 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container, Stack, Group, Title, Text, Button, Radio, Image, Space } from '@mantine/core';
+import {
+  Container,
+  Stack,
+  Group,
+  Title,
+  Text,
+  Button,
+  Radio,
+  Image,
+  Space,
+  useMantineColorScheme,
+} from '@mantine/core';
 import styled from '@emotion/styled';
 import { BsCheck2, BsXLg } from 'react-icons/bs';
 import { FormAddressInput, FormInput, FormPhoneInput, FormZoneCodeInput } from '../components';
@@ -42,17 +53,18 @@ const CustomButton = styled(Button)`
   padding: 1.8rem 2.4rem;
   border-radius: 30px;
   height: 6rem;
-  background-color: #171717;
   color: #fff;
   font-size: 1.6rem;
   font-weight: 'bold';
 
   :hover {
-    background-color: #171717;
+    background-color: #228be6;
   }
 `;
 
 const Order = () => {
+  const { colorScheme } = useMantineColorScheme();
+
   const navigate = useNavigate();
 
   return (
@@ -65,7 +77,11 @@ const Order = () => {
           <Address />
           <SelectPaymentMethod />
           <Container w="30rem">
-            <CustomButton w="100%" disabled={false} onClick={() => navigate(PATH.ORDER_COMPLETE)}>
+            <CustomButton
+              w="100%"
+              disabled={false}
+              color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+              onClick={() => navigate(PATH.ORDER_COMPLETE)}>
               주문결제
             </CustomButton>
           </Container>
@@ -312,12 +328,14 @@ const SelectPaymentMethod = () => (
 );
 
 const CartHistory = () => {
+  const { colorScheme } = useMantineColorScheme();
+
   const { data: totalPrice } = useCartsQuery({
     select: carts => carts.reduce((acc, cart) => acc + cart.quantity * cart.price, 0),
   });
 
   return (
-    <Stack w="33.33333%" px="0.8rem">
+    <Stack w="33.33333%" px="0.8rem" c={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
       <Title>장바구니</Title>
       <Group position="apart">
         <Text>상품 금액</Text>
@@ -353,6 +371,8 @@ const CartHistoryItemList = () => {
 };
 
 const CartHistoryItem = ({ cart }) => {
+  const { colorScheme } = useMantineColorScheme();
+
   const { color, name, price, imgURL, selectedSize, quantity } = cart;
 
   return (
@@ -361,7 +381,7 @@ const CartHistoryItem = ({ cart }) => {
         <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '60px' } }} />
       </div>
       <Stack pl="2rem" align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
-        <Title fz="1.4rem" fw="bold" c="#111" sx={{ cursor: 'pointer' }}>
+        <Title fz="1.4rem" fw="bold" c={colorScheme === 'dark' ? 'gray.6' : '#111'} sx={{ cursor: 'pointer' }}>
           {name}
         </Title>
         <Text mb="-0.4rem">사이즈 : {selectedSize}</Text>

@@ -139,7 +139,7 @@ const SignUp = () => {
           inputType="text"
           id="postcode"
           name="우편번호"
-          placeholder="주소찾기 버튼을 클릭주세요"
+          placeholder="주소찾기 버튼을 클릭주세요."
           setValue={setValue}
           register={register}
           formState={formState}
