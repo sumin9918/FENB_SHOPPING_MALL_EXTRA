@@ -2,13 +2,13 @@ import useGenericMutation from '../useGenericMutation';
 import { addAddress } from '../../api/address';
 import { ADDRESS_QUERY_KEY } from '../../constants';
 
-const useAddCartMutation = () =>
+const useAddAddressMutation = () =>
   useGenericMutation({
     queryKey: ADDRESS_QUERY_KEY,
     mutationFn: addAddress,
-    // onMutate(addressInfo) {
-    //   return addresses => [...addresses, addressInfo];
-    // },
+    onMutate(newAddress) {
+      return user => ({ ...user, addresses: [...user.addresses, newAddress] });
+    },
   });
 
-export default useAddCartMutation;
+export default useAddAddressMutation;

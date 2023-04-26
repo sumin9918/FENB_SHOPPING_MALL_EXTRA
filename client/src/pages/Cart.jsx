@@ -79,7 +79,7 @@ const Cart = () => (
   <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
     <Group mih="5rem" justify="center" align="flex-start" spacing={0}>
       <CartList />
-      <Receipt />
+      <OrderHistory />
     </Group>
   </Container>
 );
@@ -90,7 +90,11 @@ const CartList = () => {
   return (
     <Stack w="66.66667%" pl="0.8rem" pr="10rem" spacing={0} fluid="true">
       <Title py="0.8rem">장바구니</Title>
-      {carts.length ? carts.map(cart => <CartItem key={cart.id} cart={cart} />) : <NoCartItem />}
+      {carts.length ? (
+        carts.map(cart => <CartItem key={`${cart.id}-${cart.selectedSize}`} cart={cart} />)
+      ) : (
+        <NoCartItem />
+      )}
     </Stack>
   );
 };
@@ -118,7 +122,7 @@ const CartItem = ({ cart }) => {
   const { mutate: changeQuantity } = useChangeQuantityMutation();
   const { mutate: removeCart } = useRemoveCartMutation();
 
-  const maxQuantity = stocks.find(({ size }) => size === selectedSize).stock;
+  const maxQuantity = stocks?.find(({ size }) => size === selectedSize).stock;
 
   return (
     <Stack w="100%" py="2.4rem" spacing={0} c="rgb(117,117,117)" sx={{ borderBottom: '1px solid rgb(117,117,117)' }}>
@@ -130,7 +134,7 @@ const CartItem = ({ cart }) => {
             minWidth: '180px',
             paddingRight: '16px',
           }}>
-          <Link to={`${PATH.PRODUCTS}/${id}`}>
+          <Link to={`${PATH.PRODUCTS}/${id}`} state={id}>
             <Image src={imgURL} alt={name} withPlaceholder />
           </Link>
         </div>
@@ -138,7 +142,9 @@ const CartItem = ({ cart }) => {
           <Group position="apart" grow="true" spacing={0} align="flex-start">
             <Stack align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
               <Title fz="1.6rem" fw={500} c="#111" sx={{ cursor: 'pointer' }}>
-                <Link to={`${PATH.PRODUCTS}/${id}`}>{name}</Link>
+                <Link to={`${PATH.PRODUCTS}/${id}`} state={id}>
+                  {name}
+                </Link>
               </Title>
               <Text>{CATEGORIES[category].kr}</Text>
               <Text>{COLORS[color].kr}</Text>
@@ -199,7 +205,7 @@ const CartItem = ({ cart }) => {
   );
 };
 
-const Receipt = () => {
+const OrderHistory = () => {
   const navigate = useNavigate();
 
   const { data: countCarts } = useCartsQuery({ select: carts => carts.length });
