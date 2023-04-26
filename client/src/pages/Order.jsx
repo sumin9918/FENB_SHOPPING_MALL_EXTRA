@@ -12,12 +12,13 @@ import {
   Radio,
   Image,
   Space,
+  Center,
   useMantineColorScheme,
 } from '@mantine/core';
 import styled from '@emotion/styled';
-import { BsCheck2, BsXLg } from 'react-icons/bs';
+import { BsCheck2 } from 'react-icons/bs';
 import { FormAddressInput, FormInput, FormPhoneInput, FormZoneCodeInput } from '../components';
-import { useAddressQuery, useRemoveAddressMutation } from '../hooks/address';
+import { useAddressQuery, useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../hooks/address';
 import { useCartsQuery } from '../hooks/carts';
 import { addAddress } from '../api/address';
 import { PATH } from '../constants';
@@ -68,12 +69,12 @@ const Order = () => {
   const navigate = useNavigate();
 
   return (
-    <Container size="1200px" w="100%" py="4rem" fz="1.6rem" c="rgb(17, 17, 17)">
+    <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
       <Title p="4.8rem" sx={{ textAlign: 'center' }}>
         결제하기
       </Title>
       <Group mih="5rem" justify="center" align="flex-start" spacing={0} px="0.8rem">
-        <Stack w="66.66667%" pr="5rem" spacing={0}>
+        <Stack w="66.66667%" pr="5rem" spacing="5rem">
           <Address />
           <SelectPaymentMethod />
           <Container w="30rem">
@@ -94,10 +95,9 @@ const Order = () => {
 
 const Address = () => {
   const { data: addresses } = useAddressQuery();
-  // const addresses = [];
 
-  const defaultAddress = !addresses.length ? null : addresses.find(address => address.isDefault) ?? addresses[0];
-  const isValidAddress = !!defaultAddress?.postcode !== '';
+  const defaultAddress = !addresses.length ? {} : addresses.find(address => address.isDefault) ?? addresses[0];
+  const isValidAddress = defaultAddress?.postcode !== '' ?? false;
 
   // TODO : 더 나은 방식 생각하기
   const [field, setFiled] = useState({ ...initField, info: isValidAddress, input: !isValidAddress });
@@ -108,8 +108,8 @@ const Address = () => {
   };
 
   return (
-    <Stack w="100%">
-      <Group position="apart" p="1.2rem 2rem 2.8rem 2rem">
+    <Stack w="100%" p="2rem">
+      <Group position="apart" pt="1.2rem" pb="2.8rem">
         <Title fz="2.4rem" fw={500} sx={{ lineHeight: '2.8rem' }}>
           배송 옵션{field.info && <BsCheck2 color="rgb(18, 138, 9)" style={{ verticalAlign: 'baseline' }} />}
         </Title>
@@ -129,7 +129,13 @@ const Address = () => {
       </Group>
 
       {field.info && <AddressInfo selectedAddress={selectedAddress} />}
-      {field.edit && <EditAddress setFiled={setFiled} changeSelectedAddress={changeSelectedAddress} />}
+      {field.edit && (
+        <EditAddress
+          setFiled={setFiled}
+          selectedAddress={selectedAddress}
+          changeSelectedAddress={changeSelectedAddress}
+        />
+      )}
       {field.input && <InputAddress setFiled={setFiled} changeSelectedAddress={changeSelectedAddress} />}
     </Stack>
   );
@@ -139,16 +145,16 @@ const AddressInfo = ({ selectedAddress }) => {
   const { recipient, mainAddress, detailAddress, postcode, recipientPhone } = selectedAddress.current;
 
   return (
-    <Stack w="100%" px="2rem">
-      <Title>배송 주소</Title>
+    <Stack w="100%" spacing={0}>
+      <Title fz="1.6rem">배송 주소</Title>
       <Text>{recipient}</Text>
       <Text>{mainAddress}</Text>
       <Text>{detailAddress}</Text>
       <Text>{postcode}</Text>
       <Text>{recipientPhone}</Text>
-      <Space />
+      <Space h="xl" />
       <Title>배송 방법</Title>
-      <Text>무료</Text>
+      <Text fz="1.6rem">무료</Text>
     </Stack>
   );
 };
@@ -158,7 +164,7 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
     resolver: zodResolver(addAdressSchema),
   });
 
-  const handleAddAddress = data => {
+  const handleAddAddress = async data => {
     const newAddress = {
       recipient: data.name,
       recipientPhone: data.phone,
@@ -167,17 +173,15 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
       postcode: data.postcode,
     };
 
-    addAddress(newAddress);
+    const res = await addAddress(newAddress);
 
-    changeSelectedAddress(newAddress);
+    changeSelectedAddress({ ...newAddress, id: res.data.id });
     setFiled({ ...initField, info: true });
   };
 
   return (
     <Stack
       w="100%"
-      h="500px"
-      px="2rem"
       sx={{
         input: {
           fontSize: '1.6rem',
@@ -194,7 +198,6 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           fontSize: '1.6rem',
         },
       }}>
-      <Text>배송지 입력란</Text>
       <form noValidate onSubmit={handleSubmit(handleAddAddress)}>
         <FormInput
           inputType="text"
@@ -243,64 +246,104 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           register={register}
           formState={formState}
         />
-        <Button type="submit" sx={{ width: '40rem' }}>
-          배송지 추가
-        </Button>
+        <Group position="right">
+          <CustomButton type="submit" sx={{ width: '20rem' }}>
+            배송지 추가
+          </CustomButton>
+        </Group>
       </form>
     </Stack>
   );
 };
 
-const EditAddress = ({ setFiled, changeSelectedAddress }) => {
+const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
   const { data: addresses } = useAddressQuery();
 
   return (
     <Stack w="100%" px="2rem">
-      {addresses.map(address => (
-        <EditAddressItem
-          key={address.id}
-          address={address}
-          setFiled={setFiled}
-          changeSelectedAddress={changeSelectedAddress}
-        />
-      ))}
-      <CustomButton sx={{ width: '40rem' }} onClick={() => setFiled({ ...initField, input: true })}>
-        새 배송지 추가
-      </CustomButton>
+      {addresses.length ? (
+        addresses.map(address => (
+          <EditAddressItem
+            key={address.id}
+            address={address}
+            setFiled={setFiled}
+            changeSelectedAddress={changeSelectedAddress}
+            selectedAddress={selectedAddress}
+          />
+        ))
+      ) : (
+        <Center>
+          <Text>배송지를 입력해 주세요</Text>
+        </Center>
+      )}
+      <Group position="right">
+        <CustomButton sx={{ width: '20rem' }} onClick={() => setFiled({ ...initField, input: true })}>
+          새 배송지 추가
+        </CustomButton>
+      </Group>
     </Stack>
   );
 };
 
-const EditAddressItem = ({ address, setFiled, changeSelectedAddress }) => {
+const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAddress }) => {
   const { id, recipient, mainAddress, detailAddress, postcode, recipientPhone, isDefault } = address;
 
   const { mutate: removeAddress } = useRemoveAddressMutation();
+  const { mutate: changeDefaultAddress } = useChangeDefaultAddressMutation();
 
   return (
     <Container
       key={id}
-      sx={{ width: '100%', border: '1px solid black' }}
+      p="0.8rem"
+      size="content-fit"
+      sx={{
+        width: '100%',
+        border: `1px solid ${selectedAddress.current.id === id ? 'black' : 'lightgray'}`,
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
       onClick={() => {
         changeSelectedAddress(address);
         setFiled({ ...initField, info: true });
       }}>
       <Group position="apart" align="flex-start">
-        <Stack>
-          {isDefault && <Text>[기본 배송지]</Text>}
-          <Text>{recipient}</Text>
+        <Stack spacing={0}>
+          <Group spacing="1.2rem">
+            <Text>{recipient}</Text>
+            {isDefault && <Text>[기본 배송지]</Text>}
+          </Group>
           <Text>{mainAddress}</Text>
           <Text>{detailAddress}</Text>
           <Text>{postcode}</Text>
           <Text>{recipientPhone}</Text>
         </Stack>
-        <Button
-          style={{ zIndex: '9999' }}
-          onClick={e => {
-            e.stopPropagation();
-            removeAddress(id);
-          }}>
-          <BsXLg w="5rem" h="5rem" color="#000" />
-        </Button>
+        <Stack align="flex-end" justify="space-between" h="12.4rem">
+          <Button
+            variant="subtle"
+            color="dark"
+            p="0.4rem"
+            w="3.2rem"
+            h="3.2rem"
+            sx={{ zIndex: '9999', ':hover': { background: 'transparent' } }}
+            onClick={e => {
+              e.stopPropagation();
+              removeAddress(id);
+            }}>
+            <Text fz="1.6rem">X</Text>
+          </Button>
+          <Button
+            variant="subtle"
+            color="dark"
+            sx={{ zIndex: '9999', ':hover': { background: 'transparent' } }}
+            onClick={e => {
+              e.stopPropagation();
+              changeDefaultAddress(id);
+            }}>
+            <Text fz="1.2rem" fw="normal" sx={{ textDecoration: 'underline' }}>
+              기본 배송지로 변경
+            </Text>
+          </Button>
+        </Stack>
       </Group>
     </Container>
   );
@@ -315,12 +358,14 @@ const paymentMethods = [
 ];
 
 const SelectPaymentMethod = () => (
-  <Stack w="100%">
-    <Title>결제 수단 선택</Title>
-    <Radio.Group>
-      <Stack>
+  <Stack w="100%" px="2rem">
+    <Title fz="2.4rem" fw={500}>
+      결제
+    </Title>
+    <Radio.Group defaultValue={paymentMethods[0].value} name="paymentMethods">
+      <Stack mt="xs" spacing="0.8rem">
         {paymentMethods.map(({ value, label }) => (
-          <Radio vaule={value} label={label} key={value} />
+          <Radio key={value} value={value} label={label} size="xl" />
         ))}
       </Stack>
     </Radio.Group>
@@ -364,7 +409,7 @@ const CartHistoryItemList = () => {
         주문 상품
       </Title>
       {carts.map(cart => (
-        <CartHistoryItem key={cart.id} cart={cart} />
+        <CartHistoryItem key={`${cart.id}-${cart.selectedSize}`} cart={cart} />
       ))}
     </Stack>
   );

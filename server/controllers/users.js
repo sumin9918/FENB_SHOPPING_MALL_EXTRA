@@ -89,11 +89,13 @@ const hasAddress = (email, id) =>
   );
 
 // 추가
-const addAddress = (email, { isDefault, ...address }) => {
+const addAddress = (email, { isDefault = false, ...address }) => {
   const id = uuidv4();
   const newAddress = {
     id,
-    isDefault: isDefault ?? users.length === 0,
+    isDefault:
+      isDefault ??
+      users.find((user) => user.email === email).addresses.length === 0,
     ...address,
   };
 
