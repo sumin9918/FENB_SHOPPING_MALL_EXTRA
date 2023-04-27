@@ -51,21 +51,21 @@ let carts = [
   },
 ];
 
-const createUser = (email) => {
+const createUser = email => {
   carts = [...carts, { ...defaultCart, email }];
 };
 
 const addCart = ({ email, ...newProduct }) => {
-  carts = carts.map((cart) =>
+  carts = carts.map(cart =>
     cart.email === email ? { ...cart, products: [{ ...newProduct }, ...cart.products] } : cart
   );
 };
 
 const getCarts = () => carts;
 
-const getUserCart = (email) => carts.find((cart) => cart.email === email);
+const getUserCart = email => carts.find(cart => cart.email === email);
 
-const getUserCartProduct = (id, products) => products.find((product) => product.id === id);
+const getUserCartProduct = (id, products) => products.find(product => product.id === id);
 
 const getUserCartSelectProductStock = (products, id, selectedSize) =>
   products.reduce(
@@ -77,29 +77,29 @@ const getUserCartSelectProductStock = (products, id, selectedSize) =>
   );
 
 const changeCart = ({ email, id, quantity }) => {
-  carts = carts.map((cart) =>
+  carts = carts.map(cart =>
     cart.email === email
       ? {
           ...cart,
-          products: cart.products.map((product) => (product.id === id ? { ...product, quantity } : product)),
+          products: cart.products.map(product => (product.id === id ? { ...product, quantity } : product)),
         }
       : cart
   );
 };
 
 const removeCart = ({ email, id }) => {
-  carts = carts.map((cart) =>
+  carts = carts.map(cart =>
     cart.email === email
       ? {
           ...cart,
-          products: cart.products.filter((product) => product.id !== id),
+          products: cart.products.filter(product => product.id !== id),
         }
       : cart
   );
 };
 
-const removeAllCart = (email) => {
-  carts = carts.map((cart) => (cart.email === email ? { ...cart, products: [] } : cart));
+const removeAllCart = email => {
+  carts = carts.map(cart => (cart.email === email ? { ...cart, products: [] } : cart));
 };
 
 module.exports = {
