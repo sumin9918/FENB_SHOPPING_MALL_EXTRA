@@ -40,6 +40,11 @@ export const getUserInfo = async () => {
   return data;
 };
 
+export const fetchCoupons = async () => {
+  const { data } = await axios.get('api/coupons');
+  return data;
+};
+
 export const signOut = async () => {
   await axios.get('api/auth/signout');
 };

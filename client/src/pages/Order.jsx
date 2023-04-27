@@ -17,12 +17,14 @@ import {
 } from '@mantine/core';
 import styled from '@emotion/styled';
 import { BsCheck2 } from 'react-icons/bs';
+import { useQuery } from '@tanstack/react-query';
 import { FormAddressInput, FormInput, FormPhoneInput, FormZoneCodeInput } from '../components';
 import { useAddressQuery, useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../hooks/address';
 import { useCartsQuery } from '../hooks/carts';
 import { addAddress } from '../api/address';
 import { PATH } from '../constants';
 import { addAdressSchema } from '../schema';
+import { userQuery } from '../api/loader';
 
 const COLORS = [
   { color: '#8D429F', en: 'purple', kr: '보라색' },
@@ -94,7 +96,8 @@ const Order = () => {
 };
 
 const Address = () => {
-  const { data: addresses } = useAddressQuery();
+  // const { data: addresses } = useAddressQuery();
+  const { data: addresses } = useQuery(userQuery());
 
   const defaultAddress = !addresses.length ? {} : addresses.find(address => address.isDefault) ?? addresses[0];
   const isValidAddress = defaultAddress?.postcode !== '' ?? false;

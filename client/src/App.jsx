@@ -17,9 +17,11 @@ import {
   carouselLoader,
   cartsLoader,
   categoryLoader,
+  couponsLoader,
   favoritesLoader,
   filteredProductsLoader,
   productsLoader,
+  userLoader,
 } from './api/loader';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -69,7 +71,11 @@ const router = createHashRouter([
       },
       {
         path: PATH.ORDER,
-        // loader: user(+address) 데이터 prefetch
+        loader: async () => ({
+          user: await userLoader(),
+          carts: await cartsLoader(),
+          coupons: await couponsLoader(),
+        }),
         element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<Order />} />,
       },
       {

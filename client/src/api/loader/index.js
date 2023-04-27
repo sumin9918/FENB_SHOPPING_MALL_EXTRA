@@ -4,6 +4,7 @@ import {
   authQueryKey,
   carouselQueryKey,
   categoryQueryKey,
+  couponsQueryKey,
   filteredProductsQueryKey,
   productsQueryKey,
   userQueryKey,
@@ -16,6 +17,7 @@ import {
   checkSignIn,
   fetchCarousel,
   fetchCategories,
+  fetchCoupons,
   fetchFilteredProducts,
   fetchProducts,
   getUserInfo,
@@ -106,13 +108,6 @@ export const verifyLoader = async () => {
   }
 };
 
-export const userQuery = () => ({
-  queryKey: userQueryKey,
-  queryFn: getUserInfo,
-  retry: 0,
-  staleTime: 600000, // 10분
-});
-
 export const favoritesQuery = () => ({
   queryKey: wishListQueryKey,
   queryFn: fetchFavorites,
@@ -121,11 +116,7 @@ export const favoritesQuery = () => ({
 export const favoritesLoader = async () => {
   const { queryKey, queryFn } = favoritesQuery();
 
-  try {
-    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
-  } catch (e) {
-    throw new Error(e);
-  }
+  return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
 };
 
 export const cartsQuery = () => ({
@@ -135,6 +126,37 @@ export const cartsQuery = () => ({
 
 export const cartsLoader = async () => {
   const { queryKey, queryFn } = cartsQuery();
+
+  try {
+    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const userQuery = () => ({
+  queryKey: userQueryKey,
+  queryFn: getUserInfo,
+  retry: 0,
+  staleTime: 3000,
+});
+
+export const userLoader = async () => {
+  const { queryKey, queryFn } = userQuery();
+
+  try {
+    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+export const couponsQuery = () => ({
+  queryKey: couponsQueryKey,
+  queryFn: fetchCoupons,
+});
+
+export const couponsLoader = async () => {
+  const { queryKey, queryFn } = couponsQuery();
 
   try {
     return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
