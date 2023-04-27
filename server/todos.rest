@@ -1,22 +1,8 @@
-### 유저 정보 가져오기
-GET http://localhost:8000/api/users
-
-### 회원가입 확인
-POST http://localhost:8000/api/auth/signup
-content-type: application/json
-
-{
-  "email" : "test1@test.com",
-  "name": "이동규",
-  "phone": "010-1234-5678",
-  "password": "test123",
-  "mainAddress": "",
-  "detailAddress": "",
-  "postcode": ""
-}
-
-### 상품리스트 가져오기
+### 전체 상품리스트 가져오기
 GET http://localhost:8000/api/products
+
+### 카테고리 상품리스트 가져오기
+GET http://localhost:8000/api/products?search="울"
 
 ### 특정 유저(accessToken)의 정보 가져오기(패스워드 제외)
 GET http://localhost:8000/api/users/me
@@ -36,20 +22,23 @@ GET http://localhost:8000/api/favorites/me
 ### 주문하기
 GET http://localhost:8000/api/order
 
-### 결제하기
-GET http://localhost:8000/api/order/pay
-
 ### 캐러셀 가져오기
 GET http://localhost:8000/api/carousel
 
 ### 로그인 유무 확인
 GET http://localhost:8000/api/auth/verify
 
-### 캐러셀 가져오기
-GET http://localhost:8000/api/carousel
+### 로그인 유저의 쿠폰 확인
+GET http://localhost:8000/api/coupons
 
-### 로그인 유무 확인
-GET http://localhost:8000/api/auth/verify
+### 검색한 문자열에 따른 필터된 상품리스트
+GET http://localhost:8000/api/products?search=나이키
+
+### 카테고리에 따른 필터된 상품리스트
+GET http://localhost:8000/api/products?category=slipper
+
+### 상품 가격 쿠폰 적용
+GET http://localhost:8000/api/order/coupons/2
 
 ### 특정 유저(accessToken)의 관심상품 추가/제거(관심상품 추가, 상품의 좋아요 개수 증가 / 관심상품 제거, 상품의 좋아요 개수 감소)
 POST http://localhost:8000/api/favorites/me
@@ -64,21 +53,7 @@ content-type: application/json
 // { "email" : "test@test.com" }
 { "email" : "new@new.com" }
 
-### 회원가입 확인
-POST http://localhost:8000/api/auth/signup
-content-type: application/json
-
-{
-  "email" : "test1@test.com",
-  "name": "이동규",
-  "phone": "010-1234-5678",
-  "password": "test123",
-  "mainAddress": "",
-  "detailAddress": "",
-  "postcode": ""
-}
-
-### 회원가입 확인
+### 회원가입
 POST http://localhost:8000/api/auth/signup
 content-type: application/json
 
@@ -93,11 +68,11 @@ content-type: application/json
 }
 
 ### 장바구니에 상품 추가
-POST http://localhost:8000/api/carts/me/3
+POST http://localhost:8000/api/carts/me/1
 content-type: application/json
 
 // { "selectedSize" : 260, "quantity" : 1 }
-{ "selectedSize" : 230 }
+{ "selectedSize" : 265 }
 
 ### 로그인 기능
 POST http://localhost:8000/api/auth/signin
@@ -109,17 +84,36 @@ content-type: application/json
 POST http://localhost:8000/api/users/me/address
 content-type: application/json
 
-{ "recipient": "최수민", "recipientPhone": "011-1234-5678", "mainAddress": "서울시 강남구", "detailAddress": "미왕빌딩 10층", "postcode": "123456"}
+{
+  "recipient": "최수민",
+  "recipientPhone": "011-1234-5678",
+  "mainAddress": "서울시 강남구",
+  "detailAddress": "미왕빌딩 10층",
+  "postcode": "123456"
+}
 
-### 장바구니 사이즈(고정), 수량 변경
-PATCH http://localhost:8000/api/carts/me/3
+# "isDefault": true
+
+### 쿠폰 추가
+POST http://localhost:8000/api/coupons/2
 content-type: application/json
 
-{ "quantity" : 6 }
+### 결제하기
+POST http://localhost:8000/api/order/pay
+content-type: application/json
+
+{ "addressId": 1, "paymentMethod": "kakaopay", "couponId": 2 }
+
+### 장바구니 사이즈(고정), 수량 변경
+PATCH http://localhost:8000/api/carts/me/1
+content-type: application/json
+
+{ "quantity" : 11 }
 //{ "quantity" : 20 }
 
+
 ### 기본 배송지 변경
-PATCH http://localhost:8000/api/users/me/address/6bc27060-9b9c-4f53-b20f-992dbf19dad5
+PATCH http://localhost:8000/api/users/me/address/1
 content-type: application/json
 
 {"postcode": "000000"}
@@ -127,5 +121,9 @@ content-type: application/json
 
 
 ### 장바구니 특정 상품 삭제
-DELETE http://localhost:8000/api/carts/3
+DELETE http://localhost:8000/api/carts/1
+content-type: application/json
+
+### 배송지 삭제
+DELETE http://localhost:8000/api/users/me/address/1
 content-type: application/json

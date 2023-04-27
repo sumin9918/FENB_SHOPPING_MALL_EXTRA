@@ -19,30 +19,33 @@ let users = [
   },
 ];
 
-const createUser = (email) => {
+const createUser = email => {
   users = [...users, { ...defaultUser, email }];
 };
 
 const hasCoupon = (email, id) =>
-  users.some((user) => user.email === email && user.coupons.some((coupon) => coupon.id === id));
+  users.some(user => user.email === email && user.coupons.some(coupon => coupon.id === id));
 
 const addCoupon = (email, coupon) =>
-  (users = users.map((user) => (user.email === email ? { ...user, coupons: [coupon, ...user.coupons] } : user)));
+  (users = users.map(user => (user.email === email ? { ...user, coupons: [coupon, ...user.coupons] } : user)));
 
-const getCoupons = (email) => users.find((user) => user.email === email).coupons;
+const getCoupons = email => users.find(user => user.email === email).coupons;
+
+const getCoupon = (email, couponId) =>
+  users.find(user => user.email === email).coupons.find(coupon => coupon.id === couponId);
 
 const removeCoupon = (email, id) => {
-  users = users.map((user) =>
-    user.email === email ? { ...user, coupons: user.coupons.filter((coupon) => coupon.id !== id) } : user
+  users = users.map(user =>
+    user.email === email ? { ...user, coupons: user.coupons.filter(coupon => coupon.id !== id) } : user
   );
 };
 
-const removeExpireCoupon = (email) => {
-  users = users.map((user) =>
+const removeExpireCoupon = email => {
+  users = users.map(user =>
     user.email === email
-      ? { ...user, coupons: user.coupons.filter((coupon) => new Date().getTime() < coupon.endTime.getTime()) }
+      ? { ...user, coupons: user.coupons.filter(coupon => new Date().getTime() < coupon.endTime.getTime()) }
       : user
   );
 };
 
-module.exports = { createUser, addCoupon, getCoupons, hasCoupon, removeCoupon, removeExpireCoupon };
+module.exports = { createUser, addCoupon, getCoupons, getCoupon, hasCoupon, removeCoupon, removeExpireCoupon };

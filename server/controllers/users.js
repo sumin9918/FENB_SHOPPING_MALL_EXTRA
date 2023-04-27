@@ -1,38 +1,38 @@
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require('uuid');
 
 // Mock data
 let users = [
   {
-    email: "test@test.com",
-    password: "test123",
-    name: "이동규",
-    phone: "010-1234-5678",
+    email: 'test@test.com',
+    password: 'test123',
+    name: '이동규',
+    phone: '010-1234-5678',
     addresses: [
       {
         id: uuidv4(),
-        recipient: "이동규",
-        recipientPhone: "010-1234-5678",
-        mainAddress: "서울시 동작구 12길 28",
-        detailAddress: "235호",
-        postcode: "120156",
+        recipient: '이동규',
+        recipientPhone: '010-1234-5678',
+        mainAddress: '서울시 동작구 12길 28',
+        detailAddress: '235호',
+        postcode: '120156',
         isDefault: true,
       },
       {
         id: uuidv4(),
-        recipient: "최수민",
-        recipientPhone: "010-3456-5678",
-        mainAddress: "서울시 강남구 역삼로 15길 7",
-        detailAddress: "휴앤아이빌 309호",
-        postcode: "098762",
+        recipient: '최수민',
+        recipientPhone: '010-3456-5678',
+        mainAddress: '서울시 강남구 역삼로 15길 7',
+        detailAddress: '휴앤아이빌 309호',
+        postcode: '098762',
         isDefault: false,
       },
       {
         id: uuidv4(),
-        recipient: "김경재",
-        recipientPhone: "010-0987-5555",
-        mainAddress: "서울시 강남구 강남대로 364(역삼동)",
-        detailAddress: "미왕빌딩 10층 E강의실",
-        postcode: "348523",
+        recipient: '김경재',
+        recipientPhone: '010-0987-5555',
+        mainAddress: '서울시 강남구 강남대로 364(역삼동)',
+        detailAddress: '미왕빌딩 10층 E강의실',
+        postcode: '348523',
         isDefault: false,
       },
     ],
@@ -40,20 +40,20 @@ let users = [
 ];
 
 const defaultUser = {
-  email: "",
-  password: "",
-  name: "",
-  phone: "",
+  email: '',
+  password: '',
+  name: '',
+  phone: '',
   addresses: [],
 };
 
 const defaultAddress = {
   id: null,
-  recipient: "",
-  recipientPhone: "",
-  mainAddress: "",
-  detailAddress: "",
-  postcode: "",
+  recipient: '',
+  recipientPhone: '',
+  mainAddress: '',
+  detailAddress: '',
+  postcode: '',
   isDefault: true,
 };
 
@@ -82,24 +82,21 @@ const createUser = ({ email, name, phone, password, ...address }) => {
 };
 
 const hasAddress = (email, id) =>
-  users.some(
-    (user) =>
-      user.email === email &&
-      user.addresses.some((address) => address.id === id)
-  );
+  users.some(user => user.email === email && user.addresses.some(address => address.id === id));
+
+const getAddress = (email, addressId) =>
+  users.find(user => user.email === email).addresses.find(address => address.id === addressId);
 
 // 추가
 const addAddress = (email, { isDefault = false, ...address }) => {
   const id = uuidv4();
   const newAddress = {
     id,
-    isDefault:
-      isDefault ??
-      users.find((user) => user.email === email).addresses.length === 0,
+    isDefault: isDefault ?? users.find(user => user.email === email).addresses.length === 0,
     ...address,
   };
 
-  users = users.map((user) =>
+  users = users.map(user =>
     user.email === email
       ? {
           ...user,
@@ -113,11 +110,11 @@ const addAddress = (email, { isDefault = false, ...address }) => {
 
 // 기본 배송지 변경
 const changeDefaultAddress = (email, addressId) => {
-  users = users.map((user) =>
+  users = users.map(user =>
     user.email === email
       ? {
           ...user,
-          addresses: user.addresses.map((address) => ({
+          addresses: user.addresses.map(address => ({
             ...address,
             isDefault: address.id === addressId,
           })),
@@ -127,14 +124,14 @@ const changeDefaultAddress = (email, addressId) => {
 };
 
 // 기본 배송지는 배열 맨앞으로 이동
-const moveFrontDefaultAddress = (email, addressId) => {
-  users = users.map((user) =>
+const moveFrontDefaultAddress = email => {
+  users = users.map(user =>
     user.email === email
       ? {
           ...user,
           addresses: [
-            user.addresses.find((address) => address.isDefault),
-            ...user.addresses.filter((address) => !address.isDefault),
+            user.addresses.find(address => address.isDefault),
+            ...user.addresses.filter(address => !address.isDefault),
           ],
         }
       : user
@@ -143,13 +140,11 @@ const moveFrontDefaultAddress = (email, addressId) => {
 
 // 배송지 수정
 const editAddress = (email, id, newAddress) => {
-  users = users.map((user) =>
+  users = users.map(user =>
     user.email === email
       ? {
           ...user,
-          addresses: user.addresses.map((address) =>
-            address.id === id ? { ...address, ...newAddress } : address
-          ),
+          addresses: user.addresses.map(address => (address.id === id ? { ...address, ...newAddress } : address)),
         }
       : user
   );
@@ -157,30 +152,28 @@ const editAddress = (email, id, newAddress) => {
 
 // 배송지 삭제
 const deleteAddress = (email, id) => {
-  users = users.map((user) =>
+  users = users.map(user =>
     user.email === email
       ? {
           ...user,
-          addresses: user.addresses.filter((address) => address.id !== id),
+          addresses: user.addresses.filter(address => address.id !== id),
         }
       : user
   );
 };
 
-const getUser = (email) => users.find((user) => user.email === email);
+const getUser = email => users.find(user => user.email === email);
 
-const confirmUser = (email, password) =>
-  users.find((user) => user.email === email && user.password === password);
+const confirmUser = (email, password) => users.find(user => user.email === email && user.password === password);
 
-const hasUser = (email, password) =>
-  users.some((user) => user.email === email && user.password === password);
+const hasUser = (email, password) => users.some(user => user.email === email && user.password === password);
 
-const checkDuplicateEmail = (inputEmail) =>
-  users.some((user) => user.email === inputEmail);
+const checkDuplicateEmail = inputEmail => users.some(user => user.email === inputEmail);
 
 module.exports = {
   createUser,
   addAddress,
+  getAddress,
   hasUser,
   hasAddress,
   getUser,
