@@ -193,11 +193,7 @@ const NavigationBar = () => {
   const { colorScheme } = useMantineColorScheme();
 
   return (
-    <Navbar
-      height="auto"
-      zIndex={1}
-      position={{ top: 0, left: 0, borderBottom: '1px solid #ced4da' }}
-      sx={{ position: 'sticky', top: 0 }}>
+    <Navbar height="auto" position={{ top: 0, left: 0, borderBottom: '1px solid #ced4da' }}>
       <Group position="apart" spacing={0} w="120rem" m="auto">
         <Link to={PATH.MAIN}>
           {colorScheme === 'dark' ? (
