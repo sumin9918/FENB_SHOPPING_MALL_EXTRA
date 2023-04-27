@@ -18,9 +18,10 @@ import {
   Text,
   Flex,
 } from '@mantine/core';
-import { Link } from 'react-router-dom';
-import { fetchProducts } from '../api';
+import { Link, useLocation } from 'react-router-dom';
 import { PATH } from '../constants';
+import { filteredProductsQuery } from '../api/loader';
+import { getDecodeSearch } from '../utils/location';
 
 const prices = [
   { rangeIdx: 0, text: '0 - 50,000원' },
@@ -190,10 +191,14 @@ const Filters = ({ sizeFilters, colorFilters, handleCheckFilters }) => (
 );
 
 const ResultProducts = () => {
-  // 서버에서 받아온 data를 products로 저장
-  const { data: products } = useQuery({ queryKey: ['products'], queryFn: fetchProducts });
+  const { search: rawSearch } = useLocation();
+  const { search, searchValue } = getDecodeSearch(rawSearch);
 
-  const [currentProducts, setCurrentProducts] = useState(products);
+  const { data: products } = useQuery(filteredProductsQuery(search, searchValue));
+
+  // console.log('category: ', products);
+  // 서버에서 받아온 products를 저장한 상태
+  // const [currentProducts, setCurrentProducts] = useState(products);
 
   // filters states
   const [filters, setFilters] = useState({
@@ -255,7 +260,7 @@ const ResultProducts = () => {
 
     console.log(filteredColor);
 
-    setCurrentProducts(filteredColor);
+    // setCurrentProducts(filteredColor);
   };
 
   return (
@@ -267,7 +272,7 @@ const ResultProducts = () => {
         sx={{ zIndex: 100 }}
       />
       <SimpleGrid cols={3}>
-        {currentProducts.map(({ id, imgURL, name, price, features, color }) => (
+        {products.map(({ id, imgURL, name, price, feature, color }) => (
           <Link key={id} to={`${PATH.PRODUCTS}/${id}`} state={id}>
             <Stack sx={{ fontSize: '1.6rem', cursor: 'pointer' }}>
               <Image src={imgURL} alt="Product Image" />
@@ -275,8 +280,7 @@ const ResultProducts = () => {
                 <Text fz="2rem" fw="bold">
                   {name}
                 </Text>
-                <Text fw={700}>{features.emphasize}</Text>
-                <Text fw={500}>{features.character}</Text>
+                <Text fw={700}>{feature}</Text>
                 <Text color="#757575">{colors.at(color).kr}</Text>
                 <Text fw="bold" sx={{ lineHeight: '2em' }}>
                   {`${price.toLocaleString()} 원`}

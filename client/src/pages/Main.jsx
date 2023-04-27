@@ -6,25 +6,30 @@ import { Carousel } from '@mantine/carousel';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useDisclosure } from '@mantine/hooks';
 import { Link, useNavigate } from 'react-router-dom';
-import { checkSignIn, fetchCarousel, fetchProducts } from '../api';
 import PATH from '../constants/path';
+import { carouselQuery, productsQuery, verifyQuery } from '../api/loader';
+import { addCoupon } from '../api';
 
-const MainCarousel = ({ modalOpen }) => {
-  const { data: slides } = useQuery({
-    queryKey: ['carousel'],
-    queryFn: fetchCarousel,
-  });
+const MainCarousel = ({ modalOpen, setModalTitle }) => {
+  const { data: slides } = useQuery(carouselQuery());
+  const { data: verify } = useQuery(verifyQuery());
   const autoplay = useRef(Autoplay({ delay: 2000 }));
   const sideBackgroundColorsRef = useRef(slides.map(slide => slide.sideBackgroundColor));
   const [sideBackgroundColor, setSideBackgroundColor] = useState(sideBackgroundColorsRef.current.at(0));
   const navigate = useNavigate();
 
-  const handleCarouselClick = async () => {
-    const data = await checkSignIn();
-    console.log(data);
-    if (!data.isSignIn) navigate(PATH.SIGNIN);
+  const handleCarouselClick = async id => {
+    if (!verify) navigate(PATH.SIGNIN);
 
-    modalOpen();
+    try {
+      const { message } = await addCoupon(id);
+      setModalTitle(message);
+    } catch (e) {
+      const { message } = e.response.data;
+      setModalTitle(message);
+    } finally {
+      modalOpen();
+    }
   };
 
   return (
@@ -51,8 +56,8 @@ const MainCarousel = ({ modalOpen }) => {
         styles={{
           indicator: { width: '1rem', height: '1rem' },
         }}>
-        {slides.map(({ title, imgURL, alt }) => (
-          <Carousel.Slide key={title} onClick={() => handleCarouselClick()}>
+        {slides.map(({ id, imgURL, alt }) => (
+          <Carousel.Slide key={id} onClick={() => handleCarouselClick(id)} sx={{ cursor: 'pointer' }}>
             <Image src={imgURL} alt={alt} />
           </Carousel.Slide>
         ))}
@@ -62,17 +67,17 @@ const MainCarousel = ({ modalOpen }) => {
 };
 
 const Main = () => {
-  const { data: products } = useQuery({ queryKey: ['products'], queryFn: fetchProducts });
-
+  const { data: products } = useQuery(productsQuery());
+  const [modalTitle, setModalTitle] = useState('');
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <MainCarousel modalOpen={open} />
+      <MainCarousel modalOpen={open} setModalTitle={setModalTitle} />
       <Container p="0" maw="120rem">
         <Flex gap="xl" justify="center" align="center" direction="row" wrap="wrap" m="5rem 0">
           {products.map(({ id, name, price, imgURL, brand }) => (
-            <Link to={`${PATH.PRODUCTS}/${id}`} key={id}>
+            <Link to={`${PATH.PRODUCTS}/${id}`} key={id} state={id}>
               <Card shadow="sm" padding="lg" radius="md" w="28rem" withBorder>
                 <Card.Section pos="relative">
                   <Image src={imgURL} alt={name}></Image>
@@ -128,7 +133,7 @@ const Main = () => {
             },
           }}>
           <Text size="3rem" weight="bold" p="5rem 0">
-            쿠폰이 발급되었습니다.
+            {modalTitle}
           </Text>
           <Button fullWidth size="2rem" h="5rem" onClick={close}>
             확인

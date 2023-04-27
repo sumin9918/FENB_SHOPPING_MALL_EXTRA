@@ -1,4 +1,3 @@
-import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import { Footer, NavigationBar } from '../components';

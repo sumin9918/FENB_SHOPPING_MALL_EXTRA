@@ -1,8 +1,4 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
-import { ErrorBoundary } from 'react-error-boundary';
-import { Suspense } from 'react';
-import { Loader } from '@mantine/core';
-import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import {
   Root,
   Cart,
@@ -17,14 +13,28 @@ import {
   NotFound,
 } from './pages';
 import { PATH } from './constants';
+import {
+  carouselLoader,
+  cartsLoader,
+  categoryLoader,
+  favoritesLoader,
+  filteredProductsLoader,
+  productsLoader,
+} from './api/loader';
+import PrivateRoute from './components/PrivateRoute';
 
 const router = createHashRouter([
   {
     path: '/',
     element: <Root />,
+    loader: async () => ({
+      products: await productsLoader(),
+      categories: await categoryLoader(),
+    }),
     children: [
       {
         path: PATH.MAIN,
+        loader: carouselLoader,
         element: <Main />,
       },
       {
@@ -37,27 +47,34 @@ const router = createHashRouter([
       },
       {
         path: PATH.CART,
-        element: <Cart />,
+        loader: cartsLoader,
+        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<Cart />} />,
+        errorElement: <PrivateRoute redirectTo={PATH.SIGNIN} element={<Cart />} />,
       },
       {
         path: PATH.WISHLIST,
-        element: <WishList />,
+        loader: favoritesLoader,
+        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<WishList />} />,
+        errorElement: <PrivateRoute redirectTo={PATH.SIGNIN} element={<WishList />} />,
       },
       {
         path: PATH.CATEGORY,
+        loader: filteredProductsLoader,
         element: <Category />,
       },
       {
         path: `${PATH.PRODUCTS}/:id`,
+        loader: favoritesLoader,
         element: <Products />,
       },
       {
         path: PATH.ORDER,
-        element: <Order />,
+        // loader: user(+address) 데이터 prefetch
+        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<Order />} />,
       },
       {
         path: PATH.ORDER_COMPLETE,
-        element: <OrderComplete />,
+        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<OrderComplete />} />,
       },
       {
         path: '/*',
@@ -67,29 +84,6 @@ const router = createHashRouter([
   },
 ]);
 
-const App = () => {
-  const { reset } = useQueryErrorResetBoundary();
-
-  return (
-    <Suspense
-      fallback={
-        <Loader
-          size="6rem"
-          color="pink"
-          variant="dots"
-          pos="absolute"
-          top="50%"
-          left="50%"
-          sx={{
-            transform: 'translate3d(-3rem, -3rem, 0)',
-          }}
-        />
-      }>
-      <ErrorBoundary fallbackRender={NotFound} onReset={reset}>
-        <RouterProvider router={router} />
-      </ErrorBoundary>
-    </Suspense>
-  );
-};
+const App = () => <RouterProvider router={router} />;
 
 export default App;

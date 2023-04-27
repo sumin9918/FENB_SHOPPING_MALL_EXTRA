@@ -5,8 +5,28 @@ export const fetchProducts = async () => {
   return data;
 };
 
+export const fetchCategories = async () => {
+  const { data } = await axios.get('/api/categories');
+  return data;
+};
+
+export const fetchCarts = async () => {
+  const { data } = await axios.get('/api/carts/me');
+  return data;
+};
+
+export const fetchFilteredProducts = async search => {
+  const { data } = await axios.get(`/api/products${search}`);
+  return data;
+};
+
 export const fetchCarousel = async () => {
   const { data } = await axios.get('/api/carousel');
+  return data;
+};
+
+export const addCoupon = async id => {
+  const { data } = await axios.post(`/api/coupons/${id}`);
   return data;
 };
 

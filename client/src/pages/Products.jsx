@@ -16,10 +16,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { FaHeart } from 'react-icons/fa';
-import { fetchProducts } from '../api';
-import { fetchFavorites, toggleFavorite } from '../api/favorites';
+import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
 import { addCart } from '../api/carts';
+import { favoritesQuery, productsQuery } from '../api/loader';
 
 const SizeButton = styled(Button)`
   height: 4.8rem;
@@ -188,8 +188,8 @@ const ModalButton = ({
 };
 
 const Products = () => {
-  const { data: products } = useQuery({ queryKey: ['products'], queryFn: fetchProducts });
-  const { data: favorites } = useQuery({ queryKey: ['wishList'], queryFn: fetchFavorites });
+  const { data: products } = useQuery(productsQuery());
+  const { data: favorites } = useQuery(favoritesQuery());
 
   const { state: currentId } = useLocation();
 

@@ -5,10 +5,12 @@ const { getProducts } = require('../controllers/products');
 const { findStock } = require('../controllers/stocks');
 
 router.get('/', (req, res) => {
+  const search = req.query.search;
+  const category = req.query.category;
   const products = getProducts();
 
-  res.send(
-    products.map(({ id, brand, category, gender, color, ...rest }) => ({
+  const filteredProducts = products
+    .map(({ id, brand, category, gender, color, ...rest }) => ({
       ...rest,
       id,
       brand: BRANDS[brand],
@@ -17,7 +19,15 @@ router.get('/', (req, res) => {
       color: COLORS[color],
       stocks: findStock(id),
     }))
-  );
+    .filter(product =>
+      search
+        ? product.name.includes(search) || product.brand.kr.includes(search) || product.brand.en.includes(search)
+        : category
+        ? product.category.en.includes(category)
+        : true
+    );
+
+  res.send(filteredProducts);
 });
 
 // router.post('/', (req, res) => {

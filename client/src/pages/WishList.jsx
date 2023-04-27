@@ -1,17 +1,34 @@
 import { Container, Group, Card, Image, Text, Badge, UnstyledButton } from '@mantine/core';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { BiTrash } from 'react-icons/bi';
-import { fetchFavorites } from '../api/favorites';
+import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
+import { favoritesQuery } from '../api/loader';
 
 const WishList = () => {
+  const queryClient = useQueryClient();
+  const { data: favorites } = useQuery(favoritesQuery());
   const navigate = useNavigate();
 
-  const { data: favorites } = useQuery({ queryKey: ['wishList'], queryFn: fetchFavorites });
+  // 낙관적 업데이트
+  const { mutate } = useMutation({
+    mutationFn: toggleFavorite,
+    onMutate: async id => {
+      await queryClient.cancelQueries({ queryKey: ['wishList'] });
+
+      const prevTodos = queryClient.getQueryData(['wishList']);
+      queryClient.setQueryData(['wishList'], todos => todos.filter(todo => todo.id !== id));
+
+      return { prevTodos };
+    },
+    onError: (res, param, context) => queryClient.setQueryData(['wishList'], context.prevTodos),
+  });
 
   const handleRemoveWishItemClick = id => {
     // TODO: 클릭한 상품을 위시리스트에서 지우는 요청을 보낸다.
+    // ㄷㄱ : 낙관적 업데이트 필요하다.
+    mutate(id);
   };
 
   const handleClickProduct = id => {
