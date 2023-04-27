@@ -78,24 +78,34 @@ const Main = () => {
         <Flex gap="xl" justify="center" align="center" direction="row" wrap="wrap" m="5rem 0">
           {products.map(({ id, name, price, imgURL, brand }) => (
             <Link to={`${PATH.PRODUCTS}/${id}`} key={id} state={id}>
-              <Card shadow="sm" padding="lg" radius="md" w="28rem" withBorder>
+              <Card
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                w="28rem"
+                withBorder
+                sx={{
+                  '@media (max-width: 1240px)': {
+                    width: '20rem',
+                  },
+                }}>
                 <Card.Section pos="relative">
                   <Image src={imgURL} alt={name}></Image>
                   <Badge
-                    color="pink"
                     variant="light"
                     size="xl"
                     h="3rem"
                     fz="1.3rem"
                     pos="absolute"
                     bottom="1rem"
-                    right="1rem">
+                    right="1rem"
+                    sx={{ backgroundColor: 'rgba(255, 240, 246, 1)', color: '#e64980' }}>
                     무료 배송
                   </Badge>
                 </Card.Section>
 
                 <Group position="apart" mt="md" mb="xs">
-                  <Text weight="bold" size="2rem">
+                  <Text weight="bold" size="2rem" truncate>
                     {name}
                   </Text>
                 </Group>

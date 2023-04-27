@@ -110,8 +110,8 @@ const BusinessTitle = () => {
 
 const Footer = () => (
   <MantineFooter sx={{ borderTop: '1px solid #ced4da' }} fz="1.3rem" m="5rem 0" p="5rem">
-    <Container size="1200px">
-      <Group position="apart" pb="5.6rem" align="center">
+    <Container size="120rem">
+      <Group position="apart" pb="5.6rem" align="center" spacing="5rem">
         <Menus />
         <Creator />
         <ServiceArea />
