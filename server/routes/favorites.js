@@ -23,7 +23,7 @@ router.get('/me', (req, res) => {
       }))
     );
   } catch (e) {
-    return res.send([]);
+    return res.send(null);
   }
 });
 
