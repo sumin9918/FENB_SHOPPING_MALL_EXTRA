@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { FaHeart } from 'react-icons/fa';
+import { ImSad } from 'react-icons/im';
 import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
 import { addCart } from '../api/carts';
@@ -48,6 +49,7 @@ const ModalButton = ({
   currentProduct,
   isSizeSelected,
   isSignInUserRef,
+  hasStock,
   isFavorite,
   handleIsSizeSelected,
   handleCartClick,
@@ -101,41 +103,64 @@ const ModalButton = ({
             <Modal.Root opened={opened} size="45rem" yOffset="0" sx={{ fontSize: '1.6rem' }} onClose={close}>
               <Modal.Overlay />
               <Modal.Content sx={{ padding: '1.5rem' }}>
-                <Modal.Header>
-                  <Modal.Title fz="1.6rem" fw="600">
-                    {`${buttonType}에 추가 되었습니다.`}
-                  </Modal.Title>
-                  <Modal.CloseButton size="1.6rem" />
-                </Modal.Header>
-                <Modal.Body>
-                  <Stack sx={{ paddingTop: '1rem' }}>
-                    <Group position="apart" align="flex-start" noWrap="nowrap">
-                      <Image src={imgURL} width="15rem" />
-                      <Stack w="30rem" sx={{ paddingLeft: '1.2rem' }}>
-                        <Text fw="600">{name}</Text>
-                        <Text fz="1.4rem" fw="500" color="dimmed">
-                          {brand.kr}
-                        </Text>
-                        <Text>{`${price.toLocaleString()} 원`}</Text>
+                {hasStock ? (
+                  <>
+                    <Modal.Header>
+                      <Modal.Title fz="1.6rem" fw="600">
+                        {`${buttonType}에 추가 되었습니다.`}
+                      </Modal.Title>
+                      <Modal.CloseButton size="1.6rem" />
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Stack sx={{ paddingTop: '1rem' }}>
+                        <Group position="apart" align="flex-start" noWrap="nowrap">
+                          <Image src={imgURL} width="15rem" />
+                          <Stack w="30rem" sx={{ paddingLeft: '1.2rem' }}>
+                            <Text fw="600">{name}</Text>
+                            <Text fz="1.4rem" fw="500" color="dimmed">
+                              {brand.kr}
+                            </Text>
+                            <Text>{`${price.toLocaleString()} 원`}</Text>
+                          </Stack>
+                        </Group>
+                        <Button
+                          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+                          radius="3rem"
+                          h="5rem"
+                          sx={{ marginTop: '1rem', fontSize: '1.6rem' }}
+                          onClick={handleModalButtonClick}>
+                          {`${buttonType} 보기`}
+                        </Button>
                       </Stack>
-                    </Group>
+                    </Modal.Body>
+                  </>
+                ) : (
+                  <Stack align="center">
+                    <Modal.Header>
+                      <Modal.Title fz="1.8rem" fw="600">
+                        재고가 부족하여 장바구니에 추가할 수 없습니다
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <ImSad size="8rem" />
+                    </Modal.Body>
                     <Button
                       color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
                       radius="3rem"
-                      h="5rem"
-                      sx={{ marginTop: '1rem', fontSize: '1.6rem' }}
-                      onClick={handleModalButtonClick}>
-                      {`${buttonType} 보기`}
+                      w="12rem"
+                      h="4rem"
+                      sx={{ fontSize: '1.6rem' }}
+                      onClick={close}>
+                      {'돌아가기'}
                     </Button>
                   </Stack>
-                </Modal.Body>
+                )}
               </Modal.Content>
             </Modal.Root>
           )}
 
           <Button
             color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-            variant="filled"
             radius="3rem"
             h="6rem"
             sx={{ margin: '0.5rem', fontSize: '1.8rem' }}
@@ -195,6 +220,109 @@ const ModalButton = ({
       )}
     </>
   );
+
+  // return (
+  //   <>
+  //     {buttonType === BUTTON.cart ? (
+  //       <>
+  //         {isSizeSelected && (
+  //           <Modal.Root opened={opened} size="45rem" yOffset="0" sx={{ fontSize: '1.6rem' }} onClose={close}>
+  //             <Modal.Overlay />
+  //             <Modal.Content sx={{ padding: '1.5rem' }}>
+  //               <Modal.Header>
+  //                 <Modal.Title fz="1.6rem" fw="600">
+  //                   {`${buttonType}에 추가 되었습니다.`}
+  //                 </Modal.Title>
+  //                 <Modal.CloseButton size="1.6rem" />
+  //               </Modal.Header>
+  //               <Modal.Body>
+  //                 <Stack sx={{ paddingTop: '1rem' }}>
+  //                   <Group position="apart" align="flex-start" noWrap="nowrap">
+  //                     <Image src={imgURL} width="15rem" />
+  //                     <Stack w="30rem" sx={{ paddingLeft: '1.2rem' }}>
+  //                       <Text fw="600">{name}</Text>
+  //                       <Text fz="1.4rem" fw="500" color="dimmed">
+  //                         {brand.kr}
+  //                       </Text>
+  //                       <Text>{`${price.toLocaleString()} 원`}</Text>
+  //                     </Stack>
+  //                   </Group>
+  //                   <Button
+  //                     color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+  //                     radius="3rem"
+  //                     h="5rem"
+  //                     sx={{ marginTop: '1rem', fontSize: '1.6rem' }}
+  //                     onClick={handleModalButtonClick}>
+  //                     {`${buttonType} 보기`}
+  //                   </Button>
+  //                 </Stack>
+  //               </Modal.Body>
+  //             </Modal.Content>
+  //           </Modal.Root>
+  //         )}
+
+  //         <Button
+  //           color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+  //           variant="filled"
+  //           radius="3rem"
+  //           h="6rem"
+  //           sx={{ margin: '0.5rem', fontSize: '1.8rem' }}
+  //           onClick={handleCartModalOpen}>
+  //           <Text>{buttonType}</Text>
+  //         </Button>
+  //       </>
+  //     ) : (
+  //       <>
+  //         {isFavorite && (
+  //           <Modal.Root opened={opened} size="45rem" yOffset="0" sx={{ fontSize: '1.6rem' }} onClose={close}>
+  //             <Modal.Overlay />
+  //             <Modal.Content sx={{ padding: '1.5rem' }}>
+  //               <Modal.Header>
+  //                 <Modal.Title fz="1.6rem" fw="600">
+  //                   {`${buttonType}에 추가 되었습니다.`}
+  //                 </Modal.Title>
+  //                 <Modal.CloseButton size="1.6rem" />
+  //               </Modal.Header>
+  //               <Modal.Body>
+  //                 <Stack sx={{ paddingTop: '1rem' }}>
+  //                   <Group position="apart" align="flex-start" noWrap="nowrap">
+  //                     <Image src={imgURL} width="15rem" />
+  //                     <Stack w="30rem" sx={{ paddingLeft: '1.2rem' }}>
+  //                       <Text fw="600">{name}</Text>
+  //                       <Text fz="1.4rem" fw="500" color="dimmed">
+  //                         {brand.kr}
+  //                       </Text>
+  //                       <Text>{`${price.toLocaleString()} 원`}</Text>
+  //                     </Stack>
+  //                   </Group>
+  //                   <Button
+  //                     color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+  //                     radius="3rem"
+  //                     h="5rem"
+  //                     sx={{ marginTop: '1rem', fontSize: '1.6rem' }}
+  //                     onClick={handleModalButtonClick}>
+  //                     {`${buttonType} 보기`}
+  //                   </Button>
+  //                 </Stack>
+  //               </Modal.Body>
+  //             </Modal.Content>
+  //           </Modal.Root>
+  //         )}
+
+  //         <Button
+  //           variant="default"
+  //           radius="3rem"
+  //           h="6rem"
+  //           sx={{ margin: '0.5rem', fontSize: '1.8rem' }}
+  //           onClick={handleWishListModalOpen}>
+  //           <Text>
+  //             {buttonType} <Heart selected={isFavorite} />
+  //           </Text>
+  //         </Button>
+  //       </>
+  //     )}
+  //   </>
+  // );
 };
 
 const Products = () => {
@@ -213,8 +341,13 @@ const Products = () => {
   const [isSizeSelected, setIsSizeSelected] = useState(null);
 
   const isSignInUserRef = useRef(null);
+  const [hasStock, setHasStock] = useState(true);
 
   const [isFavorite, setIsFavorite] = useState(verify ? favorites?.some(product => product.id === id) : false);
+
+  useEffect(() => {
+    setHasStock(true);
+  }, [currentSelectedSize]);
 
   useEffect(() => {
     isSignInUserRef.current = verify;
@@ -229,8 +362,12 @@ const Products = () => {
     setIsSizeSelected(true);
   };
 
-  const handleCartClick = () => {
-    addCart({ id, selectedSize: currentSelectedSize });
+  const handleCartClick = async selectedSize => {
+    try {
+      await addCart({ id, selectedSize });
+    } catch (e) {
+      setHasStock(selectedSize !== currentSelectedSize);
+    }
   };
 
   const handleWishListToggle = () => {
@@ -294,9 +431,10 @@ const Products = () => {
                 currentProduct={currentProduct}
                 currentSelectedSize={currentSelectedSize}
                 isSizeSelected={isSizeSelected}
+                hasStock={hasStock}
                 isSignInUserRef={isSignInUserRef}
                 handleIsSizeSelected={handleIsSizeSelected}
-                handleCartClick={handleCartClick}
+                handleCartClick={() => handleCartClick(currentSelectedSize)}
               />
               <ModalButton
                 buttonType={BUTTON.wishList}
