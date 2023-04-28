@@ -1,13 +1,13 @@
 import { queryClient } from '../../components/GlobalProvider';
-import { CARTS_QUERY_KEY } from '../../constants';
+import { CARTS_QUERY_KEY, ADDRESS_QUERY_KEY } from '../../constants';
 import {
   authQueryKey,
   carouselQueryKey,
   categoryQueryKey,
   couponsQueryKey,
   filteredProductsQueryKey,
+  historyQueryKey,
   productsQueryKey,
-  userQueryKey,
   wishListQueryKey,
 } from '../../constants/queryKey';
 import { getDecodeSearch } from '../../utils/location';
@@ -19,6 +19,7 @@ import {
   fetchCategories,
   fetchCoupons,
   fetchFilteredProducts,
+  fetchHistory,
   fetchProducts,
   getUserInfo,
 } from '../index';
@@ -119,9 +120,12 @@ export const favoritesLoader = async () => {
   return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
 };
 
-export const cartsQuery = () => ({
+export const cartsQuery = options => ({
   queryKey: CARTS_QUERY_KEY,
   queryFn: fetchCarts,
+  retry: 0,
+  staleTime: 3000,
+  ...options,
 });
 
 export const cartsLoader = async () => {
@@ -134,11 +138,12 @@ export const cartsLoader = async () => {
   }
 };
 
-export const userQuery = () => ({
-  queryKey: userQueryKey,
+export const userQuery = options => ({
+  queryKey: ADDRESS_QUERY_KEY,
   queryFn: getUserInfo,
   retry: 0,
   staleTime: 3000,
+  ...options,
 });
 
 export const userLoader = async () => {
@@ -150,13 +155,35 @@ export const userLoader = async () => {
     throw new Error(e);
   }
 };
-export const couponsQuery = () => ({
+
+export const couponsQuery = options => ({
   queryKey: couponsQueryKey,
   queryFn: fetchCoupons,
+  retry: 0,
+  staleTime: 3000,
+  ...options,
 });
 
 export const couponsLoader = async () => {
   const { queryKey, queryFn } = couponsQuery();
+
+  try {
+    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const historyQuery = options => ({
+  queryKey: historyQueryKey,
+  queryFn: fetchHistory,
+  retry: 0,
+  staleTime: 3000,
+  ...options,
+});
+
+export const historyLoader = async () => {
+  const { queryKey, queryFn } = historyQuery();
 
   try {
     return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));

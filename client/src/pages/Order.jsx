@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -13,18 +14,18 @@ import {
   Image,
   Space,
   Center,
+  Accordion,
   useMantineColorScheme,
 } from '@mantine/core';
 import styled from '@emotion/styled';
 import { BsCheck2 } from 'react-icons/bs';
 import { useQuery } from '@tanstack/react-query';
 import { FormAddressInput, FormInput, FormPhoneInput, FormZoneCodeInput } from '../components';
-import { useAddressQuery, useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../hooks/address';
-import { useCartsQuery } from '../hooks/carts';
+import { cartsQuery, couponsQuery, userQuery } from '../api/loader';
 import { addAddress } from '../api/address';
+import { useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../hooks/address';
 import { PATH } from '../constants';
 import { addAdressSchema } from '../schema';
-import { userQuery } from '../api/loader';
 
 const COLORS = [
   { color: '#8D429F', en: 'purple', kr: '보라색' },
@@ -65,10 +66,36 @@ const CustomButton = styled(Button)`
   }
 `;
 
-const Order = () => {
-  const { colorScheme } = useMantineColorScheme();
+// api --------------------------------------
 
-  const navigate = useNavigate();
+const postOrder = async paymentInfo => {
+  await axios.post('/api/order/pay', { ...paymentInfo });
+};
+
+const checkCoupon = async id => {
+  const { data } = await axios.get(`/api/order/coupons/${id}`);
+
+  return data;
+};
+
+const Order = () => {
+  const { data: totalPrice } = useQuery(
+    cartsQuery({
+      select: carts => carts.reduce((acc, cart) => acc + cart.quantity * cart.price, 0),
+    })
+  );
+
+  const [discount, setDiscount] = useState({ discountAmount: 0, discountedTotalPrice: totalPrice });
+
+  const couponId = useRef(null);
+
+  const changeCouponId = async newCouponId => {
+    couponId.current = newCouponId;
+
+    const data = await checkCoupon(newCouponId);
+
+    setDiscount(data);
+  };
 
   return (
     <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
@@ -76,28 +103,65 @@ const Order = () => {
         결제하기
       </Title>
       <Group mih="5rem" justify="center" align="flex-start" spacing={0} px="0.8rem">
-        <Stack w="66.66667%" pr="5rem" spacing="5rem">
-          <Address />
-          <SelectPaymentMethod />
-          <Container w="30rem">
-            <CustomButton
-              w="100%"
-              disabled={false}
-              color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-              onClick={() => navigate(PATH.ORDER_COMPLETE)}>
-              주문결제
-            </CustomButton>
-          </Container>
-        </Stack>
-        <CartHistory />
+        <Payment couponId={couponId} changeCouponId={changeCouponId} totalPrice={totalPrice} />
+        <CartHistory discount={discount} totalPrice={totalPrice} />
       </Group>
     </Container>
   );
 };
 
-const Address = () => {
-  // const { data: addresses } = useAddressQuery();
-  const { data: addresses } = useQuery(userQuery());
+const Payment = ({ couponId, changeCouponId, totalPrice }) => {
+  const { colorScheme } = useMantineColorScheme();
+
+  const navigate = useNavigate();
+
+  const [disabled, setDisabled] = useState(false);
+
+  const addressId = useRef(null);
+  const paymentMethod = useRef('kakaoPay');
+
+  const changeAddressId = newAddressId => {
+    addressId.current = newAddressId;
+  };
+
+  const changePaymentMethod = newPaymentMethod => {
+    paymentMethod.current = newPaymentMethod;
+  };
+
+  return (
+    <Stack w="66.66667%" pr="5rem" spacing="5rem">
+      <Address changeAddressId={changeAddressId} setDisabled={setDisabled} />
+      <Coupons changeCouponId={changeCouponId} totalPrice={totalPrice} />
+      <SelectPaymentMethod changePaymentMethod={changePaymentMethod} />
+      <Container w="30rem">
+        <CustomButton
+          w="100%"
+          disabled={disabled}
+          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+          onClick={async () => {
+            console.log({
+              addressId: addressId.current,
+              couponId: couponId.current,
+              paymentMethod: paymentMethod.current,
+            });
+
+            await postOrder({
+              addressId: addressId.current,
+              couponId: couponId.current,
+              paymentMethod: paymentMethod.current,
+            });
+
+            navigate(PATH.ORDER_COMPLETE);
+          }}>
+          주문결제
+        </CustomButton>
+      </Container>
+    </Stack>
+  );
+};
+
+const Address = ({ changeAddressId, setDisabled }) => {
+  const { data: addresses } = useQuery(userQuery({ select: user => user.addresses }));
 
   const defaultAddress = !addresses.length ? {} : addresses.find(address => address.isDefault) ?? addresses[0];
   const isValidAddress = defaultAddress?.postcode !== '' ?? false;
@@ -105,16 +169,19 @@ const Address = () => {
   // TODO : 더 나은 방식 생각하기
   const [field, setFiled] = useState({ ...initField, info: isValidAddress, input: !isValidAddress });
   const selectedAddress = useRef(defaultAddress);
+  changeAddressId(selectedAddress.current.id);
 
   const changeSelectedAddress = newAddress => {
     selectedAddress.current = newAddress;
   };
 
+  setDisabled(!field.info);
+
   return (
     <Stack w="100%" p="2rem">
       <Group position="apart" pt="1.2rem" pb="2.8rem">
         <Title fz="2.4rem" fw={500} sx={{ lineHeight: '2.8rem' }}>
-          배송 옵션{field.info && <BsCheck2 color="rgb(18, 138, 9)" style={{ verticalAlign: 'baseline' }} />}
+          배송 옵션{field.info && <BsCheck2 color="rgb(18, 138, 9)" />}
         </Title>
         {field.info && (
           <Button
@@ -260,7 +327,7 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
 };
 
 const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
-  const { data: addresses } = useAddressQuery();
+  const { data: addresses } = useQuery(userQuery({ select: user => user.addresses }));
 
   return (
     <Stack w="100%" px="2rem">
@@ -352,6 +419,56 @@ const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAdd
   );
 };
 
+const Coupons = ({ changeCouponId, totalPrice }) => {
+  const { data: filteredCoupons } = useQuery(
+    couponsQuery({
+      select: coupons => coupons.filter(coupon => coupon.minimumPrice < totalPrice),
+    })
+  );
+
+  return (
+    <Stack w="100%" px="2rem">
+      <Title fz="2.4rem" fw={500}>
+        쿠폰
+      </Title>
+      <Accordion variant="separated">
+        <Accordion.Item value="coupons">
+          <Accordion.Control fz="1.6rem">쿠폰을 선택하세요</Accordion.Control>
+          <Accordion.Panel>
+            <Radio.Group name="coupons" onChange={changeCouponId}>
+              <Stack mt="xs" spacing="0.8rem">
+                {filteredCoupons.map(({ id, title, endTime }) => (
+                  <Radio
+                    key={id}
+                    size="lg"
+                    value={`${id}`}
+                    label={<CouponName title={title} endTime={endTime} />}
+                    sx={{ '.mantine-Radio-labelWrapper': { width: '100%' } }}
+                  />
+                ))}
+              </Stack>
+            </Radio.Group>
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
+    </Stack>
+  );
+};
+
+const ONE_DAY = 1000 * 60 * 60 * 24;
+
+const CouponName = ({ title, endTime }) => {
+  const currentTime = new Date();
+  const leftDay = Math.floor((Date.parse(endTime) - Date.parse(currentTime)) / ONE_DAY);
+
+  return (
+    <Group position="apart" px="0.4rem" fz="1.6rem">
+      <Text>{title}</Text>
+      <Text c="crimson">{leftDay}일 남음</Text>
+    </Group>
+  );
+};
+
 const paymentMethods = [
   { value: 'kakaoPay', label: '카카오페이' },
   { value: 'creditCard', label: '신용카드' },
@@ -360,12 +477,17 @@ const paymentMethods = [
   { value: 'accountTransfer', label: '실시간 계좌이체' },
 ];
 
-const SelectPaymentMethod = () => (
+const SelectPaymentMethod = ({ changePaymentMethod }) => (
   <Stack w="100%" px="2rem">
     <Title fz="2.4rem" fw={500}>
       결제
     </Title>
-    <Radio.Group defaultValue={paymentMethods[0].value} name="paymentMethods">
+    <Radio.Group
+      defaultValue={paymentMethods[0].value}
+      name="paymentMethods"
+      onChange={e => {
+        changePaymentMethod(e);
+      }}>
       <Stack mt="xs" spacing="0.8rem">
         {paymentMethods.map(({ value, label }) => (
           <Radio key={value} value={value} label={label} size="xl" />
@@ -375,28 +497,29 @@ const SelectPaymentMethod = () => (
   </Stack>
 );
 
-const CartHistory = () => {
+const CartHistory = ({ discount, totalPrice }) => {
   const { colorScheme } = useMantineColorScheme();
 
-  const { data: totalPrice } = useCartsQuery({
-    select: carts => carts.reduce((acc, cart) => acc + cart.quantity * cart.price, 0),
-  });
+  const { discountAmount, discountedTotalPrice } = discount;
 
   return (
     <Stack w="33.33333%" px="0.8rem" c={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
       <Title>장바구니</Title>
       <Group position="apart">
         <Text>상품 금액</Text>
-        <Text>{totalPrice} 원</Text>
+        <Text>{totalPrice.toLocaleString()} 원</Text>
       </Group>
-      <Text>쿠폰</Text>
+      <Group position="apart">
+        <Text>쿠폰 할인액</Text>
+        <Text>{discountAmount.toLocaleString()} 원</Text>
+      </Group>
       <Group position="apart">
         <Text>배송비</Text>
         <Text>0 원</Text>
       </Group>
       <Group position="apart">
         <Text>총 결제 금액</Text>
-        <Text>{totalPrice} 원</Text>
+        <Text>{discountedTotalPrice.toLocaleString()} 원</Text>
       </Group>
       <CartHistoryItemList />
     </Stack>
@@ -404,7 +527,7 @@ const CartHistory = () => {
 };
 
 const CartHistoryItemList = () => {
-  const { data: carts } = useCartsQuery();
+  const { data: carts } = useQuery(cartsQuery());
 
   return (
     <Stack mx="0.8rem" mb="2rem" pt="2.4rem">
@@ -432,12 +555,12 @@ const CartHistoryItem = ({ cart }) => {
         <Title fz="1.4rem" fw="bold" c={colorScheme === 'dark' ? 'gray.6' : '#111'} sx={{ cursor: 'pointer' }}>
           {name}
         </Title>
-        <Text mb="-0.4rem">사이즈 : {selectedSize}</Text>
-        <Text mb="-0.4rem">색상 : {COLORS[color].kr}</Text>
-        <Text mb="-0.4rem">
+        <Text>사이즈 : {selectedSize}</Text>
+        <Text>색상 : {COLORS[color].kr}</Text>
+        <Text>
           수량 : {quantity} / {price.toLocaleString()}
         </Text>
-        <Text mb="-0.4rem">가격 {(price * quantity).toLocaleString()}</Text>
+        <Text>가격 {(price * quantity).toLocaleString()}</Text>
       </Stack>
     </Group>
   );

@@ -20,6 +20,7 @@ import {
   couponsLoader,
   favoritesLoader,
   filteredProductsLoader,
+  historyLoader,
   productsLoader,
   userLoader,
 } from './api/loader';
@@ -80,6 +81,7 @@ const router = createHashRouter([
       },
       {
         path: PATH.ORDER_COMPLETE,
+        loader: historyLoader,
         element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<OrderComplete />} />,
       },
       {
