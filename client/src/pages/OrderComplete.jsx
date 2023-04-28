@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Container, Stack, Group, Title, Text, Button, Image, useMantineColorScheme } from '@mantine/core';
+import styled from '@emotion/styled';
 import { historyQuery } from '../api/loader';
 import { PATH } from '../constants';
 
@@ -20,58 +21,93 @@ const COLORS = [
   { color: '#F0728F', en: 'pink', kr: '분홍색' },
 ];
 
+// styled component
+const CustomButton = styled(Button)`
+  display: block;
+  margin-top: 2rem;
+  padding: 1.8rem 2.4rem;
+  border-radius: 30px;
+  height: 6rem;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 'bold';
+
+  :hover {
+    background-color: #228be6;
+  }
+`;
+
 const OrderComplete = () => {
   const { data: history } = useQuery(historyQuery());
+
+  const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
 
   return (
     <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
       <Title p="4.8rem" sx={{ textAlign: 'center' }}>
-        결제가 완료되었습니다
+        결제가 정상적으로 완료되었습니다
       </Title>
-      <Stack mih="5rem" justify="center" align="flex-start" spacing={0} px="0.8rem">
+      <Stack mih="5rem" justify="center" align="center" spacing={0} px="0.8rem">
         <OrderInfo history={history} />
         <OrderProducts products={history.products} />
-        <Button onClick={() => navigate(PATH.MAIN)}>확인</Button>
+        <CustomButton w="20rem" color={colorScheme === 'dark' ? 'gray.6' : 'dark'} onClick={() => navigate(PATH.MAIN)}>
+          확인
+        </CustomButton>
       </Stack>
     </Container>
   );
 };
 
 const OrderInfo = ({ history }) => {
-  const { orderDate, paymentMethod, totalPrice, discountedTotalPrice, discountAmount, deliveryAddress } = history;
+  const { orderDate, paymentMethod, discountedTotalPrice, deliveryAddress } = history;
 
   const address = `(${deliveryAddress.postcode})${deliveryAddress.mainAddress} ${deliveryAddress.detailAddress}`;
 
   return (
-    <Stack w="100%" p="2rem" sx={{ border: '1px solid black' }}>
-      <Title fz="2.4rem">주문 정보</Title>
-      <Container>
-        <Text>받는 사람 : {deliveryAddress.recipient}</Text>
-        <Text>주소 : {address}</Text>
-        <Text>전화번호 : {deliveryAddress.recipientPhone}</Text>
-      </Container>
-      <Container>
-        <Text>상품 금액 : {totalPrice.toLocaleString()}원</Text>
-        <Text>쿠폰 할인액 : {discountAmount.toLocaleString()}원</Text>
-        <Text>배송비 : 0원</Text>
-        <Text>총액 : {discountedTotalPrice.toLocaleString()} 원</Text>
-      </Container>
-      <Container>
-        <Text>결제 방식 : {paymentMethod}</Text>
-        <Text>결제 시각 : {orderDate}</Text>
-      </Container>
+    <Stack w="70%" p="2rem">
+      <Title fz="2.4rem" mb="2rem" sx={{ textAlign: 'center' }}>
+        주문 정보
+      </Title>
+      <Group py="1.6rem" px="3.2rem" spacing="3.2rem" sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
+        <Stack>
+          <Text>받는 사람</Text>
+          <Text>주소</Text>
+          <Text>전화번호</Text>
+        </Stack>
+        <Stack>
+          <Text>{deliveryAddress.recipient}</Text>
+          <Text>{address}</Text>
+          <Text>{deliveryAddress.recipientPhone}</Text>
+        </Stack>
+      </Group>
+      <Group py="1.6rem" px="3.2rem" spacing="3.2rem" sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
+        <Stack>
+          <Text>결제 금액</Text>
+          <Text>결제 방식</Text>
+          <Text>결제 시각</Text>
+        </Stack>
+        <Stack>
+          <Text>{discountedTotalPrice.toLocaleString()} 원</Text>
+          <Text>{paymentMethod}</Text>
+          <Text>{orderDate.toLocaleString('ko-KR')}</Text>
+        </Stack>
+      </Group>
     </Stack>
   );
 };
 
 const OrderProducts = ({ products }) => (
-  <Stack w="100%" p="2rem" sx={{ border: '1px solid black' }}>
-    <Title fz="2.4rem">주문 상품</Title>
-    {products.map(product => (
-      <OrderProductsItem key={product.id} product={product} />
-    ))}
+  <Stack w="70%" p="2rem">
+    <Title fz="2.4rem" mb="2rem" sx={{ textAlign: 'center' }}>
+      주문 상품
+    </Title>
+    <Stack py="1.6rem" px="3.2rem" sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
+      {products.map(product => (
+        <OrderProductsItem key={product.id} product={product} />
+      ))}
+    </Stack>
   </Stack>
 );
 
@@ -81,22 +117,28 @@ const OrderProductsItem = ({ product }) => {
   const { selectedSize, quantity, feature, name, price, color, imgURL } = product;
 
   return (
-    <Group align="flex-start" fz="1.4rem">
-      <div style={{ width: '60px', minWidth: '60px' }}>
-        <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '60px' } }} />
+    <Group position="center" align="flex-start" fz="1.4rem">
+      <div style={{ width: '20%', minWidth: '110px' }}>
+        <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '110px' } }} />
       </div>
-      <Stack pl="2rem" align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
-        <Title fz="1.4rem" fw="bold" c={colorScheme === 'dark' ? 'gray.6' : '#111'} sx={{ cursor: 'pointer' }}>
-          {name}
-        </Title>
-        <Text mb="-0.4rem">설명 : {feature}</Text>
-        <Text mb="-0.4rem">사이즈 : {selectedSize}</Text>
-        <Text mb="-0.4rem">색상 : {COLORS[color].kr}</Text>
-        <Text mb="-0.4rem">
-          수량 : {quantity} / {price.toLocaleString()}
-        </Text>
-        <Text mb="-0.4rem">가격 {(price * quantity).toLocaleString()}</Text>
-      </Stack>
+      <Group position="apart" align="flex-start" justify="center" w="70%" my="auto">
+        <Stack spacing={0} maw="fit-content" justify="center">
+          <Title fz="1.6rem" fw="bold" c={colorScheme === 'dark' ? 'gray.6' : '#111'}>
+            {name}
+          </Title>
+          <Text pl="0.2rem">{feature}</Text>
+          <Text pl="0.2rem">사이즈 {selectedSize}</Text>
+          <Text pl="0.2rem">색상 {COLORS[color].kr}</Text>
+          <Text pl="0.2rem">
+            {quantity} / {price.toLocaleString()}
+          </Text>
+        </Stack>
+        <Stack>
+          <Text fz="1.6rem" fw="bold" c={colorScheme === 'dark' ? 'gray.6' : '#111'}>
+            {(price * quantity).toLocaleString()} 원
+          </Text>
+        </Stack>
+      </Group>
     </Group>
   );
 };

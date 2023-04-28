@@ -473,7 +473,7 @@ const paymentMethods = [
   { value: 'kakaoPay', label: '카카오페이' },
   { value: 'creditCard', label: '신용카드' },
   { value: 'naverPay', label: '네이버페이' },
-  { value: 'payco', label: '페이코' },
+  { value: 'applePay', label: '애플페이' },
   { value: 'accountTransfer', label: '실시간 계좌이체' },
 ];
 
@@ -496,6 +496,13 @@ const SelectPaymentMethod = ({ changePaymentMethod }) => (
     </Radio.Group>
   </Stack>
 );
+
+// const SelectPaymentMethodLabel = ({ value, label }) => (
+//   <Group px="0.4rem" fz="1.6rem">
+//     <Image src={`images/products/${value}`} />
+//     <Text span>{label}</Text>
+//   </Group>
+// );
 
 const CartHistory = ({ discount, totalPrice }) => {
   const { colorScheme } = useMantineColorScheme();
@@ -548,8 +555,8 @@ const CartHistoryItem = ({ cart }) => {
 
   return (
     <Group align="flex-start" fz="1.4rem">
-      <div style={{ width: '60px', minWidth: '60px' }}>
-        <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '60px' } }} />
+      <div style={{ width: '70px', minWidth: '70px' }}>
+        <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '70px' } }} />
       </div>
       <Stack pl="2rem" align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
         <Title fz="1.4rem" fw="bold" c={colorScheme === 'dark' ? 'gray.6' : '#111'} sx={{ cursor: 'pointer' }}>
