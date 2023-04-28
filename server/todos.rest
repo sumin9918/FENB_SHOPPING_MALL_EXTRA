@@ -40,6 +40,9 @@ GET http://localhost:8000/api/products?category=slipper
 ### 상품 가격 쿠폰 적용
 GET http://localhost:8000/api/order/coupons/2
 
+### 구매 내역 확인
+GET http://localhost:8000/api/order/history
+
 ### 특정 유저(accessToken)의 관심상품 추가/제거(관심상품 추가, 상품의 좋아요 개수 증가 / 관심상품 제거, 상품의 좋아요 개수 감소)
 POST http://localhost:8000/api/favorites/me
 content-type: application/json
@@ -102,7 +105,7 @@ content-type: application/json
 POST http://localhost:8000/api/order/pay
 content-type: application/json
 
-{ "addressId": 1, "paymentMethod": "kakaopay", "couponId": 2 }
+{ "addressId": 1, "paymentMethod": "kakaopay", "couponId": null }
 
 ### 장바구니 사이즈(고정), 수량 변경
 PATCH http://localhost:8000/api/carts/me/1
