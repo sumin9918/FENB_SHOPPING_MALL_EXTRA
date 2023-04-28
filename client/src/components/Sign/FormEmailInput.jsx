@@ -36,6 +36,11 @@ const FormEmailInputContainer = ({ inputType, id, name, placeholder, withAsteris
       {...register(id)}
       onBlur={e => checkEmailDuplicate(e.target.value)}
       error={formState?.errors[id]?.message || duplicateEmailError}
+      sx={{
+        '@media (max-width: 765px)': {
+          width: '20rem',
+        },
+      }}
     />
   );
 };

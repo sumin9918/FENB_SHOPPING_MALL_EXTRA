@@ -70,6 +70,11 @@ const FormZoneCodeInput = ({
       mb="3.5rem"
       {...register(id)}
       error={formState?.errors[id]?.message}
+      sx={{
+        '@media (max-width: 765px)': {
+          width: '20rem',
+        },
+      }}
     />
   );
 };

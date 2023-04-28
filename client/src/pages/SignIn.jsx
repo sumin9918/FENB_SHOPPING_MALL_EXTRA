@@ -120,7 +120,18 @@ const SignIn = () => {
           formState={formState}
         />
         <FormInput inputType="password" id="password" name="비밀번호" register={register} formState={formState} />
-        <Button type="submit" w="40rem" h="5.2rem" p="0" color={colorScheme === 'dark' ? 'gray.6' : 'dark'} radius="md">
+        <Button
+          type="submit"
+          w="40rem"
+          h="5.2rem"
+          p="0"
+          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+          radius="md"
+          sx={{
+            '@media (max-width: 765px)': {
+              width: '20rem',
+            },
+          }}>
           로그인
         </Button>
         <Center mt="2rem">

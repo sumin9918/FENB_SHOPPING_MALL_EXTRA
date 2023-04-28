@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
 import GlobalProvider from './components/GlobalProvider';
 import App from './App';
 

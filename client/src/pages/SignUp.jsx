@@ -160,7 +160,18 @@ const SignUp = () => {
           register={register}
           formState={formState}
         />
-        <Button type="submit" w="40rem" h="5.2rem" p="0" color={colorScheme === 'dark' ? 'gray.6' : 'dark'} radius="md">
+        <Button
+          type="submit"
+          w="40rem"
+          h="5.2rem"
+          p="0"
+          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+          radius="md"
+          sx={{
+            '@media (max-width: 765px)': {
+              width: '20rem',
+            },
+          }}>
           가입하기
         </Button>
         <Center mt="2rem">

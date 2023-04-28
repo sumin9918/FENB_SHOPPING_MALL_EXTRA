@@ -34,6 +34,11 @@ const FormPhoneInput = ({
       {...register(id)}
       onBlur={e => addDash(e.target.value)}
       error={formState?.errors[id]?.message}
+      sx={{
+        '@media (max-width: 765px)': {
+          width: '20rem',
+        },
+      }}
     />
   );
 };
