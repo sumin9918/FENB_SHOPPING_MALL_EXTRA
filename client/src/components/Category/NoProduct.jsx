@@ -18,12 +18,12 @@ const Icon = () => (
   </svg>
 );
 
-const NoProducts = () => (
+const NoProducts = ({ children }) => (
   <Container>
-    <Stack pt="15rem" align="center">
+    <Stack pt="5rem" align="center">
       <Icon />
       <Text align="center" fz="3rem" lh="6rem">
-        등록된 상품이 없습니다.
+        {children}
       </Text>
     </Stack>
   </Container>

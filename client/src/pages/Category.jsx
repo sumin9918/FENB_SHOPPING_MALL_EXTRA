@@ -21,7 +21,7 @@ import {
 import { getDecodeSearch } from '../utils/location';
 import { filteredProductsQuery } from '../api/loader';
 import { PATH } from '../constants';
-import NoProduct from '../components/Catagory/NoProduct';
+import NoProduct from '../components/Category/NoProduct';
 
 const CATEGORIES = {
   sneakers: '운동화',
@@ -190,7 +190,7 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
       top="0"
       bg={colorScheme === 'dark' ? 'dark.7' : 'white'}
       sx={{ zIndex: 99 }}>
-      <Container m="0" p="1.5rem 0" fz="2.4rem" fw="600">
+      <Container m="0" p="1.5rem 1rem" fz="2.4rem" fw="600">
         {CATEGORIES[searchValue] ? `${CATEGORIES[searchValue]}` : `${searchValue}`} {`(${productCount})`}
       </Container>
       <Select
@@ -218,7 +218,7 @@ const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
     <ScrollFiltersArea m="0" miw="26rem" h="65rem" pos="sticky" top="6.8rem" sx={{ overflowY: 'auto' }}>
       <Button
         variant="default"
-        m="2rem 0.5rem"
+        m="1rem 1rem"
         p="0"
         w="22rem"
         h="5rem"
@@ -339,7 +339,7 @@ const ResultProducts = ({ products, filters, sortOption }) => {
   return (
     <>
       {newProducts.length === 0 ? (
-        <NoProduct />
+        <NoProduct>등록된 상품이 없습니다.</NoProduct>
       ) : (
         <SimpleGrid cols={3} pl="2rem">
           {newProducts.map(({ id, imgURL, name, price, brand, feature, color }) => (
@@ -419,7 +419,7 @@ const Category = () => {
   };
 
   return (
-    <Container top="0" left="0" sx={{ minWidth: '120rem', maxWidth: '192rem', padding: '0 8rem' }}>
+    <Container top="0" left="0" sx={{ maxWidth: '192rem', padding: '0 8rem' }}>
       <Header
         sortOption={sortOption}
         searchValue={searchValue}

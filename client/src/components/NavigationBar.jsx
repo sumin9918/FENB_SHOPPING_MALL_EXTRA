@@ -309,7 +309,7 @@ const NavigationBar = () => {
               <MainList />
             </Stack>
           </MediaQuery>
-          <MediaQuery largerThan={880} styles={{ display: 'none' }}>
+          <MediaQuery largerThan={879} styles={{ display: 'none' }}>
             <Group>
               <SearchBar />
               <NavigationMenu />
