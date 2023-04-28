@@ -13,13 +13,13 @@ import {
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { FaHeart } from 'react-icons/fa';
 import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
 import { addCart } from '../api/carts';
-import { favoritesQuery, productsQuery } from '../api/loader';
+import { favoritesQuery, productsQuery, verifyQuery } from '../api/loader';
 
 const SizeButton = styled(Button)`
   height: 4.8rem;
@@ -47,6 +47,7 @@ const ModalButton = ({
   buttonType,
   currentProduct,
   isSizeSelected,
+  isSignInUserRef,
   isFavorite,
   handleIsSizeSelected,
   handleCartClick,
@@ -56,6 +57,7 @@ const ModalButton = ({
   const { imgURL, name, brand, price } = currentProduct;
   const { colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const handleModalButtonClick = () => {
     if (buttonType === BUTTON.cart) {
@@ -67,20 +69,28 @@ const ModalButton = ({
 
   const handleCartModalOpen = () => {
     if (isSizeSelected) {
-      open();
+      if (!isSignInUserRef.current) {
+        navigate(PATH.SIGNIN, { state: pathname });
+      } else {
+        open();
 
-      handleCartClick();
+        handleCartClick();
+      }
     }
 
     handleIsSizeSelected();
   };
 
   const handleWishListModalOpen = () => {
-    if (!isFavorite) {
-      open();
-    }
+    if (!isSignInUserRef.current) {
+      navigate(PATH.SIGNIN, { state: pathname });
+    } else {
+      if (!isFavorite) {
+        open();
+      }
 
-    handleWishListToggle();
+      handleWishListToggle();
+    }
   };
 
   return (
@@ -190,16 +200,25 @@ const ModalButton = ({
 const Products = () => {
   const { data: products } = useQuery(productsQuery());
   const { data: favorites } = useQuery(favoritesQuery());
+  const { data: verify } = useQuery(verifyQuery());
+  const { pathname } = useLocation();
 
-  const { state: currentId } = useLocation();
+  const getIdfromPath = pathname => +pathname.split('/').at(-1);
 
-  const currentProduct = products.find(product => product.id === currentId);
+  const currentProduct = products?.find(product => product.id === getIdfromPath(pathname));
+
   const { id, name, brand, price, stocks, color, description, imgURL } = currentProduct;
 
   const [currentSelectedSize, setCurrentSelectedSize] = useState(-1);
   const [isSizeSelected, setIsSizeSelected] = useState(null);
 
-  const [isFavorite, setIsFavorite] = useState(favorites.some(product => product.id === currentId));
+  const isSignInUserRef = useRef(null);
+
+  const [isFavorite, setIsFavorite] = useState(verify ? favorites?.some(product => product.id === id) : false);
+
+  useEffect(() => {
+    isSignInUserRef.current = verify;
+  }, [verify]);
 
   const handleIsSizeSelected = () => {
     setIsSizeSelected(!!isSizeSelected);
@@ -225,7 +244,7 @@ const Products = () => {
       <Group position="center" align="flex-start" noWrap="nowrap">
         <Stack sx={{ margin: '4.8rem 0 0.8rem', padding: '0 2.4rem 0 4.8rem', maxWidth: '60rem' }}>
           <Image src={imgURL} />
-          <Text fz="1.6rem" fw="500" lh="3.2rem" sx={{ marginTop: '1.5rem' }}>
+          <Text fz="1.6rem" fw="500" lh="3.2rem" mt="1.5rem">
             {description}
           </Text>
         </Stack>
@@ -275,12 +294,14 @@ const Products = () => {
                 currentProduct={currentProduct}
                 currentSelectedSize={currentSelectedSize}
                 isSizeSelected={isSizeSelected}
+                isSignInUserRef={isSignInUserRef}
                 handleIsSizeSelected={handleIsSizeSelected}
                 handleCartClick={handleCartClick}
               />
               <ModalButton
                 buttonType={BUTTON.wishList}
                 currentProduct={currentProduct}
+                isSignInUserRef={isSignInUserRef}
                 isFavorite={isFavorite}
                 handleWishListToggle={handleWishListToggle}
               />
