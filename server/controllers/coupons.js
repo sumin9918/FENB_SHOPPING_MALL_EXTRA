@@ -6,16 +6,7 @@ const defaultUser = {
 let users = [
   {
     email: 'test@test.com',
-    coupons: [
-      {
-        id: 2,
-        title: '1주년 기념 2만원 할인쿠폰',
-        discountRate: null,
-        discountPrice: 20000,
-        minimumPrice: 100000,
-        endTime: new Date('2023-05-04'),
-      },
-    ],
+    coupons: [],
   },
 ];
 

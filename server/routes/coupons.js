@@ -13,7 +13,7 @@ router.get('/', authCheck, expireCoupon, (req, res) => {
 
 router.post('/:id', authCheck, expireCoupon, (req, res) => {
   const { email } = req.locals;
-  const id = +req.params.id;
+  const { id } = req.params;
 
   const newCoupon = COUPONS.find(coupon => coupon.id === id);
 

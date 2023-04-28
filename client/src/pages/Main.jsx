@@ -33,7 +33,14 @@ const MainCarousel = ({ modalOpen, setModalTitle }) => {
   };
 
   return (
-    <Container w="100%" maw="100%" pos="relative" bg={sideBackgroundColor}>
+    <Container
+      w="100%"
+      maw="100%"
+      pos="relative"
+      bg={sideBackgroundColor}
+      sx={{
+        transition: 'all .1s ',
+      }}>
       <Carousel
         mx="auto"
         maw="120rem"
@@ -58,7 +65,7 @@ const MainCarousel = ({ modalOpen, setModalTitle }) => {
         }}>
         {slides.map(({ id, imgURL, alt }) => (
           <Carousel.Slide key={id} onClick={() => handleCarouselClick(id)} sx={{ cursor: 'pointer' }}>
-            <Image src={imgURL} alt={alt} />
+            <Image src={imgURL} alt={alt} fit="contain" height="45rem" />
           </Carousel.Slide>
         ))}
       </Carousel>
@@ -85,7 +92,7 @@ const Main = () => {
                 w="28rem"
                 withBorder
                 sx={{
-                  '@media (max-width: 1240px)': {
+                  '@media (max-width: 900px)': {
                     width: '20rem',
                   },
                 }}>

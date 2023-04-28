@@ -13,6 +13,7 @@ import {
   Container,
   Menu,
   Avatar,
+  Tooltip,
 } from '@mantine/core';
 import { BiSearch } from 'react-icons/bi';
 import { SlHandbag } from 'react-icons/sl';
@@ -39,14 +40,16 @@ const DarkMode = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
-    <ActionIcon
-      size="xl"
-      onClick={() => toggleColorScheme()}
-      sx={theme => ({
-        color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.dark[6],
-      })}>
-      {colorScheme === 'dark' ? <TbSunFilled size="2.8rem" /> : <TbMoonFilled size="2.8rem" />}
-    </ActionIcon>
+    <Tooltip label="다크모드">
+      <ActionIcon
+        size="xl"
+        onClick={() => toggleColorScheme()}
+        sx={theme => ({
+          color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.dark[6],
+        })}>
+        {colorScheme === 'dark' ? <TbSunFilled size="2.8rem" /> : <TbMoonFilled size="2.8rem" />}
+      </ActionIcon>
+    </Tooltip>
   );
 };
 
@@ -113,6 +116,10 @@ const NavigationMenu = () => {
     navigate(PATH.MAIN);
   };
 
+  const handleRedirectClick = (path, state) => {
+    navigate(path, { state });
+  };
+
   return (
     <Menu shadow="md" width="20rem" transitionProps={{ transition: 'rotate-right', duration: 150 }}>
       <Menu.Target>
@@ -120,22 +127,25 @@ const NavigationMenu = () => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        {verify && (
-          <>
-            <Menu.Label fz="1.6rem" fw="bold">
-              {user.username}님 환영합니다.
-            </Menu.Label>
-            <Menu.Divider />
-          </>
-        )}
+        <Menu.Label fz="1.6rem" fw="bold">
+          {verify ? `${user.username}님 환영합니다.` : '로그인이 필요합니다.'}
+        </Menu.Label>
+        <Menu.Divider />
 
-        <Menu.Item fz="1.6rem" fw="bold" closeMenuOnClick={false}>
-          <SearchBar />
-        </Menu.Item>
-        <Menu.Item fz="1.6rem" fw="bold" disabled={!verify}>
+        <Menu.Item
+          fz="1.6rem"
+          fw="bold"
+          disabled={!verify}
+          icon={<BsFillSuitHeartFill size="2rem" color="tomato" />}
+          onClick={() => handleRedirectClick(PATH.WISHLIST, pathname)}>
           관심상품
         </Menu.Item>
-        <Menu.Item fz="1.6rem" fw="bold" disabled={!verify}>
+        <Menu.Item
+          fz="1.6rem"
+          fw="bold"
+          disabled={!verify}
+          icon={<SlHandbag size="2rem" />}
+          onClick={() => handleRedirectClick(PATH.CART, pathname)}>
           장바구니
         </Menu.Item>
 
@@ -147,11 +157,13 @@ const NavigationMenu = () => {
           </Menu.Item>
         ) : (
           topList.map(({ kr, en }) => (
-            <Link key={en} to={PATH[en.toUpperCase()]} state={`${pathname}${search}`}>
-              <Menu.Item fz="1.6rem" fw="bold">
-                {kr}
-              </Menu.Item>
-            </Link>
+            <Menu.Item
+              key={en}
+              fz="1.6rem"
+              fw="bold"
+              onClick={() => handleRedirectClick(PATH[en.toUpperCase()], `${pathname}${search}`)}>
+              {kr}
+            </Menu.Item>
           ))
         )}
       </Menu.Dropdown>
@@ -221,14 +233,18 @@ const MainList = () => {
       <Flex justify="flex-end" align="center" gap="xl">
         <SearchBar />
         <Link to={PATH.WISHLIST} state={pathname}>
-          <ActionIcon size="xl">
-            <BsFillSuitHeartFill size="2.8rem" color="tomato" />
-          </ActionIcon>
+          <Tooltip label="관심상품">
+            <ActionIcon size="xl">
+              <BsFillSuitHeartFill size="2.8rem" color="tomato" />
+            </ActionIcon>
+          </Tooltip>
         </Link>
         <Link to={PATH.CART} state={pathname}>
-          <ActionIcon size="xl">
-            <SlHandbag size="2.8rem" />
-          </ActionIcon>
+          <Tooltip label="장바구니">
+            <ActionIcon size="xl">
+              <SlHandbag size="2.8rem" />
+            </ActionIcon>
+          </Tooltip>
         </Link>
       </Flex>
     </Navbar.Section>
@@ -278,7 +294,7 @@ const NavigationBar = () => {
 
   return (
     <Navbar height="auto" zIndex={9999} position={{ top: 0, left: 0, borderBottom: '1px solid #ced4da' }}>
-      <Container w="100%" size="auto" m="auto">
+      <Container w="100%" size="120rem" m="auto">
         <Group position="apart">
           <Link to={PATH.MAIN}>
             {colorScheme === 'dark' ? (
@@ -295,6 +311,7 @@ const NavigationBar = () => {
           </MediaQuery>
           <MediaQuery largerThan={880} styles={{ display: 'none' }}>
             <Group>
+              <SearchBar />
               <NavigationMenu />
               <DarkMode />
             </Group>

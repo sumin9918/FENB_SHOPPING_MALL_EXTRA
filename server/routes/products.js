@@ -5,8 +5,7 @@ const { getProducts } = require('../controllers/products');
 const { findStock } = require('../controllers/stocks');
 
 router.get('/', (req, res) => {
-  const search = req.query.search;
-  const category = req.query.category;
+  const { search = null, category = null } = req.query;
   const products = getProducts();
 
   const filteredProducts = products

@@ -1,6 +1,8 @@
+const { v4: uuidv4 } = require('uuid');
+
 const COUPONS = [
   {
-    id: 1,
+    id: uuidv4(),
     title: '신규회원 15% 할인쿠폰',
     discountRate: 15,
     discountPrice: null,
@@ -8,7 +10,7 @@ const COUPONS = [
     endTime: new Date('2023-05-04'),
   },
   {
-    id: 2,
+    id: uuidv4(),
     title: '1주년 기념 2만원 할인쿠폰',
     discountRate: null,
     discountPrice: 20000,

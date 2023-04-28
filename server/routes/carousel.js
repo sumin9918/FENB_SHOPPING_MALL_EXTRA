@@ -3,9 +3,9 @@ const COUPONS = require('../constants/coupons');
 const { getCarousel } = require('../controllers/carousel');
 
 router.get('/', (req, res) => {
-  const carouselContainCoupon = getCarousel().map((slide) => ({
+  const carouselContainCoupon = getCarousel().map((slide, idx) => ({
+    id: COUPONS[idx].id,
     ...slide,
-    ...COUPONS.find((coupon) => coupon.id === slide.id),
   }));
 
   res.send(carouselContainCoupon);

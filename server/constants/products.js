@@ -43,7 +43,6 @@ const CATEGORIES = [
   { en: 'slipper', kr: '슬리퍼' },
   { en: 'walking', kr: '워킹화' },
   { en: 'shoes', kr: '구두' },
-  { en: 'etc', kr: '기타' },
 ];
 
 module.exports = { BRANDS, COLORS, GENDER, CATEGORIES };
