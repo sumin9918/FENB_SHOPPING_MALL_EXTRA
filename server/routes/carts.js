@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const router = require('express').Router();
 
 const {
@@ -15,7 +14,7 @@ const { authCheck } = require('../middleware/auth');
 const { findProduct } = require('../controllers/products');
 
 router.get('/me', authCheck, cartStockCheck, (req, res) => {
-  const { email } = jwt.decode(req.cookies.accessToken);
+  const { email } = req.locals;
 
   const { products } = getUserCart(email);
   const addStockToUserCart = products.map(product => ({
@@ -68,8 +67,8 @@ router.patch('/me/:id', authCheck, cartStockCheck, (req, res) => {
 });
 
 // 삭제
-router.delete('/me/:id', cartStockCheck, (req, res) => {
-  const { email } = jwt.decode(req.cookies.accessToken);
+router.delete('/me/:id', authCheck, cartStockCheck, (req, res) => {
+  const { email } = req.locals;
   const id = +req.params.id;
 
   removeCart({ email, id });

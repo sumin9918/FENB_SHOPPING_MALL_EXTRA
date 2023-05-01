@@ -3,7 +3,6 @@ import { CARTS_QUERY_KEY, ADDRESS_QUERY_KEY } from '../../constants';
 import {
   authQueryKey,
   carouselQueryKey,
-  categoryQueryKey,
   couponsQueryKey,
   filteredProductsQueryKey,
   historyQueryKey,
@@ -16,18 +15,19 @@ import { fetchFavorites } from '../favorites';
 import {
   checkSignIn,
   fetchCarousel,
-  fetchCategories,
   fetchCoupons,
   fetchFilteredProducts,
   fetchHistory,
+  fetchPageProducts,
   fetchProducts,
   getUserInfo,
 } from '../index';
 
-export const productsQuery = () => ({
+export const productsQuery = options => ({
   queryKey: productsQueryKey,
   queryFn: fetchProducts,
   staleTime: 30000,
+  ...options,
 });
 
 export const productsLoader = async () => {
@@ -40,18 +40,19 @@ export const productsLoader = async () => {
   }
 };
 
-export const categoryQuery = () => ({
-  queryKey: categoryQueryKey,
-  queryFn: fetchCategories,
-  retry: 0,
-  staleTime: Infinity,
+const PAGE_SIZE = 12;
+
+export const pageProductsQuery = (search = 'all') => ({
+  queryKey: [...productsQueryKey, search],
+  queryFn: ({ pageParam = 1 }) => fetchPageProducts(pageParam, PAGE_SIZE),
+  getNextPageParam: (lastPage, allPages) => (lastPage.products.length === PAGE_SIZE ? allPages.length + 1 : undefined),
 });
 
-export const categoryLoader = async () => {
-  const { queryKey, queryFn } = categoryQuery();
+export const pageProductsLoader = async (search = 'all') => {
+  const { queryKey, queryFn } = pageProductsQuery(search);
 
   try {
-    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
+    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchInfiniteQuery({ queryKey, queryFn }));
   } catch (e) {
     throw new Error(e);
   }
@@ -96,7 +97,7 @@ export const verifyQuery = () => ({
   queryKey: authQueryKey,
   queryFn: checkSignIn,
   retry: 0,
-  staleTime: 1000,
+  staleTime: 3000,
 });
 
 export const verifyLoader = async () => {
@@ -117,7 +118,11 @@ export const favoritesQuery = () => ({
 export const favoritesLoader = async () => {
   const { queryKey, queryFn } = favoritesQuery();
 
-  return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
+  try {
+    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
+  } catch (e) {
+    throw new Error(e);
+  }
 };
 
 export const cartsQuery = options => ({

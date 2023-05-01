@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const { getDateAfter } = require('../utils/date');
 
 // Mock data
 let users = [
@@ -7,6 +8,7 @@ let users = [
     password: 'test123',
     name: '이동규',
     phone: '010-1234-5678',
+    createAt: getDateAfter(-6),
     addresses: [
       {
         id: uuidv4(),

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Card, Image, Text, Badge, Button, Group, Flex, Container, Modal } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, Flex, Container, Modal, Loader } from '@mantine/core';
 import { useRef, useState } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Carousel } from '@mantine/carousel';
@@ -7,8 +7,10 @@ import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useDisclosure } from '@mantine/hooks';
 import { Link, useNavigate } from 'react-router-dom';
 import PATH from '../constants/path';
-import { carouselQuery, productsQuery, verifyQuery } from '../api/loader';
+import { carouselQuery, verifyQuery } from '../api/loader';
 import { addCoupon } from '../api';
+import { useFetchPageProducts } from '../hooks';
+import useObserver from '../hooks/useObserver';
 
 const MainCarousel = ({ modalOpen, setModalTitle }) => {
   const { data: slides } = useQuery(carouselQuery());
@@ -74,17 +76,18 @@ const MainCarousel = ({ modalOpen, setModalTitle }) => {
 };
 
 const Main = () => {
-  const { data: products } = useQuery(productsQuery());
+  const { products, fetchNextPage, hasNextPage } = useFetchPageProducts();
   const [modalTitle, setModalTitle] = useState('');
   const [opened, { open, close }] = useDisclosure(false);
+  const observerRef = useObserver(fetchNextPage);
 
   return (
     <>
       <MainCarousel modalOpen={open} setModalTitle={setModalTitle} />
-      <Container p="0" maw="120rem">
+      <Container p="0" maw="120rem" pos="relative">
         <Flex gap="xl" justify="center" align="center" direction="row" wrap="wrap" m="5rem 0">
           {products.map(({ id, name, price, imgURL, brand }) => (
-            <Link to={`${PATH.PRODUCTS}/${id}`} key={id} state={id}>
+            <Link to={`${PATH.PRODUCTS}/${id}`} key={id}>
               <Card
                 shadow="sm"
                 padding="lg"
@@ -156,6 +159,12 @@ const Main = () => {
             확인
           </Button>
         </Modal>
+
+        {hasNextPage && (
+          <div ref={observerRef}>
+            <Loader />
+          </div>
+        )}
       </Container>
     </>
   );

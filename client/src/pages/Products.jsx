@@ -343,7 +343,7 @@ const Products = () => {
   const isSignInUserRef = useRef(null);
   const [hasStock, setHasStock] = useState(true);
 
-  const [isFavorite, setIsFavorite] = useState(verify ? favorites?.some(product => product.id === id) : false);
+  const [isFavorite, setIsFavorite] = useState(verify ? favorites.some(product => product.id === id) : false);
 
   useEffect(() => {
     setHasStock(true);

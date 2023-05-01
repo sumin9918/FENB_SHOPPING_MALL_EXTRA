@@ -16,11 +16,11 @@ import { PATH } from './constants';
 import {
   carouselLoader,
   cartsLoader,
-  categoryLoader,
   couponsLoader,
   favoritesLoader,
   filteredProductsLoader,
   historyLoader,
+  pageProductsLoader,
   productsLoader,
   userLoader,
 } from './api/loader';
@@ -32,7 +32,7 @@ const router = createHashRouter([
     element: <Root />,
     loader: async () => ({
       products: await productsLoader(),
-      categories: await categoryLoader(),
+      pageProducts: await pageProductsLoader(),
     }),
     children: [
       {

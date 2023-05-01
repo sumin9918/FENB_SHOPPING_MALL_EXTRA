@@ -8,6 +8,10 @@ const style = css`
 
   html {
     font-size: 10px;
+    height: auto;
+  }
+  body {
+    height: 100%;
   }
 `;
 

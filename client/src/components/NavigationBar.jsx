@@ -9,7 +9,6 @@ import {
   Group,
   Stack,
   Text,
-  MediaQuery,
   Container,
   Menu,
   Avatar,
@@ -23,10 +22,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { forwardRef, useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
 import { PATH } from '../constants';
 import { signOut } from '../api';
-import { categoryQuery, productsQuery, verifyQuery } from '../api/loader';
+import { productsQuery } from '../api/loader';
 import { userState } from '../recoil/atoms';
 import { authQueryKey } from '../constants/queryKey';
 import { getDecodeSearch } from '../utils/location';
@@ -54,24 +53,19 @@ const DarkMode = () => {
 };
 
 const SearchBar = () => {
+  const { data: searchProducts } = useQuery(
+    productsQuery({ select: products => products.map(({ id, name, brand }) => ({ id, value: name, brand })) })
+  );
   const [filter, setFilter] = useState('');
   const [debounced] = useDebouncedValue(filter, 200);
-  const { data: products } = useQuery(productsQuery());
   const { pathname } = useLocation();
-
   const navigate = useNavigate();
-
-  const dropDownProducts = products.map(({ id, name, brand }) => ({ id, value: name, brand }));
 
   const handleSubmit = e => {
     e.preventDefault();
     document.activeElement.blur();
 
     navigate(`${PATH.CATEGORY}?search=${filter}`);
-  };
-
-  const handleChange = value => {
-    setFilter(value);
   };
 
   useEffect(() => {
@@ -84,12 +78,12 @@ const SearchBar = () => {
         size="xl"
         icon={<BiSearch size="2rem" />}
         placeholder="제조사명, 상품명"
-        data={dropDownProducts}
+        data={searchProducts}
         radius="xl"
         itemComponent={AutoCompleteItem}
         name="searchInput"
         value={filter}
-        onChange={handleChange}
+        onChange={value => setFilter(value)}
         filter={(_, item) =>
           item.value.toLowerCase().includes(debounced.toLowerCase().trim()) ||
           item.brand.en.toLowerCase().includes(debounced.toLowerCase().trim()) ||
@@ -103,7 +97,6 @@ const SearchBar = () => {
 
 const NavigationMenu = () => {
   const [user, setUser] = useRecoilState(userState);
-  const { data: verify } = useQuery(verifyQuery());
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { search: rawSearch, pathname } = useLocation();
@@ -128,14 +121,14 @@ const NavigationMenu = () => {
 
       <Menu.Dropdown>
         <Menu.Label fz="1.6rem" fw="bold">
-          {verify ? `${user.username}님 환영합니다.` : '로그인이 필요합니다.'}
+          {user ? `${user.username}님 환영합니다.` : '로그인이 필요합니다.'}
         </Menu.Label>
         <Menu.Divider />
 
         <Menu.Item
           fz="1.6rem"
           fw="bold"
-          disabled={!verify}
+          disabled={!user}
           icon={<BsFillSuitHeartFill size="2rem" color="tomato" />}
           onClick={() => handleRedirectClick(PATH.WISHLIST, pathname)}>
           관심상품
@@ -143,7 +136,7 @@ const NavigationMenu = () => {
         <Menu.Item
           fz="1.6rem"
           fw="bold"
-          disabled={!verify}
+          disabled={!user}
           icon={<SlHandbag size="2rem" />}
           onClick={() => handleRedirectClick(PATH.CART, pathname)}>
           장바구니
@@ -151,7 +144,7 @@ const NavigationMenu = () => {
 
         <Menu.Divider />
 
-        {verify ? (
+        {user ? (
           <Menu.Item fz="1.6rem" fw="bold" color="red" onClick={handleSignOutClick}>
             로그아웃
           </Menu.Item>
@@ -173,7 +166,6 @@ const NavigationMenu = () => {
 
 const TopList = () => {
   const [user, setUser] = useRecoilState(userState);
-  const { data: verify } = useQuery(verifyQuery());
 
   const { search: rawSearch, pathname } = useLocation();
   const { search } = getDecodeSearch(rawSearch);
@@ -190,7 +182,7 @@ const TopList = () => {
   return (
     <Navbar.Section pt="xs">
       <Flex gap="lg" align="center" justify="flex-end" fz="1.3rem" color="#222222">
-        {verify ? (
+        {user ? (
           <>
             <Text onClick={handleSignOutClick} sx={{ cursor: 'pointer' }}>
               로그아웃
@@ -251,8 +243,47 @@ const MainList = () => {
   );
 };
 
-const BottomList = () => {
-  const { data: categories } = useQuery(categoryQuery());
+const MainNav = () => {
+  const { colorScheme } = useMantineColorScheme();
+  const matches = useMediaQuery('(min-width: 880px)');
+
+  return (
+    <Group position="apart">
+      <Link to={PATH.MAIN}>
+        <Image
+          width="10rem"
+          pl="1rem"
+          src={colorScheme === 'dark' ? 'images/logo/darkmodeMainLogo.svg' : 'images/logo/main.svg'}
+          alt="486"
+        />
+      </Link>
+      {matches ? (
+        <Stack>
+          <TopList />
+          <MainList />
+        </Stack>
+      ) : (
+        <Group>
+          <SearchBar />
+          <NavigationMenu />
+          <DarkMode />
+        </Group>
+      )}
+    </Group>
+  );
+};
+
+const CategoryNav = () => {
+  const { data: categories } = useQuery(
+    productsQuery({
+      select: products =>
+        products.reduce(
+          (acc, product) =>
+            acc.some(category => category.en === product.category.en) ? acc : [product.category, ...acc],
+          []
+        ),
+    })
+  );
   const { pathname } = useLocation();
   const [activeTab, setActiveTab] = useState('');
   const { colorScheme } = useMantineColorScheme();
@@ -289,38 +320,13 @@ const BottomList = () => {
   );
 };
 
-const NavigationBar = () => {
-  const { colorScheme } = useMantineColorScheme();
-
-  return (
-    <Navbar height="auto" zIndex={9999} position={{ top: 0, left: 0, borderBottom: '1px solid #ced4da' }}>
-      <Container w="100%" size="120rem" m="auto">
-        <Group position="apart">
-          <Link to={PATH.MAIN}>
-            {colorScheme === 'dark' ? (
-              <Image width="10rem" pl="1rem" src="images/logo/darkmodeMainLogo.svg" alt="486" />
-            ) : (
-              <Image width="10rem" pl="1rem" src="images/logo/main.svg" alt="486" />
-            )}
-          </Link>
-          <MediaQuery smallerThan={880} styles={{ display: 'none' }}>
-            <Stack>
-              <TopList />
-              <MainList />
-            </Stack>
-          </MediaQuery>
-          <MediaQuery largerThan={879} styles={{ display: 'none' }}>
-            <Group>
-              <SearchBar />
-              <NavigationMenu />
-              <DarkMode />
-            </Group>
-          </MediaQuery>
-        </Group>
-        <BottomList />
-      </Container>
-    </Navbar>
-  );
-};
+const NavigationBar = () => (
+  <Navbar height="auto" zIndex={9999} position={{ top: 0, left: 0, borderBottom: '1px solid #ced4da' }}>
+    <Container w="100%" size="120rem" m="auto">
+      <MainNav />
+      <CategoryNav />
+    </Container>
+  </Navbar>
+);
 
 export default NavigationBar;

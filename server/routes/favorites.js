@@ -28,7 +28,7 @@ router.get('/me', (req, res) => {
 });
 
 router.post('/me', authCheck, (req, res) => {
-  const { email } = jwt.decode(req.cookies.accessToken);
+  const { email } = req.locals;
   const id = +req.body.id;
 
   const isFavorite = hasFavorite({ email, id });
