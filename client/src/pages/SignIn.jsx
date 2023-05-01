@@ -1,4 +1,3 @@
-import React from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
 import { useMantineColorScheme, Button, Image, Stack, Center, Title } from '@mantine/core';
@@ -11,7 +10,6 @@ import { FormInput } from '../components';
 import { signinSchema } from '../schema';
 import { userState } from '../recoil/atoms';
 
-// Styled Link
 const SignUpLink = styled(Link)`
   margin-left: 1rem;
   text-decoration: none;
@@ -21,7 +19,6 @@ const SignUpLink = styled(Link)`
   }
 `;
 
-// SignIn Component
 const SignIn = () => {
   const { colorScheme } = useMantineColorScheme();
   const setUser = useSetRecoilState(userState);
@@ -33,7 +30,7 @@ const SignIn = () => {
     resolver: zodResolver(signinSchema),
   });
 
-  const handleLogin = async data => {
+  const handleSignIn = async data => {
     try {
       const response = await axios.post('/api/auth/signin', {
         email: data.email,
@@ -70,9 +67,8 @@ const SignIn = () => {
     <Stack
       align="center"
       h="75.5rem"
-      p="0"
-      m="0"
       sx={{
+        marginLeft: '3rem',
         input: {
           padding: '0',
           fontSize: '1.6rem',
@@ -110,7 +106,7 @@ const SignIn = () => {
           />
         )}
       </Title>
-      <form noValidate onSubmit={handleSubmit(handleLogin)}>
+      <form noValidate onSubmit={handleSubmit(handleSignIn)}>
         <FormInput
           inputType="text"
           id="email"
@@ -129,7 +125,7 @@ const SignIn = () => {
           radius="md"
           sx={{
             '@media (max-width: 765px)': {
-              width: '20rem',
+              width: '100vw',
             },
           }}>
           로그인

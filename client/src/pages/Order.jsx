@@ -20,7 +20,7 @@ import {
 import styled from '@emotion/styled';
 import { BsCheck2 } from 'react-icons/bs';
 import { useQuery } from '@tanstack/react-query';
-import { FormAddressInput, FormInput, FormPhoneInput, FormZoneCodeInput } from '../components';
+import { FormMainAddressInput, FormInput, FormPhoneInput, FormZoneCodeInput } from '../components';
 import { cartsQuery, couponsQuery, userQuery } from '../api/loader';
 import { addAddress } from '../api/address';
 import { useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../hooks/address';
@@ -299,7 +299,7 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           register={register}
           formState={formState}
         />
-        <FormAddressInput
+        <FormMainAddressInput
           inputType="text"
           withAsterisk
           id="mainAddress"
