@@ -18,7 +18,7 @@ const Icon = () => (
   </svg>
 );
 
-const NoProducts = ({ children }) => (
+const NoProduct = ({ children }) => (
   <Container>
     <Stack pt="5rem" align="center">
       <Icon />
@@ -29,4 +29,4 @@ const NoProducts = ({ children }) => (
   </Container>
 );
 
-export default NoProducts;
+export default NoProduct;

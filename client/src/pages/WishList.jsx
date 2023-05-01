@@ -1,11 +1,11 @@
-import { Container, Group, Card, Image, Text, Badge, UnstyledButton, SimpleGrid, Flex, Grid } from '@mantine/core';
+import { Container, Group, Card, Image, Text, Badge, UnstyledButton, Flex } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { BiTrash } from 'react-icons/bi';
 import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
 import { favoritesQuery } from '../api/loader';
-import NoProducts from '../components/Category/NoProduct';
+import { NoProduct } from '../components';
 
 const WishList = () => {
   const queryClient = useQueryClient();
@@ -38,16 +38,16 @@ const WishList = () => {
 
   return (
     <>
-      <Container size="120rem" sx={{ paddingTop: '3.5rem', fontSize: '2.4rem' }}>
+      <Container size="120rem" p="3.5rem 0 0 1.5rem" fz="2.4rem">
         관심상품 목록
       </Container>
       {favorites.length === 0 ? (
-        <NoProducts>관심 상품이 없네요?</NoProducts>
+        <NoProduct>관심 상품이 없네요?</NoProduct>
       ) : (
         <Container p="5rem" maw="100%">
           <Flex justify="center" align="center" gap="xl" wrap="wrap">
             {favorites.map(({ id, imgURL, name, brand, price }) => (
-              <Card key={id} padding="lg" maw="40rem" sx={{ fontSize: '1.6rem' }} withBorder>
+              <Card key={id} padding="lg" maw="40rem" fz="1.6rem" withBorder>
                 <Card.Section>
                   <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
                 </Card.Section>

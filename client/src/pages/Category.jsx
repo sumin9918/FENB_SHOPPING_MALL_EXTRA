@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { FaCheck } from 'react-icons/fa';
 import { BiFilter } from 'react-icons/bi';
+import { useDisclosure } from '@mantine/hooks';
 import {
   MediaQuery,
   Drawer,
@@ -21,154 +22,11 @@ import {
   Flex,
   useMantineColorScheme,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { getDecodeSearch } from '../utils/location';
 import { filteredProductsQuery } from '../api/loader';
-import { PATH } from '../constants';
-import NoProduct from '../components/Category/NoProduct';
-
-const CATEGORIES = {
-  sneakers: '운동화',
-  sandal: '샌달',
-  slipper: '슬리퍼',
-  walking: '워킹화',
-  shoes: '구두',
-};
-
-const PRICES = [
-  { rangeIdx: 0, text: '0 - 50,000원' },
-  { rangeIdx: 1, text: '50,000 - 100,000원' },
-  { rangeIdx: 2, text: '100,000 - 150,000원' },
-  { rangeIdx: 3, text: '150,000원 이상' },
-];
-
-const SIZES = [230, 235, 240, 245, 250, 255, 260, 265, 270, 275, 280, 285];
-
-const COLORS = [
-  { color: '#8D429F', en: 'purple', kr: '보라색' },
-  { color: '#000', en: 'black', kr: '검정색' },
-  { color: '#E7352B', en: 'red', kr: '빨간색' },
-  { color: '#F36B26', en: 'orange', kr: '주황색' },
-  { color: '#1790C8', en: 'blue', kr: '파란색' },
-  { color: '#ffffff', en: 'white', kr: '흰색' },
-  { color: '#825D41', en: 'brown', kr: '갈색' },
-  { color: '#7BBA3C', en: 'green', kr: '초록색' },
-  { color: '#FED533', en: 'yellow', kr: '노란색' },
-  { color: 'navy', en: 'navy', kr: '남색' },
-  { color: 'beige', en: 'beige', kr: '베이지' },
-  { color: '#808080', en: 'gray', kr: '회색' },
-  { color: '#F0728F', en: 'pink', kr: '분홍색' },
-];
-
-const GENDER = [
-  { en: 'male', kr: '남성' },
-  { en: 'female', kr: '여성' },
-];
-
-const BRANDS = [
-  { en: 'nike', kr: '나이키' },
-  { en: 'adidas', kr: '아디다스' },
-  { en: 'newBalance', kr: '뉴발란스' },
-  { en: 'sketchers', kr: '스케쳐스' },
-  { en: 'ecco', kr: '에코' },
-  { en: 'crocs', kr: '크록스' },
-  { en: 'asics', kr: '아식스' },
-  { en: 'descente', kr: '데상트' },
-  { en: 'converse', kr: '컨버스' },
-  { en: 'kumkang', kr: '금강제화' },
-  { en: 'babara', kr: '바바라' },
-  { en: 'saera', kr: '새라' },
-  { en: 'tandy', kr: '텐디' },
-  { en: 'rockport', kr: '락포트' },
-  { en: 'soda', kr: '소다' },
-];
-
-const SizeButton = styled(Button)`
-  height: 3.6rem;
-
-  border: ${props => props.selected && '1px solid #228BE6'};
-`;
-
-const sortProducts = (products, sortOption) => {
-  switch (sortOption) {
-    case 'favorite':
-      return products.sort((a, b) => a.favorites - b.favorites);
-
-    case 'new':
-      return products.sort((a, b) => new Date(b.dateOfManufacture).getTime() - new Date(a.dateOfManufacture).getTime());
-
-    case 'high':
-      return products.sort((a, b) => b.price - a.price);
-
-    case 'low':
-      return products.sort((a, b) => a.price - b.price);
-
-    default:
-      return products;
-  }
-};
-
-const checkFiltersHasTrue = filters => filters.some(filter => filter === true);
-
-const filteredAndSortedProducts = (products, newFilters, sortOption) => {
-  const { priceFilters, sizeFilters, colorFilters, genderFilters, brandFilters } = newFilters;
-
-  const filteredPrice = checkFiltersHasTrue(priceFilters)
-    ? [
-        ...priceFilters.map((filter, i) =>
-          filter
-            ? i !== priceFilters.length - 1
-              ? products.filter(({ price }) => i * 50000 <= price && price < (i + 1) * 50000)
-              : products.filter(({ price }) => i * 50000 <= price)
-            : []
-        ),
-      ].flat()
-    : products;
-
-  const filteredSize = checkFiltersHasTrue(sizeFilters)
-    ? [
-        ...new Set(
-          [
-            ...sizeFilters.map((filter, i) =>
-              filter
-                ? filteredPrice.filter(({ stocks }) =>
-                    stocks.some(({ size, stock }) => size === SIZES.at(i) && stock > 0)
-                  )
-                : []
-            ),
-          ].flat()
-        ),
-      ]
-    : filteredPrice;
-
-  const filteredColor = checkFiltersHasTrue(colorFilters)
-    ? [
-        ...colorFilters.map((filter, i) =>
-          filter ? filteredSize.filter(({ color }) => color.en === COLORS.at(i).en) : []
-        ),
-      ].flat()
-    : filteredSize;
-
-  const filteredGender = checkFiltersHasTrue(genderFilters)
-    ? [
-        ...genderFilters.map((filter, i) =>
-          filter ? filteredColor.filter(({ gender }) => gender.en === GENDER.at(i).en) : []
-        ),
-      ].flat()
-    : filteredColor;
-
-  const filteredBrand = checkFiltersHasTrue(brandFilters)
-    ? [
-        ...brandFilters.map((filter, i) =>
-          filter ? filteredGender.filter(({ brand }) => brand.en === BRANDS.at(i).en) : []
-        ),
-      ].flat()
-    : filteredGender;
-
-  const filteredAndSortedProducts = sortProducts(filteredBrand, sortOption);
-
-  return filteredAndSortedProducts;
-};
+import { filteredAndSortedProducts } from '../utils';
+import { NoProduct, SizeButton } from '../components';
+import { PATH, CATEGORIES, PRICES, SIZES, COLORS, GENDER, BRANDS, INITIALFILTERS } from '../constants';
 
 const ScrollFiltersArea = styled(Container)`
   ::-webkit-scrollbar {
@@ -201,8 +59,8 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
         size="xl"
         maxDropdownHeight={500}
         placeholder="정렬 기준"
-        defaultValue={sortOption && null}
         variant="unstyled"
+        value={sortOption}
         data={[
           { value: 'favorite', label: '추천순' },
           { value: 'new', label: '최신순' },
@@ -215,12 +73,11 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
   );
 };
 
-const Filters = ({ type, filters, handleResetFilters, handleCheckFilters }) => {
+const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
   const { priceFilters, sizeFilters, colorFilters, genderFilters, brandFilters } = filters;
-  const [opened, { open, close }] = useDisclosure(false);
 
-  return type === 'vertical' ? (
-    <ScrollFiltersArea m="0" miw="26rem" h="65rem" pos="sticky" top="6.8rem" sx={{ overflowY: 'auto' }}>
+  return (
+    <>
       <Button
         variant="default"
         m="1rem 1rem"
@@ -331,133 +188,34 @@ const Filters = ({ type, filters, handleResetFilters, handleCheckFilters }) => {
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
+    </>
+  );
+};
+
+const FiltersArea = ({ type, filters, handleResetFilters, handleCheckFilters }) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  return type === 'vertical' ? (
+    <ScrollFiltersArea m="0" miw="26rem" maw="26rem" h="65rem" pos="sticky" top="6.8rem" sx={{ overflowY: 'auto' }}>
+      <Filters filters={filters} handleResetFilters={handleResetFilters} handleCheckFilters={handleCheckFilters} />
     </ScrollFiltersArea>
   ) : (
     <>
       <Drawer.Root opened={opened} onClose={close}>
         <Drawer.Overlay />
         <Drawer.Content>
-          <Drawer.Header m="1rem 0 0 1rem">
-            <Drawer.Title fz="1.6rem" fw="600">
-              필터
-            </Drawer.Title>
-          </Drawer.Header>
+          <Drawer.Header m="1rem 0 0 1rem" />
           <Drawer.Body>
-            <Button
-              variant="default"
-              m="1rem 1rem"
-              p="0"
-              w="22rem"
-              h="5rem"
-              fz="1.6rem"
-              radius="lg"
-              onClick={handleResetFilters}>
-              필터 초기화
-            </Button>
-            <Accordion
-              defaultValue={['price', 'size', 'color', 'gender', 'brand']}
-              sx={{ label: { fontSize: '1.6rem' }, span: { fontSize: '1.6rem' } }}
-              multiple>
-              <Accordion.Item value="price">
-                <Accordion.Control>가격</Accordion.Control>
-                <Accordion.Panel>
-                  <Stack>
-                    {PRICES.map(({ rangeIdx, text }, i) => (
-                      <Checkbox
-                        key={rangeIdx}
-                        size="lg"
-                        label={text}
-                        checked={priceFilters.at(i)}
-                        onChange={() => handleCheckFilters({ rangeIdx })}
-                      />
-                    ))}
-                  </Stack>
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item value="size">
-                <Accordion.Control>사이즈</Accordion.Control>
-                <Accordion.Panel>
-                  <SimpleGrid cols={3} spacing="sm" verticalSpacing="sm">
-                    {SIZES.map((size, i) => (
-                      <SizeButton
-                        key={size}
-                        variant="default"
-                        radius="md"
-                        selected={sizeFilters.at(i)}
-                        onClick={() => handleCheckFilters({ size })}>
-                        {size}
-                      </SizeButton>
-                    ))}
-                  </SimpleGrid>
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item value="color">
-                <Accordion.Control>색상</Accordion.Control>
-                <Accordion.Panel>
-                  <SimpleGrid cols={3} spacing="md">
-                    {COLORS.map(({ color, en, kr }, i) => (
-                      <Stack key={color} spacing={'0.2rem'} align="center">
-                        <UnstyledButton>
-                          <ColorSwatch
-                            color={color}
-                            size={'3.0rem'}
-                            selected={colorFilters.at(i)}
-                            onClick={() => handleCheckFilters({ color: en })}>
-                            {colorFilters.at(i) && (
-                              <FaCheck size={'1.2rem'} color={en === 'white' || en === 'beige' ? 'black' : 'white'} />
-                            )}
-                          </ColorSwatch>
-                        </UnstyledButton>
-                        <Text size="1.2rem" align="center">
-                          {kr}
-                        </Text>
-                      </Stack>
-                    ))}
-                  </SimpleGrid>
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item value="gender">
-                <Accordion.Control>성별</Accordion.Control>
-                <Accordion.Panel>
-                  <Stack>
-                    {GENDER.map(({ en, kr }, i) => (
-                      <Checkbox
-                        key={en}
-                        size="lg"
-                        label={kr}
-                        checked={genderFilters.at(i)}
-                        onChange={() => handleCheckFilters({ gender: en })}
-                      />
-                    ))}
-                  </Stack>
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item value="brand">
-                <Accordion.Control>제조사</Accordion.Control>
-                <Accordion.Panel>
-                  <Stack>
-                    {BRANDS.map(({ en, kr }, i) => (
-                      <Checkbox
-                        key={en}
-                        size="lg"
-                        label={kr}
-                        checked={brandFilters.at(i)}
-                        onChange={() => handleCheckFilters({ brand: en })}
-                      />
-                    ))}
-                  </Stack>
-                </Accordion.Panel>
-              </Accordion.Item>
-            </Accordion>
+            <Filters
+              filters={filters}
+              handleResetFilters={handleResetFilters}
+              handleCheckFilters={handleCheckFilters}
+            />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
 
-      <Button variant="default" fz="1.6rem" radius="md" h="3.5rem" onClick={open}>
+      <Button variant="default" mt="1rem" fz="1.6rem" radius="md" h="4rem" onClick={open}>
         필터
         <BiFilter size="2.5rem" />
       </Button>
@@ -465,72 +223,63 @@ const Filters = ({ type, filters, handleResetFilters, handleCheckFilters }) => {
   );
 };
 
-const ResultProducts = ({ products, filters, sortOption, cols = 3 }) => {
-  const newProducts = useMemo(
-    () => filteredAndSortedProducts(products, filters, sortOption),
-    [products, filters, sortOption]
-  );
-
-  return (
-    <>
-      {newProducts.length === 0 ? (
-        <NoProduct>등록된 상품이 없습니다.</NoProduct>
-      ) : (
-        <SimpleGrid cols={cols} pl="2rem">
-          {newProducts.map(({ id, imgURL, name, price, brand, feature, color }) => (
-            <Link key={id} to={`${PATH.PRODUCTS}/${id}`}>
-              <Stack sx={{ fontSize: '1.6rem', cursor: 'pointer' }}>
-                <Image src={imgURL} alt="Product Image" sx={{ zIndex: 0 }} />
-                <Stack spacing="xs" sx={{ padding: '0 1rem' }}>
-                  <Text fz="2rem" fw="bold">
-                    {name}
-                  </Text>
-                  <Text fw={500}>{brand.kr}</Text>
-                  <Text fw={500}>{feature}</Text>
-                  <Text color="#757575">{color.kr}</Text>
-                  <Text fw="bold" sx={{ lineHeight: '2em' }}>
-                    {`${price.toLocaleString()} 원`}
-                  </Text>
-                </Stack>
+const ResultProducts = ({ products, cols = 3 }) => (
+  <>
+    {products.length === 0 ? (
+      <NoProduct>등록된 상품이 없습니다.</NoProduct>
+    ) : (
+      <SimpleGrid cols={cols} pl="2rem">
+        {products.map(({ id, imgURL, name, price, brand, feature, color }) => (
+          <Link key={id} to={`${PATH.PRODUCTS}/${id}`}>
+            <Stack sx={{ fontSize: '1.6rem', cursor: 'pointer' }}>
+              <Image src={imgURL} alt="Product Image" sx={{ zIndex: 0 }} />
+              <Stack spacing="xs" sx={{ padding: '0 1rem' }}>
+                <Text fz="2rem" fw="bold">
+                  {name}
+                </Text>
+                <Text fw={500}>{brand.kr}</Text>
+                <Text fw={500}>{feature}</Text>
+                <Text color="#757575">{color.kr}</Text>
+                <Text fw="bold" sx={{ lineHeight: '2em' }}>
+                  {`${price.toLocaleString()} 원`}
+                </Text>
               </Stack>
-            </Link>
-          ))}
-        </SimpleGrid>
-      )}
-    </>
-  );
-};
-
+            </Stack>
+          </Link>
+        ))}
+      </SimpleGrid>
+    )}
+  </>
+);
 const Category = () => {
   const { search: rawSearch } = useLocation();
   const { search, searchValue } = getDecodeSearch(rawSearch);
-
   const { data: products } = useQuery(filteredProductsQuery(search, searchValue));
 
   const [sortOption, setSortOption] = useState(null);
-
-  // filters states
-  const [filters, setFilters] = useState({
-    priceFilters: Array.from({ length: PRICES.length }, () => false),
-    sizeFilters: Array.from({ length: SIZES.length }, () => false),
-    colorFilters: Array.from({ length: COLORS.length }, () => false),
-    genderFilters: Array.from({ length: GENDER.length }, () => false),
-    brandFilters: Array.from({ length: BRANDS.length }, () => false),
-  });
+  const [filters, setFilters] = useState(INITIALFILTERS);
 
   useEffect(() => {
     setSortOption(JSON.parse(sessionStorage.getItem('sortOption')) ?? sortOption);
     setFilters(JSON.parse(sessionStorage.getItem('filters')) ?? filters);
   }, []);
 
+  const newProducts = useMemo(
+    () => filteredAndSortedProducts(products, filters, sortOption),
+    [products, filters, sortOption]
+  );
+
   const handleResetFilters = () => {
-    setFilters({
-      priceFilters: Array.from({ length: PRICES.length }, () => false),
-      sizeFilters: Array.from({ length: SIZES.length }, () => false),
-      colorFilters: Array.from({ length: COLORS.length }, () => false),
-      genderFilters: Array.from({ length: GENDER.length }, () => false),
-      brandFilters: Array.from({ length: BRANDS.length }, () => false),
-    });
+    setFilters(INITIALFILTERS);
+
+    sessionStorage.setItem('filters', JSON.stringify(INITIALFILTERS));
+    sessionStorage.setItem('sortOption', JSON.stringify(null));
+  };
+
+  const handleSelectSortOption = selectedSortOption => {
+    setSortOption(selectedSortOption);
+
+    sessionStorage.setItem('sortOption', JSON.stringify(selectedSortOption));
   };
 
   const handleCheckFilters = ({ rangeIdx, size, color, gender, brand }) => {
@@ -547,40 +296,34 @@ const Category = () => {
     sessionStorage.setItem('filters', JSON.stringify({ ...filters, ...newFilters }));
   };
 
-  const handleSelectSortOption = selectedSortOption => {
-    setSortOption(selectedSortOption);
-
-    sessionStorage.setItem('sortOption', JSON.stringify(selectedSortOption));
-  };
-
   return (
     <Container top="0" left="0" sx={{ maxWidth: '192rem', padding: '0 8rem' }}>
       <Header
         sortOption={sortOption}
         searchValue={searchValue}
-        productCount={products.length}
+        productCount={newProducts.length}
         handleSelectSortOption={handleSelectSortOption}
       />
       <MediaQuery smallerThan={1000} styles={{ display: 'none' }}>
         <Flex>
-          <Filters
+          <FiltersArea
             type={'vertical'}
             filters={filters}
             handleResetFilters={handleResetFilters}
             handleCheckFilters={handleCheckFilters}
           />
-          <ResultProducts products={products} filters={filters} sortOption={sortOption} />
+          <ResultProducts products={newProducts} />
         </Flex>
       </MediaQuery>
       <MediaQuery largerThan={999} styles={{ display: 'none' }}>
         <Stack>
-          <Filters
+          <FiltersArea
             type={'horizontal'}
             filters={filters}
             handleResetFilters={handleResetFilters}
             handleCheckFilters={handleCheckFilters}
           />
-          <ResultProducts cols={2} products={products} filters={filters} sortOption={sortOption} />
+          <ResultProducts cols={2} products={newProducts} />
         </Stack>
       </MediaQuery>
     </Container>
