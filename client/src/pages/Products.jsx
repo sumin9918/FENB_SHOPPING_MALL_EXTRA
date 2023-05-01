@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   Image,
   Text,
+  MediaQuery,
 } from '@mantine/core';
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
@@ -378,23 +379,90 @@ const Products = () => {
 
   return (
     <Container size="120rem" sx={{ padding: '0 0 5rem 0' }}>
-      <Group position="center" align="flex-start" noWrap="nowrap">
-        <Stack sx={{ margin: '4.8rem 0 0.8rem', padding: '0 2.4rem 0 4.8rem', maxWidth: '60rem' }}>
-          <Image src={imgURL} />
-          <Text fz="1.6rem" fw="500" lh="3.2rem" mt="1.5rem">
-            {description}
-          </Text>
-        </Stack>
+      <MediaQuery smallerThan={880} styles={{ display: 'none' }}>
+        <Group position="center" align="flex-start" noWrap="nowrap">
+          <Stack sx={{ margin: '4.8rem 0 0.8rem', padding: '0 2.4rem 0 4.8rem', maxWidth: '60rem' }}>
+            <Image src={imgURL} />
+            <Text fz="1.6rem" fw="500" lh="3.2rem" mt="1.5rem">
+              {description}
+            </Text>
+          </Stack>
+
+          <Stack
+            sx={{
+              margin: '4.8rem 0.8rem 0 0',
+              padding: '0 4.8rem 0 2.4rem',
+              minWidth: '45.6rem',
+              fontSize: '1.6rem',
+            }}>
+            <Text fz="2.8rem" fw="600">
+              {name}
+            </Text>
+            <Text fw="500" color="dimmed">
+              {brand.kr}
+            </Text>
+            <Text fw="600" sx={{ margin: '1.2rem 0' }}>{`${price.toLocaleString()} 원`}</Text>
+            <Stack>
+              <Text fw="600">{'사이즈 선택'}</Text>
+              <Grid cols={5} selected={isSizeSelected === false}>
+                {stocks.map(({ size, stock }) => (
+                  <SizeButton
+                    key={size}
+                    variant="default"
+                    radius="0.4rem"
+                    disabled={stock === 0}
+                    selected={size === currentSelectedSize}
+                    onClick={() => handleSizeClick(size)}>
+                    {size}
+                  </SizeButton>
+                ))}
+              </Grid>
+              {isSizeSelected === false ? (
+                <Text fw="500" color="red">
+                  {'사이즈를 선택해주세요'}
+                </Text>
+              ) : null}
+              <Stack align="center" w="5rem" spacing="xs" sx={{ margin: '1.4rem 0' }}>
+                <ColorSwatch color={color.color} size={'2.5rem'} />
+                <Text fz="1.4rem" fw="500" sx={{ margin: '0' }}>
+                  {color.kr}
+                </Text>
+              </Stack>
+              <Stack sx={{ marginTop: '1rem' }}>
+                <ModalButton
+                  buttonType={BUTTON.cart}
+                  currentProduct={currentProduct}
+                  currentSelectedSize={currentSelectedSize}
+                  isSizeSelected={isSizeSelected}
+                  hasStock={hasStock}
+                  isSignInUserRef={isSignInUserRef}
+                  handleIsSizeSelected={handleIsSizeSelected}
+                  handleCartClick={() => handleCartClick(currentSelectedSize)}
+                />
+                <ModalButton
+                  buttonType={BUTTON.wishList}
+                  currentProduct={currentProduct}
+                  isSignInUserRef={isSignInUserRef}
+                  isFavorite={isFavorite}
+                  handleWishListToggle={handleWishListToggle}
+                />
+              </Stack>
+            </Stack>
+          </Stack>
+        </Group>
+      </MediaQuery>
+      <MediaQuery largerThan={879} styles={{ display: 'none' }}>
         <Stack
           sx={{
             margin: '4.8rem 0.8rem 0 0',
-            padding: '0 4.8rem 0 2.4rem',
-            minWidth: '45.6rem',
+            padding: '0 5rem',
+            minWidth: '45rem',
             fontSize: '1.6rem',
           }}>
           <Text fz="2.8rem" fw="600">
             {name}
           </Text>
+          <Image src={imgURL} />
           <Text fw="500" color="dimmed">
             {brand.kr}
           </Text>
@@ -445,8 +513,12 @@ const Products = () => {
               />
             </Stack>
           </Stack>
+
+          <Text fz="1.6rem" fw="500" lh="3.2rem" mt="1.5rem">
+            {description}
+          </Text>
         </Stack>
-      </Group>
+      </MediaQuery>
     </Container>
   );
 };

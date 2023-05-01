@@ -3,7 +3,10 @@ import { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { FaCheck } from 'react-icons/fa';
+import { BiFilter } from 'react-icons/bi';
 import {
+  MediaQuery,
+  Drawer,
   Container,
   Stack,
   Select,
@@ -18,6 +21,7 @@ import {
   Flex,
   useMantineColorScheme,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { getDecodeSearch } from '../utils/location';
 import { filteredProductsQuery } from '../api/loader';
 import { PATH } from '../constants';
@@ -211,10 +215,11 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
   );
 };
 
-const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
+const Filters = ({ type, filters, handleResetFilters, handleCheckFilters }) => {
   const { priceFilters, sizeFilters, colorFilters, genderFilters, brandFilters } = filters;
+  const [opened, { open, close }] = useDisclosure(false);
 
-  return (
+  return type === 'vertical' ? (
     <ScrollFiltersArea m="0" miw="26rem" h="65rem" pos="sticky" top="6.8rem" sx={{ overflowY: 'auto' }}>
       <Button
         variant="default"
@@ -327,10 +332,140 @@ const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
         </Accordion.Item>
       </Accordion>
     </ScrollFiltersArea>
+  ) : (
+    <>
+      <Drawer.Root opened={opened} onClose={close}>
+        <Drawer.Overlay />
+        <Drawer.Content>
+          <Drawer.Header m="1rem 0 0 1rem">
+            <Drawer.Title fz="1.6rem" fw="600">
+              필터
+            </Drawer.Title>
+          </Drawer.Header>
+          <Drawer.Body>
+            <Button
+              variant="default"
+              m="1rem 1rem"
+              p="0"
+              w="22rem"
+              h="5rem"
+              fz="1.6rem"
+              radius="lg"
+              onClick={handleResetFilters}>
+              필터 초기화
+            </Button>
+            <Accordion
+              defaultValue={['price', 'size', 'color', 'gender', 'brand']}
+              sx={{ label: { fontSize: '1.6rem' }, span: { fontSize: '1.6rem' } }}
+              multiple>
+              <Accordion.Item value="price">
+                <Accordion.Control>가격</Accordion.Control>
+                <Accordion.Panel>
+                  <Stack>
+                    {PRICES.map(({ rangeIdx, text }, i) => (
+                      <Checkbox
+                        key={rangeIdx}
+                        size="lg"
+                        label={text}
+                        checked={priceFilters.at(i)}
+                        onChange={() => handleCheckFilters({ rangeIdx })}
+                      />
+                    ))}
+                  </Stack>
+                </Accordion.Panel>
+              </Accordion.Item>
+
+              <Accordion.Item value="size">
+                <Accordion.Control>사이즈</Accordion.Control>
+                <Accordion.Panel>
+                  <SimpleGrid cols={3} spacing="sm" verticalSpacing="sm">
+                    {SIZES.map((size, i) => (
+                      <SizeButton
+                        key={size}
+                        variant="default"
+                        radius="md"
+                        selected={sizeFilters.at(i)}
+                        onClick={() => handleCheckFilters({ size })}>
+                        {size}
+                      </SizeButton>
+                    ))}
+                  </SimpleGrid>
+                </Accordion.Panel>
+              </Accordion.Item>
+
+              <Accordion.Item value="color">
+                <Accordion.Control>색상</Accordion.Control>
+                <Accordion.Panel>
+                  <SimpleGrid cols={3} spacing="md">
+                    {COLORS.map(({ color, en, kr }, i) => (
+                      <Stack key={color} spacing={'0.2rem'} align="center">
+                        <UnstyledButton>
+                          <ColorSwatch
+                            color={color}
+                            size={'3.0rem'}
+                            selected={colorFilters.at(i)}
+                            onClick={() => handleCheckFilters({ color: en })}>
+                            {colorFilters.at(i) && (
+                              <FaCheck size={'1.2rem'} color={en === 'white' || en === 'beige' ? 'black' : 'white'} />
+                            )}
+                          </ColorSwatch>
+                        </UnstyledButton>
+                        <Text size="1.2rem" align="center">
+                          {kr}
+                        </Text>
+                      </Stack>
+                    ))}
+                  </SimpleGrid>
+                </Accordion.Panel>
+              </Accordion.Item>
+
+              <Accordion.Item value="gender">
+                <Accordion.Control>성별</Accordion.Control>
+                <Accordion.Panel>
+                  <Stack>
+                    {GENDER.map(({ en, kr }, i) => (
+                      <Checkbox
+                        key={en}
+                        size="lg"
+                        label={kr}
+                        checked={genderFilters.at(i)}
+                        onChange={() => handleCheckFilters({ gender: en })}
+                      />
+                    ))}
+                  </Stack>
+                </Accordion.Panel>
+              </Accordion.Item>
+
+              <Accordion.Item value="brand">
+                <Accordion.Control>제조사</Accordion.Control>
+                <Accordion.Panel>
+                  <Stack>
+                    {BRANDS.map(({ en, kr }, i) => (
+                      <Checkbox
+                        key={en}
+                        size="lg"
+                        label={kr}
+                        checked={brandFilters.at(i)}
+                        onChange={() => handleCheckFilters({ brand: en })}
+                      />
+                    ))}
+                  </Stack>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
+          </Drawer.Body>
+        </Drawer.Content>
+      </Drawer.Root>
+
+      <Button variant="default" fz="1.6rem" radius="md" h="3.5rem" onClick={open}>
+        필터
+        <BiFilter size="2.5rem" />
+      </Button>
+    </>
   );
 };
 
-const ResultProducts = ({ products, filters, sortOption }) => {
+const ResultProducts = ({ products, filters, sortOption, cols = 3 }) => {
   const newProducts = useMemo(
     () => filteredAndSortedProducts(products, filters, sortOption),
     [products, filters, sortOption]
@@ -341,7 +476,7 @@ const ResultProducts = ({ products, filters, sortOption }) => {
       {newProducts.length === 0 ? (
         <NoProduct>등록된 상품이 없습니다.</NoProduct>
       ) : (
-        <SimpleGrid cols={3} pl="2rem">
+        <SimpleGrid cols={cols} pl="2rem">
           {newProducts.map(({ id, imgURL, name, price, brand, feature, color }) => (
             <Link key={id} to={`${PATH.PRODUCTS}/${id}`}>
               <Stack sx={{ fontSize: '1.6rem', cursor: 'pointer' }}>
@@ -426,10 +561,28 @@ const Category = () => {
         productCount={products.length}
         handleSelectSortOption={handleSelectSortOption}
       />
-      <Flex sx={{ flex: '1 26rem' }}>
-        <Filters filters={filters} handleResetFilters={handleResetFilters} handleCheckFilters={handleCheckFilters} />
-        <ResultProducts products={products} filters={filters} sortOption={sortOption} />
-      </Flex>
+      <MediaQuery smallerThan={1000} styles={{ display: 'none' }}>
+        <Flex>
+          <Filters
+            type={'vertical'}
+            filters={filters}
+            handleResetFilters={handleResetFilters}
+            handleCheckFilters={handleCheckFilters}
+          />
+          <ResultProducts products={products} filters={filters} sortOption={sortOption} />
+        </Flex>
+      </MediaQuery>
+      <MediaQuery largerThan={999} styles={{ display: 'none' }}>
+        <Stack>
+          <Filters
+            type={'horizontal'}
+            filters={filters}
+            handleResetFilters={handleResetFilters}
+            handleCheckFilters={handleCheckFilters}
+          />
+          <ResultProducts cols={2} products={products} filters={filters} sortOption={sortOption} />
+        </Stack>
+      </MediaQuery>
     </Container>
   );
 };

@@ -1,4 +1,4 @@
-import { Container, Group, Card, Image, Text, Badge, UnstyledButton, SimpleGrid } from '@mantine/core';
+import { Container, Group, Card, Image, Text, Badge, UnstyledButton, SimpleGrid, Flex, Grid } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { BiTrash } from 'react-icons/bi';
@@ -44,35 +44,37 @@ const WishList = () => {
       {favorites.length === 0 ? (
         <NoProducts>관심 상품이 없네요?</NoProducts>
       ) : (
-        <SimpleGrid cols={3} p="3.5rem 25rem" justify="center" align="center" gap="xl" wrap="wrap">
-          {favorites.map(({ id, imgURL, name, brand, price }) => (
-            <Card key={id} padding="lg" sx={{ width: '40rem', fontSize: '1.6rem' }} withBorder>
-              <Card.Section>
-                <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
-              </Card.Section>
+        <Container p="5rem" maw="100%">
+          <Flex justify="center" align="center" gap="xl" wrap="wrap">
+            {favorites.map(({ id, imgURL, name, brand, price }) => (
+              <Card key={id} padding="lg" maw="40rem" sx={{ fontSize: '1.6rem' }} withBorder>
+                <Card.Section>
+                  <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
+                </Card.Section>
 
-              <Group position="apart" mt="md" mb="xs">
-                <Text weight={500} sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)}>
-                  {name}
+                <Group position="apart" mt="md" mb="xs">
+                  <Text weight={500} sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)}>
+                    {name}
+                  </Text>
+                  <Badge color="skyblue" h="2rem" variant="light">
+                    무료배송
+                  </Badge>
+                </Group>
+
+                <Text align="left" size="1.4rem" color="dimmed">
+                  {brand.kr}
                 </Text>
-                <Badge color="skyblue" h="2rem" variant="light">
-                  무료배송
-                </Badge>
-              </Group>
 
-              <Text align="left" size="1.4rem" color="dimmed">
-                {brand.kr}
-              </Text>
-
-              <Group position="apart" my="md">
-                <Text fw="500">{`${price.toLocaleString()} 원`}</Text>
-                <UnstyledButton sx={{ cursor: 'pointer' }} onClick={() => handleRemoveWishItemClick(id)}>
-                  <BiTrash size="2.5rem" />
-                </UnstyledButton>
-              </Group>
-            </Card>
-          ))}
-        </SimpleGrid>
+                <Group position="apart" my="md">
+                  <Text fw="500">{`${price.toLocaleString()} 원`}</Text>
+                  <UnstyledButton sx={{ cursor: 'pointer' }} onClick={() => handleRemoveWishItemClick(id)}>
+                    <BiTrash size="2.5rem" />
+                  </UnstyledButton>
+                </Group>
+              </Card>
+            ))}
+          </Flex>
+        </Container>
       )}
     </>
   );
