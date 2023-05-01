@@ -2,7 +2,7 @@
 GET http://localhost:8000/api/products
 
 ### 카테고리 상품리스트 가져오기
-GET http://localhost:8000/api/products?search="울"
+GET http://localhost:8000/api/products?search=소다
 
 ### 특정 유저(accessToken)의 정보 가져오기(패스워드 제외)
 GET http://localhost:8000/api/users/me
@@ -37,11 +37,18 @@ GET http://localhost:8000/api/products?search=나이키
 ### 카테고리에 따른 필터된 상품리스트
 GET http://localhost:8000/api/products?category=slipper
 
-### 상품 가격 쿠폰 적용
-GET http://localhost:8000/api/order/coupons/2
+### 상품 가격 쿠폰 적용 : id === uuid
+GET http://localhost:8000/api/order/coupons/:id
 
 ### 구매 내역 확인
 GET http://localhost:8000/api/order/history
+
+### 페이지별 products 가져오기
+GET http://localhost:8000/api/products/pages/2
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 
 ### 특정 유저(accessToken)의 관심상품 추가/제거(관심상품 추가, 상품의 좋아요 개수 증가 / 관심상품 제거, 상품의 좋아요 개수 감소)
 POST http://localhost:8000/api/favorites/me
@@ -95,28 +102,26 @@ content-type: application/json
   "postcode": "123456"
 }
 
-# "isDefault": true
-
-### 쿠폰 추가
-POST http://localhost:8000/api/coupons/2
+### 쿠폰 추가 : id === uuid
+POST http://localhost:8000/api/coupons/5685674d-d55c-4a86-85e3-999090688ead
 content-type: application/json
 
-### 결제하기
+### 결제하기 : addressId === uuid, couponId === uuid
 POST http://localhost:8000/api/order/pay
 content-type: application/json
 
-{ "addressId": 1, "paymentMethod": "kakaopay", "couponId": null }
+{ "addressId": 1, "paymentMethod": "kakaopay", "couponId": "8cfff617-7331-43f1-ab45-6652f1a08ab6" }
 
 ### 장바구니 사이즈(고정), 수량 변경
-PATCH http://localhost:8000/api/carts/me/1
+PATCH http://localhost:8000/api/carts/me/:id
 content-type: application/json
 
 { "quantity" : 11 }
 //{ "quantity" : 20 }
 
 
-### 기본 배송지 변경
-PATCH http://localhost:8000/api/users/me/address/1
+### 기본 배송지 변경 : id === uuid
+PATCH http://localhost:8000/api/users/me/address/id
 content-type: application/json
 
 {"postcode": "000000"}

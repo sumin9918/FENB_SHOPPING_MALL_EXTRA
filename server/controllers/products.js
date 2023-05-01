@@ -1139,6 +1139,8 @@ GEL FUNWALKER는 트레일 컨셉이지만 경량성이 강조된 패션성을 �
 
 const getProducts = () => products;
 
+const getPageProducts = (page, pageSize) => products.slice((page - 1) * pageSize, page * pageSize);
+
 const findProduct = id => products.find(product => product.id === id);
 
 const toggleProductFavorite = (id, isFavorite) => {
@@ -1149,4 +1151,4 @@ const toggleProductFavorite = (id, isFavorite) => {
   );
 };
 
-module.exports = { findProduct, getProducts, toggleProductFavorite };
+module.exports = { findProduct, getProducts, getPageProducts, toggleProductFavorite };

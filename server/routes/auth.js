@@ -40,7 +40,7 @@ router.post('/signin', (req, res) => {
   res.send({ email, username: user.name });
 });
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', (req, res) => {
   // 401 Unauthorized
   const { email, name, phone, password, mainAddress, detailAddress, postcode } = req.body;
   req.locals = email;
@@ -49,7 +49,6 @@ router.post('/signup', (req, res, next) => {
     return res.status(401).send({ message: '필수 정보가 전달되지 않았습니다.' });
 
   const isDuplicate = users.checkDuplicateEmail(email);
-
   if (isDuplicate) return res.status(400).send({ message: '이메일이 중복입니다.' });
 
   users.createUser({

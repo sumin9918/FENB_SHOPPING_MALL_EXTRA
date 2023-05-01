@@ -5,8 +5,8 @@ export const fetchProducts = async () => {
   return data;
 };
 
-export const fetchCategories = async () => {
-  const { data } = await axios.get('/api/categories');
+export const fetchPageProducts = async (page, pageSize) => {
+  const { data } = await axios.get(`/api/products/pages/${page}?pageSize=${pageSize}`);
   return data;
 };
 
@@ -51,6 +51,5 @@ export const signOut = async () => {
 
 export const fetchHistory = async () => {
   const { data } = await axios.get('/api/order/history');
-  console.log('data : ', data);
   return data;
 };
