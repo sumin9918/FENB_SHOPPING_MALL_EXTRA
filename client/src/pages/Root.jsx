@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { MantineProvider, ColorSchemeProvider, ActionIcon } from '@mantine/core';
 import { SlArrowUpCircle } from 'react-icons/sl';
 import { useWindowScroll } from '@mantine/hooks';
-import { Footer, NavigationBar, ScrollToTop } from '../components';
+import { Footer, NavigationBar, SwitchingpageScrollToTop } from '../components';
 import useTheme from '../hooks/darkmode/useTheme';
 
 const Root = () => {
@@ -13,7 +13,7 @@ const Root = () => {
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleTheme}>
         <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <NavigationBar />
-          <ScrollToTop />
+          <SwitchingpageScrollToTop />
           <Outlet />
           <Footer />
           {scroll.y >= 700 && (

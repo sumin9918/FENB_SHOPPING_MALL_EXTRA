@@ -1,16 +1,14 @@
-import React from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-
 import { TextInput } from '@mantine/core';
 
-// InputContainer Component
 const FormEmailInputContainer = ({ inputType, id, name, placeholder, withAsterisk = false, register, formState }) => {
-  const [duplicateEmailError, setDuplicateEmailError] = React.useState('');
+  const [duplicateEmailError, setDuplicateEmailError] = useState('');
 
-  const checkEmailDuplicate = async stremail => {
+  const checkEmailDuplicate = async emailAddress => {
     try {
       const response = await axios.post('/api/auth/signup/email', {
-        email: stremail,
+        email: emailAddress,
       });
 
       if (response.data.isDuplicate) {
@@ -30,15 +28,15 @@ const FormEmailInputContainer = ({ inputType, id, name, placeholder, withAsteris
       placeholder={placeholder}
       withAsterisk={withAsterisk}
       autoComplete="off"
-      w="40rem"
-      h="3.8rem"
-      mb="3.5rem"
       {...register(id)}
       onBlur={e => checkEmailDuplicate(e.target.value)}
       error={formState?.errors[id]?.message || duplicateEmailError}
+      w="40rem"
+      h="3.8rem"
+      mb="3.5rem"
       sx={{
         '@media (max-width: 765px)': {
-          width: '20rem',
+          width: '100vw',
         },
       }}
     />

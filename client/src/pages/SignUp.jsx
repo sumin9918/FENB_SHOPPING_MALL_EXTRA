@@ -1,4 +1,3 @@
-import React from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
 import { useMantineColorScheme, Button, Stack, Title, Center } from '@mantine/core';
@@ -6,10 +5,9 @@ import { notifications } from '@mantine/notifications';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput, FormAddressInput, FormZoneCodeInput, FormEmailInput, FormPhoneInput } from '../components';
+import { FormInput, FormMainAddressInput, FormZoneCodeInput, FormEmailInput, FormPhoneInput } from '../components';
 import { signupSchema } from '../schema';
 
-// Styled Link
 const SignInLink = styled(Link)`
   margin-left: 1rem;
   text-decoration: none;
@@ -19,7 +17,6 @@ const SignInLink = styled(Link)`
   }
 `;
 
-// SignUp Component
 const SignUp = () => {
   const { colorScheme } = useMantineColorScheme();
 
@@ -65,9 +62,8 @@ const SignUp = () => {
     <Stack
       align="center"
       h="100rem"
-      p="0"
-      m="0"
       sx={{
+        marginLeft: '3rem',
         input: {
           padding: '0',
           fontSize: '1.6rem',
@@ -90,25 +86,24 @@ const SignUp = () => {
       <form noValidate onSubmit={handleSubmit(handleSignUp)}>
         <FormEmailInput
           inputType="text"
-          withAsterisk
           id="email"
           name="이메일 주소"
           placeholder="예) fenb@fenb.com"
           register={register}
           formState={formState}
+          withAsterisk
         />
         <FormInput
           inputType="text"
-          withAsterisk
           id="name"
           name="이름"
           placeholder="예) 김펜비"
           register={register}
           formState={formState}
+          withAsterisk
         />
         <FormPhoneInput
           inputType="tel"
-          withAsterisk
           id="phone"
           name="휴대전화번호"
           placeholder="예) 01012345678"
@@ -116,24 +111,25 @@ const SignUp = () => {
           setValue={setValue}
           register={register}
           formState={formState}
+          withAsterisk
         />
         <FormInput
           inputType="password"
-          withAsterisk
           id="password"
           name="비밀번호"
           placeholder="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
           formState={formState}
+          withAsterisk
         />
         <FormInput
           inputType="password"
-          withAsterisk
           id="confirmPassword"
           name="비밀번호 확인"
           placeholder="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
           formState={formState}
+          withAsterisk
         />
         <FormZoneCodeInput
           inputType="text"
@@ -144,7 +140,7 @@ const SignUp = () => {
           register={register}
           formState={formState}
         />
-        <FormAddressInput
+        <FormMainAddressInput
           inputType="text"
           id="mainAddress"
           name="주소"
@@ -169,7 +165,7 @@ const SignUp = () => {
           radius="md"
           sx={{
             '@media (max-width: 765px)': {
-              width: '20rem',
+              width: '100vw',
             },
           }}>
           가입하기
