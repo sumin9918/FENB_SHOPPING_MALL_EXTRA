@@ -81,8 +81,8 @@ content-type: application/json
 POST http://localhost:8000/api/carts/me/1
 content-type: application/json
 
-// { "selectedSize" : 260, "quantity" : 1 }
-{ "selectedSize" : 265 }
+// { "selectedSize" : 270, "quantity" : 1 }
+// { "selectedSize" : 265 }
 
 ### 로그인 기능
 POST http://localhost:8000/api/auth/signin
@@ -113,10 +113,10 @@ content-type: application/json
 { "addressId": 1, "paymentMethod": "kakaopay", "couponId": "8cfff617-7331-43f1-ab45-6652f1a08ab6" }
 
 ### 장바구니 사이즈(고정), 수량 변경
-PATCH http://localhost:8000/api/carts/me/:id
+PATCH http://localhost:8000/api/carts/me/1
 content-type: application/json
 
-{ "quantity" : 11 }
+{ "selectedSize": 265, "quantity" : 2 }
 //{ "quantity" : 20 }
 
 

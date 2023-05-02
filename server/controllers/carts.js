@@ -35,12 +35,14 @@ const getUserCartSelectProductStock = (products, id, selectedSize) =>
     { selectedSize, quantity: 0 }
   );
 
-const changeCart = ({ email, id, quantity }) => {
+const changeCart = ({ email, id, selectedSize, quantity }) => {
   carts = carts.map(cart =>
     cart.email === email
       ? {
           ...cart,
-          products: cart.products.map(product => (product.id === id ? { ...product, quantity } : product)),
+          products: cart.products.map(product =>
+            product.id === id && product.selectedSize === selectedSize ? { ...product, quantity } : product
+          ),
         }
       : cart
   );

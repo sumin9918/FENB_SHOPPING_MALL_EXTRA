@@ -52,16 +52,14 @@ router.post('/me/:id', authCheck, (req, res) => {
 router.patch('/me/:id', authCheck, cartStockCheck, (req, res) => {
   const { email } = req.locals;
   const id = +req.params.id;
-  const { quantity } = req.body;
+  const { selectedSize, quantity } = req.body;
 
   // 이번에 요청한 상품의 재고 확인
-  const { products } = getUserCart(email);
-  const { selectedSize } = getUserCartProduct(id, products);
   const { stock } = getSelectedSizeStock(id, selectedSize);
 
   if (stock < quantity) return res.status(406).send({ message: '상품의 재고가 없습니다. 수량을 다시 선택해주세요' });
 
-  changeCart({ email, id, quantity });
+  changeCart({ email, id, selectedSize, quantity });
 
   res.send({ message: '장바구니 상품이 변경되었습니다.' });
 });
