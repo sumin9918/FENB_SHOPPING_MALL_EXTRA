@@ -67,7 +67,7 @@ export const favoritesQuery = options => ({
   queryKey: WISHLIST_QUERY_KEY,
   queryFn: fetchFavorites,
   retry: 0,
-  staleTime: 3000,
+  // staleTime: 3000,
   ...options,
 });
 

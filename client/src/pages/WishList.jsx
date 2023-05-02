@@ -1,34 +1,19 @@
 import { Title, Container, Group, Card, Image, Text, Badge, UnstyledButton, Flex } from '@mantine/core';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { BiTrash } from 'react-icons/bi';
-import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
 import { favoritesQuery } from '../api/query';
 import { NoProduct } from '../components';
+import { useRemoveWishItemMutation } from '../hooks/wishList';
 
 const WishList = () => {
-  const queryClient = useQueryClient();
   const { data: favorites } = useQuery(favoritesQuery());
   const navigate = useNavigate();
 
-  // 낙관적 업데이트
-  const { mutate } = useMutation({
-    mutationFn: toggleFavorite,
-    onMutate: async id => {
-      await queryClient.cancelQueries({ queryKey: ['wishList'] });
-
-      const prevWishList = queryClient.getQueryData(['wishList']);
-      queryClient.setQueryData(['wishList'], wishList => wishList.filter(wishItem => wishItem.id !== id));
-
-      return { prevWishList };
-    },
-    onError: (res, param, context) => queryClient.setQueryData(['wishList'], context.prevWishList),
-  });
+  const { mutate } = useRemoveWishItemMutation();
 
   const handleRemoveWishItemClick = id => {
-    // TODO: 클릭한 상품을 위시리스트에서 지우는 요청을 보낸다.
-    // ㄷㄱ : 낙관적 업데이트 필요하다.
     mutate(id);
   };
 
@@ -42,9 +27,9 @@ const WishList = () => {
       {favorites.length === 0 ? (
         <NoProduct pageName={'관심상품 목록'} />
       ) : (
-        <Flex justify="center" align="center" gap="xl" wrap="wrap">
+        <Flex p="3.5rem 0 0 1rem" align="center" gap="xl" wrap="wrap">
           {favorites.map(({ id, imgURL, name, brand, price }) => (
-            <Card key={id} padding="lg" maw="40rem" fz="1.6rem" withBorder>
+            <Card key={id} padding="lg" maw="38rem" fz="1.6rem" withBorder>
               <Card.Section>
                 <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
               </Card.Section>

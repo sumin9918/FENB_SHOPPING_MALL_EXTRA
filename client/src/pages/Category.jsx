@@ -26,7 +26,15 @@ import { getDecodeSearch } from '../utils/location';
 import { filteredProductsQuery } from '../api/query';
 import { filteredAndSortedProducts } from '../utils';
 import { SadIcon, SizeButton } from '../components';
-import { PATH, CATEGORIES, PRICES, SIZES, COLORS, GENDER, BRANDS, INITIALFILTERS } from '../constants';
+import { PATH, CATEGORIES, PRICES, SIZES, COLORS, GENDER, BRANDS } from '../constants';
+
+const INITIAL_FILTERS = {
+  priceFilters: Array.from({ length: PRICES.length }, () => false),
+  sizeFilters: Array.from({ length: SIZES.length }, () => false),
+  colorFilters: Array.from({ length: COLORS.length }, () => false),
+  genderFilters: Array.from({ length: GENDER.length }, () => false),
+  brandFilters: Array.from({ length: BRANDS.length }, () => false),
+};
 
 const ScrollFiltersArea = styled(Container)`
   ::-webkit-scrollbar {
@@ -257,7 +265,7 @@ const Category = () => {
   const { data: products } = useQuery(filteredProductsQuery(search, searchValue));
 
   const [sortOption, setSortOption] = useState(null);
-  const [filters, setFilters] = useState(INITIALFILTERS);
+  const [filters, setFilters] = useState(INITIAL_FILTERS);
 
   useEffect(() => {
     setSortOption(JSON.parse(sessionStorage.getItem('sortOption')) ?? sortOption);
@@ -270,9 +278,9 @@ const Category = () => {
   );
 
   const handleResetFilters = () => {
-    setFilters(INITIALFILTERS);
+    setFilters(INITIAL_FILTERS);
 
-    sessionStorage.setItem('filters', JSON.stringify(INITIALFILTERS));
+    sessionStorage.setItem('filters', JSON.stringify(INITIAL_FILTERS));
     sessionStorage.setItem('sortOption', JSON.stringify(null));
   };
 
