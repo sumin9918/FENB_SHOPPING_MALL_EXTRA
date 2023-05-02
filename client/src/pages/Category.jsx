@@ -25,7 +25,7 @@ import {
 import { getDecodeSearch } from '../utils/location';
 import { filteredProductsQuery } from '../api/query';
 import { filteredAndSortedProducts } from '../utils';
-import { NoProduct, SizeButton } from '../components';
+import { SadIcon, SizeButton } from '../components';
 import { PATH, CATEGORIES, PRICES, SIZES, COLORS, GENDER, BRANDS, INITIALFILTERS } from '../constants';
 
 const ScrollFiltersArea = styled(Container)`
@@ -226,7 +226,7 @@ const FiltersArea = ({ type, filters, handleResetFilters, handleCheckFilters }) 
 const ResultProducts = ({ products, cols = 3 }) => (
   <>
     {products.length === 0 ? (
-      <NoProduct>등록된 상품이 없습니다.</NoProduct>
+      <SadIcon>등록된 상품이 없습니다.</SadIcon>
     ) : (
       <SimpleGrid cols={cols} pl="2rem">
         {products.map(({ id, imgURL, name, price, brand, feature, color }) => (

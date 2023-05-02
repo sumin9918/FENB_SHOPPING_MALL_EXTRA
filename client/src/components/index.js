@@ -6,6 +6,7 @@ export { default as FormZoneCodeInput } from './Sign/FormZoneCodeInput';
 export { default as NavigationBar } from './NavigationBar';
 export { default as Footer } from './Footer';
 export { default as SwitchingpageScrollToTop } from './SwitchigPageScrollToTop';
+export { default as SadIcon } from './Icon';
 export { default as NoProduct } from './NoProduct';
 export { default as SizeButton } from './SizeButton';
 export { default as DarkMode } from './DarkMode';

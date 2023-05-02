@@ -1,4 +1,4 @@
-import { Container, Group, Card, Image, Text, Badge, UnstyledButton, Flex } from '@mantine/core';
+import { Title, Container, Group, Card, Image, Text, Badge, UnstyledButton, Flex } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { BiTrash } from 'react-icons/bi';
@@ -37,46 +37,42 @@ const WishList = () => {
   };
 
   return (
-    <>
-      <Container size="120rem" p="3.5rem 0 0 1.5rem" fz="2.4rem">
-        관심상품 목록
-      </Container>
+    <Container size="120rem" pt="4rem">
+      <Title p="0.8rem 0 0 0.8rem">관심상품 목록</Title>
       {favorites.length === 0 ? (
-        <NoProduct>관심 상품이 없네요?</NoProduct>
+        <NoProduct pageName={'관심상품 목록'} />
       ) : (
-        <Container p="5rem" maw="100%">
-          <Flex justify="center" align="center" gap="xl" wrap="wrap">
-            {favorites.map(({ id, imgURL, name, brand, price }) => (
-              <Card key={id} padding="lg" maw="40rem" fz="1.6rem" withBorder>
-                <Card.Section>
-                  <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
-                </Card.Section>
+        <Flex justify="center" align="center" gap="xl" wrap="wrap">
+          {favorites.map(({ id, imgURL, name, brand, price }) => (
+            <Card key={id} padding="lg" maw="40rem" fz="1.6rem" withBorder>
+              <Card.Section>
+                <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
+              </Card.Section>
 
-                <Group position="apart" mt="md" mb="xs">
-                  <Text weight={500} sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)}>
-                    {name}
-                  </Text>
-                  <Badge color="skyblue" h="2rem" variant="light">
-                    무료배송
-                  </Badge>
-                </Group>
-
-                <Text align="left" size="1.4rem" color="dimmed">
-                  {brand.kr}
+              <Group position="apart" mt="md" mb="xs">
+                <Text weight={500} sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)}>
+                  {name}
                 </Text>
+                <Badge color="skyblue" h="2rem" variant="light">
+                  무료배송
+                </Badge>
+              </Group>
 
-                <Group position="apart" my="md">
-                  <Text fw="500">{`${price.toLocaleString()} 원`}</Text>
-                  <UnstyledButton sx={{ cursor: 'pointer' }} onClick={() => handleRemoveWishItemClick(id)}>
-                    <BiTrash size="2.5rem" />
-                  </UnstyledButton>
-                </Group>
-              </Card>
-            ))}
-          </Flex>
-        </Container>
+              <Text align="left" size="1.4rem" color="dimmed">
+                {brand.kr}
+              </Text>
+
+              <Group position="apart" my="md">
+                <Text fw="500">{`${price.toLocaleString()} 원`}</Text>
+                <UnstyledButton sx={{ cursor: 'pointer' }} onClick={() => handleRemoveWishItemClick(id)}>
+                  <BiTrash size="2.5rem" />
+                </UnstyledButton>
+              </Group>
+            </Card>
+          ))}
+        </Flex>
       )}
-    </>
+    </Container>
   );
 };
 
