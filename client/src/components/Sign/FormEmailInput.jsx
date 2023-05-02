@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { TextInput } from '@mantine/core';
 
-const FormEmailInputContainer = ({ inputType, id, name, placeholder, withAsterisk = false, register, formState }) => {
+const FormEmailInput = ({ inputType, id, name, placeholder, withAsterisk = false, register, formState }) => {
   const [duplicateEmailError, setDuplicateEmailError] = useState('');
 
   const checkEmailDuplicate = async emailAddress => {
@@ -42,4 +42,4 @@ const FormEmailInputContainer = ({ inputType, id, name, placeholder, withAsteris
     />
   );
 };
-export default FormEmailInputContainer;
+export default FormEmailInput;

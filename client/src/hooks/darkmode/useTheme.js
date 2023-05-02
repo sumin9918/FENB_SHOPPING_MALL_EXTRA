@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 const getInitialTheme = () => {
   let initialTheme = localStorage.getItem('theme');
@@ -13,9 +13,9 @@ const getInitialTheme = () => {
 };
 
 const useTheme = () => {
-  const [colorScheme, setColorScheme] = React.useState(getInitialTheme);
+  const [colorScheme, setColorScheme] = useState(getInitialTheme);
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('theme', colorScheme);
   }, [colorScheme]);
 
