@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Navigate, useLocation } from 'react-router-dom';
-import { verifyQuery } from '../api/loader';
+import { verifyQuery } from '../api/query';
 
 const PrivateRoute = ({ redirectTo, element }) => {
   const { state } = useLocation();

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchCoupons } from '../../api';
+import { fetchCoupons } from '../../api/fetch';
 import { COUPONS_QUERY_KEY, STALE_TIME } from '../../constants';
 
 const useCouponsQuery = options => {

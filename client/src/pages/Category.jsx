@@ -23,7 +23,7 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { getDecodeSearch } from '../utils/location';
-import { filteredProductsQuery } from '../api/loader';
+import { filteredProductsQuery } from '../api/query';
 import { filteredAndSortedProducts } from '../utils';
 import { NoProduct, SizeButton } from '../components';
 import { PATH, CATEGORIES, PRICES, SIZES, COLORS, GENDER, BRANDS, INITIALFILTERS } from '../constants';

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Container, Stack, Group, Title, Text, Button, Image, useMantineColorScheme } from '@mantine/core';
 import styled from '@emotion/styled';
-import { historyQuery } from '../api/loader';
+import { historyQuery } from '../api/query';
 import { PATH } from '../constants';
 
 const COLORS = [

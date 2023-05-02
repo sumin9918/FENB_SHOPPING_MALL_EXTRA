@@ -21,7 +21,7 @@ import styled from '@emotion/styled';
 import { BsCheck2 } from 'react-icons/bs';
 import { useQuery } from '@tanstack/react-query';
 import { FormMainAddressInput, FormInput, FormPhoneInput, FormZoneCodeInput } from '../components';
-import { cartsQuery, couponsQuery, userQuery } from '../api/loader';
+import { cartsQuery, couponsQuery, userQuery } from '../api/query';
 import { addAddress } from '../api/address';
 import { useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../hooks/address';
 import { PATH } from '../constants';

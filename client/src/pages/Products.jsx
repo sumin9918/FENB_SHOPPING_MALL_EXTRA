@@ -21,7 +21,7 @@ import { ImSad } from 'react-icons/im';
 import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
 import { addCart } from '../api/carts';
-import { favoritesQuery, productsQuery, verifyQuery } from '../api/loader';
+import { favoritesQuery, productsQuery, verifyQuery } from '../api/query';
 import { SizeButton } from '../components';
 
 const SizeButtonContainer = styled(SimpleGrid)`

@@ -1,34 +1,17 @@
-import { queryClient } from '../../components/GlobalProvider';
-import { CARTS_QUERY_KEY, ADDRESS_QUERY_KEY } from '../../constants';
+import { queryClient } from '../components/GlobalProvider';
+import { getDecodeSearch } from '../utils/location';
 import {
-  authQueryKey,
-  slidesQueryKey,
-  couponsQueryKey,
-  filteredProductsQueryKey,
-  historyQueryKey,
-  productsQueryKey,
-  wishListQueryKey,
-} from '../../constants/queryKey';
-import { getDecodeSearch } from '../../utils/location';
-import { fetchCarts } from '../carts';
-import { fetchFavorites } from '../favorites';
-import {
-  checkSignIn,
-  fetchSlides,
-  fetchCoupons,
-  fetchFilteredProducts,
-  fetchHistory,
-  fetchPageProducts,
-  fetchProducts,
-  getUserInfo,
-} from '../index';
-
-export const productsQuery = options => ({
-  queryKey: productsQueryKey,
-  queryFn: fetchProducts,
-  staleTime: 30000,
-  ...options,
-});
+  cartsQuery,
+  couponsQuery,
+  favoritesQuery,
+  filteredProductsQuery,
+  historyQuery,
+  pageProductsQuery,
+  productsQuery,
+  slidesQuery,
+  userQuery,
+  verifyQuery,
+} from './query';
 
 export const productsLoader = async () => {
   const { queryKey, queryFn } = productsQuery();
@@ -40,15 +23,7 @@ export const productsLoader = async () => {
   }
 };
 
-const PAGE_SIZE = 12;
-
-export const pageProductsQuery = (search = 'all') => ({
-  queryKey: [...productsQueryKey, search],
-  queryFn: ({ pageParam = 1 }) => fetchPageProducts(pageParam, PAGE_SIZE),
-  getNextPageParam: (lastPage, allPages) => (lastPage.products.length === PAGE_SIZE ? allPages.length + 1 : undefined),
-});
-
-export const pageProductsLoader = async (search = 'all') => {
+export const pageProductsLoader = async search => {
   const { queryKey, queryFn } = pageProductsQuery(search);
 
   try {
@@ -57,14 +32,6 @@ export const pageProductsLoader = async (search = 'all') => {
     throw new Error(e);
   }
 };
-
-export const filteredProductsQuery = (search, searchValue) => ({
-  queryKey: filteredProductsQueryKey(searchValue),
-  queryFn: async () => {
-    const data = await fetchFilteredProducts(search);
-    return data;
-  },
-});
 
 export const filteredProductsLoader = async params => {
   const { search: rawSearch } = new URL(params.request.url);
@@ -78,11 +45,6 @@ export const filteredProductsLoader = async params => {
   }
 };
 
-export const slidesQuery = () => ({
-  queryKey: slidesQueryKey,
-  queryFn: fetchSlides,
-});
-
 export const slidesLoader = async () => {
   const { queryKey, queryFn } = slidesQuery();
 
@@ -92,13 +54,6 @@ export const slidesLoader = async () => {
     throw new Error(e);
   }
 };
-
-export const verifyQuery = () => ({
-  queryKey: authQueryKey,
-  queryFn: checkSignIn,
-  retry: 0,
-  staleTime: 3000,
-});
 
 export const verifyLoader = async () => {
   const { queryKey, queryFn } = verifyQuery();
@@ -110,11 +65,6 @@ export const verifyLoader = async () => {
   }
 };
 
-export const favoritesQuery = () => ({
-  queryKey: wishListQueryKey,
-  queryFn: fetchFavorites,
-});
-
 export const favoritesLoader = async () => {
   const { queryKey, queryFn } = favoritesQuery();
 
@@ -124,14 +74,6 @@ export const favoritesLoader = async () => {
     throw new Error(e);
   }
 };
-
-export const cartsQuery = options => ({
-  queryKey: CARTS_QUERY_KEY,
-  queryFn: fetchCarts,
-  retry: 0,
-  staleTime: 3000,
-  ...options,
-});
 
 export const cartsLoader = async () => {
   const { queryKey, queryFn } = cartsQuery();
@@ -143,14 +85,6 @@ export const cartsLoader = async () => {
   }
 };
 
-export const userQuery = options => ({
-  queryKey: ADDRESS_QUERY_KEY,
-  queryFn: getUserInfo,
-  retry: 0,
-  staleTime: 3000,
-  ...options,
-});
-
 export const userLoader = async () => {
   const { queryKey, queryFn } = userQuery();
 
@@ -161,14 +95,6 @@ export const userLoader = async () => {
   }
 };
 
-export const couponsQuery = options => ({
-  queryKey: couponsQueryKey,
-  queryFn: fetchCoupons,
-  retry: 0,
-  staleTime: 3000,
-  ...options,
-});
-
 export const couponsLoader = async () => {
   const { queryKey, queryFn } = couponsQuery();
 
@@ -178,14 +104,6 @@ export const couponsLoader = async () => {
     throw new Error(e);
   }
 };
-
-export const historyQuery = options => ({
-  queryKey: historyQueryKey,
-  queryFn: fetchHistory,
-  retry: 0,
-  staleTime: 3000,
-  ...options,
-});
 
 export const historyLoader = async () => {
   const { queryKey, queryFn } = historyQuery();

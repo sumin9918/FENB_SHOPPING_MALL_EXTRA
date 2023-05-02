@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { BiTrash } from 'react-icons/bi';
 import { toggleFavorite } from '../api/favorites';
 import { PATH } from '../constants';
-import { favoritesQuery } from '../api/loader';
+import { favoritesQuery } from '../api/query';
 import { NoProduct } from '../components';
 
 const WishList = () => {

@@ -6,8 +6,8 @@ import { Container, Image } from '@mantine/core';
 import Autoplay from 'embla-carousel-autoplay';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { PATH } from '../../constants';
-import { addCoupon } from '../../api';
-import { slidesQuery, verifyQuery } from '../../api/loader';
+import { addCoupon } from '../../api/fetch';
+import { slidesQuery, verifyQuery } from '../../api/query';
 
 const Carousel = ({ modalOpen, setModalTitle }) => {
   const { data: slides } = useQuery(slidesQuery());

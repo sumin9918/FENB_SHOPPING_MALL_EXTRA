@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { pageProductsQuery } from '../../api/loader';
+import { pageProductsQuery } from '../../api/query';
 
 const usePageProducts = () => {
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(pageProductsQuery());
