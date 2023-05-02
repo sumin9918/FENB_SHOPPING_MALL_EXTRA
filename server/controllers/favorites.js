@@ -14,39 +14,32 @@ const createUser = email => {
   favorites = [...favorites, { ...defaultFavorite, email }];
 };
 
-const addFavoriteProduct = ({ email, product }) => {
+const addFavorite = (email, product) => {
   favorites = favorites.map(favorite =>
     favorite.email === email ? { ...favorite, products: [product, ...favorite.products] } : favorite
   );
 };
 
-const getFavorites = () => favorites;
-const getMyFavorites = email => favorites.find(favorite => favorite.email === email);
+const getFavorites = email => favorites.find(favorite => favorite.email === email);
 
-const removeFavoriteProduct = ({ email, id }) => {
+const getFavorite = (email, productId) =>
+  favorites.find(favorite => favorite.email === email).products.find(product => product.id === productId);
+
+const removeFavoriteProduct = (email, productId) => {
   favorites = favorites.map(favorite =>
     favorite.email === email
       ? {
           ...favorite,
-          products: favorite.products.filter(product => product.id !== id),
+          products: favorite.products.filter(product => product.id !== productId),
         }
       : favorite
   );
 };
 
-const findUserFavorites = email => favorites.find(favorite => favorite.email === email);
-
-const hasFavorite = ({ email, id }) => {
-  const { products } = findUserFavorites(email);
-
-  return products.some(product => product.id === id);
-};
-
 module.exports = {
   createUser,
-  addFavoriteProduct,
-  getMyFavorites,
+  addFavorite,
   getFavorites,
-  hasFavorite,
+  getFavorite,
   removeFavoriteProduct,
 };

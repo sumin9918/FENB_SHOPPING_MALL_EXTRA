@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
 const { getUserCart, removeAllCart } = require('../controllers/carts');
-const { changeStock } = require('../controllers/stocks');
-const { getLatestHistory, addHistory } = require('../controllers/history');
+const { removeStock } = require('../controllers/stocks');
+const { getPurchasesHistory, addPurchaseHistory } = require('../controllers/history');
 const { getAddress } = require('../controllers/users');
 const { getCoupon, removeCoupon } = require('../controllers/coupons');
 const { cartStockCheck } = require('../middleware/stock');
 const { authCheck } = require('../middleware/auth');
-const { expireCoupon, checkCoupon } = require('../middleware/coupon');
+const { expireCoupon } = require('../middleware/coupon');
 
 // 결제 페이지 이동 전 check 용도
 router.get('/', authCheck, cartStockCheck, expireCoupon, (req, res) => {
@@ -41,7 +41,7 @@ router.get('/coupons/:id', authCheck, (req, res) => {
 });
 
 // 결제하기 버튼 클릭시 사용해주세요
-router.post('/pay', authCheck, cartStockCheck, expireCoupon, checkCoupon, (req, res) => {
+router.post('/pay', authCheck, cartStockCheck, expireCoupon, (req, res) => {
   const { email } = req.locals;
   const { addressId, paymentMethod, couponId = null } = req.body;
 
@@ -58,13 +58,19 @@ router.post('/pay', authCheck, cartStockCheck, expireCoupon, checkCoupon, (req, 
   if (totalPrice < minimumPrice)
     return res.status(403).send({ message: `쿠폰을 사용하기 위한 최소 주문 금액을 충족하지 않습니다.` });
 
-  addHistory(email, { deliveryAddress, products, paymentMethod, totalPrice, discountedTotalPrice, discountAmount });
-
+  addPurchaseHistory(email, {
+    deliveryAddress,
+    products,
+    paymentMethod,
+    totalPrice,
+    discountedTotalPrice,
+    discountAmount,
+  });
   removeCoupon(email, couponId);
 
   // 상품 사이즈 별 수량 변경하기
   const userCart = getUserCart(email);
-  userCart.products.forEach(product => changeStock(product));
+  userCart.products.forEach(product => removeStock(product));
 
   // 유저 장바구니 비우기
   removeAllCart(email);
@@ -74,9 +80,9 @@ router.post('/pay', authCheck, cartStockCheck, expireCoupon, checkCoupon, (req, 
 // 결제 목록 확인
 router.get('/history', authCheck, (req, res) => {
   const { email } = req.locals;
-  const history = getLatestHistory(email);
+  const history = getPurchasesHistory(email);
 
-  res.send(history);
+  res.send(history[0]);
 });
 
 module.exports = router;

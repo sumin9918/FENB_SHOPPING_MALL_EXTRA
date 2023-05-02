@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { hasUser } = require('../controllers/users');
+const { confirmUser } = require('../controllers/users');
 
 const authCheck = (req, res, next) => {
   /**
@@ -23,7 +23,7 @@ const signin = (req, res, next) => {
     return res.status(401).send({ message: '사용자 아이디 또는 패스워드가 전달되지 않았습니다.' });
 
   // 401 Unauthorized
-  const user = hasUser(email, password);
+  const user = confirmUser(email, password);
   if (!user) return res.status(401).send({ message: '등록되지 않은 사용자입니다.' });
 
   const accessToken = jwt.sign({ email }, process.env.JWT_SECRET_KEY, {

@@ -1227,10 +1227,11 @@ let stocks = [
 
 const getStocks = () => stocks;
 
-const findStock = id => stocks.find(stock => stock.id === id).products;
+const getStock = id => stocks.find(stock => stock.id === id).products;
 
-const findDetailStock = ({ id, selectedSize }) => findStock(id).find(stock => stock.size === selectedSize);
-const changeStock = ({ id, selectedSize, quantity }) => {
+const getSelectedSizeStock = (id, selectedSize) => getStock(id).find(stock => stock.size === selectedSize);
+
+const removeStock = ({ id, selectedSize, quantity }) => {
   stocks = stocks.map(stock =>
     stock.id === id
       ? {
@@ -1243,4 +1244,4 @@ const changeStock = ({ id, selectedSize, quantity }) => {
   );
 };
 
-module.exports = { getStocks, findStock, findDetailStock, changeStock };
+module.exports = { getStocks, getStock, getSelectedSizeStock, removeStock };

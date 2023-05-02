@@ -1,14 +1,12 @@
-const jwt = require('jsonwebtoken');
-
-const { findDetailStock } = require('../controllers/stocks');
+const { getSelectedSizeStock } = require('../controllers/stocks');
 const { getUserCart } = require('../controllers/carts');
 
 const cartStockCheck = (req, res, next) => {
-  const { email } = jwt.decode(req.cookies.accessToken);
+  const { email } = req.locals;
   const { products } = getUserCart(email);
 
   const isSoldOut = products.some(
-    ({ id, selectedSize, quantity }) => findDetailStock({ id, selectedSize }).stock < quantity
+    ({ id, selectedSize, quantity }) => getSelectedSizeStock(id, selectedSize).stock < quantity
   );
 
   // 기존에 저장된 장바구니의 모든 상품 재고 확인

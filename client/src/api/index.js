@@ -20,8 +20,8 @@ export const fetchFilteredProducts = async search => {
   return data;
 };
 
-export const fetchCarousel = async () => {
-  const { data } = await axios.get('/api/carousel');
+export const fetchSlides = async () => {
+  const { data } = await axios.get('/api/slides');
   return data;
 };
 

@@ -1,4 +1,4 @@
-let CarouselSlides = [
+let slides = [
   {
     imgURL: 'http://localhost:8000/images/coupons/10Coupon.png',
     sideBackgroundColor: '#FCEAD9',
@@ -11,6 +11,6 @@ let CarouselSlides = [
   },
 ];
 
-const getCarousel = () => CarouselSlides;
+const getSlides = () => slides;
 
-module.exports = { getCarousel };
+module.exports = { getSlides };

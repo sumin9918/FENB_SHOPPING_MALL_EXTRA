@@ -14,7 +14,7 @@ import {
 } from './pages';
 import { PATH } from './constants';
 import {
-  carouselLoader,
+  slidesLoader,
   cartsLoader,
   couponsLoader,
   favoritesLoader,
@@ -30,14 +30,14 @@ const router = createHashRouter([
   {
     path: '/',
     element: <Root />,
-    loader: async () => ({
-      products: await productsLoader(),
-      pageProducts: await pageProductsLoader(),
-    }),
+    loader: productsLoader,
     children: [
       {
         path: PATH.MAIN,
-        loader: carouselLoader,
+        loader: async () => ({
+          slides: await slidesLoader(),
+          pageProducts: await pageProductsLoader(),
+        }),
         element: <Main />,
       },
       {

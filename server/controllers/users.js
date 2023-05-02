@@ -1,7 +1,24 @@
 const { v4: uuidv4 } = require('uuid');
 const { getDateAfter } = require('../utils/date');
 
-// Mock data
+const defaultUser = {
+  email: '',
+  password: '',
+  name: '',
+  phone: '',
+  addresses: [],
+};
+
+const defaultAddress = {
+  id: null,
+  recipient: '',
+  recipientPhone: '',
+  mainAddress: '',
+  detailAddress: '',
+  postcode: '',
+  isDefault: true,
+};
+
 let users = [
   {
     email: 'test@test.com',
@@ -41,24 +58,6 @@ let users = [
   },
 ];
 
-const defaultUser = {
-  email: '',
-  password: '',
-  name: '',
-  phone: '',
-  addresses: [],
-};
-
-const defaultAddress = {
-  id: null,
-  recipient: '',
-  recipientPhone: '',
-  mainAddress: '',
-  detailAddress: '',
-  postcode: '',
-  isDefault: true,
-};
-
 // 신규 회원가입 유저 정보 추가
 const createUser = ({ email, name, phone, password, ...address }) => {
   users = [
@@ -82,9 +81,6 @@ const createUser = ({ email, name, phone, password, ...address }) => {
     ...users,
   ];
 };
-
-const hasAddress = (email, id) =>
-  users.some(user => user.email === email && user.addresses.some(address => address.id === id));
 
 const getAddress = (email, addressId) =>
   users.find(user => user.email === email).addresses.find(address => address.id === addressId);
@@ -111,7 +107,7 @@ const addAddress = (email, { isDefault = false, ...address }) => {
 };
 
 // 기본 배송지 변경
-const changeDefaultAddress = (email, addressId) => {
+const updateDefaultAddress = (email, addressId) => {
   users = users.map(user =>
     user.email === email
       ? {
@@ -126,7 +122,7 @@ const changeDefaultAddress = (email, addressId) => {
 };
 
 // 기본 배송지는 배열 맨앞으로 이동
-const moveFrontDefaultAddress = email => {
+const moveForwardDefaultAddress = email => {
   users = users.map(user =>
     user.email === email
       ? {
@@ -141,7 +137,7 @@ const moveFrontDefaultAddress = email => {
 };
 
 // 배송지 수정
-const editAddress = (email, id, newAddress) => {
+const updateAddress = (email, id, newAddress) => {
   users = users.map(user =>
     user.email === email
       ? {
@@ -153,7 +149,7 @@ const editAddress = (email, id, newAddress) => {
 };
 
 // 배송지 삭제
-const deleteAddress = (email, id) => {
+const removeAddress = (email, id) => {
   users = users.map(user =>
     user.email === email
       ? {
@@ -168,21 +164,17 @@ const getUser = email => users.find(user => user.email === email);
 
 const confirmUser = (email, password) => users.find(user => user.email === email && user.password === password);
 
-const hasUser = (email, password) => users.some(user => user.email === email && user.password === password);
-
 const checkDuplicateEmail = inputEmail => users.some(user => user.email === inputEmail);
 
 module.exports = {
   createUser,
   addAddress,
   getAddress,
-  hasUser,
-  hasAddress,
   getUser,
   confirmUser,
   checkDuplicateEmail,
-  changeDefaultAddress,
-  moveFrontDefaultAddress,
-  editAddress,
-  deleteAddress,
+  updateDefaultAddress,
+  moveForwardDefaultAddress,
+  updateAddress,
+  removeAddress,
 };

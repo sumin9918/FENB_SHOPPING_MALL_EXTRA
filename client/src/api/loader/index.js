@@ -2,7 +2,7 @@ import { queryClient } from '../../components/GlobalProvider';
 import { CARTS_QUERY_KEY, ADDRESS_QUERY_KEY } from '../../constants';
 import {
   authQueryKey,
-  carouselQueryKey,
+  slidesQueryKey,
   couponsQueryKey,
   filteredProductsQueryKey,
   historyQueryKey,
@@ -14,7 +14,7 @@ import { fetchCarts } from '../carts';
 import { fetchFavorites } from '../favorites';
 import {
   checkSignIn,
-  fetchCarousel,
+  fetchSlides,
   fetchCoupons,
   fetchFilteredProducts,
   fetchHistory,
@@ -78,13 +78,13 @@ export const filteredProductsLoader = async params => {
   }
 };
 
-export const carouselQuery = () => ({
-  queryKey: carouselQueryKey,
-  queryFn: fetchCarousel,
+export const slidesQuery = () => ({
+  queryKey: slidesQueryKey,
+  queryFn: fetchSlides,
 });
 
-export const carouselLoader = async () => {
-  const { queryKey, queryFn } = carouselQuery();
+export const slidesLoader = async () => {
+  const { queryKey, queryFn } = slidesQuery();
 
   try {
     return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));

@@ -5,7 +5,6 @@ import { Notifications } from '@mantine/notifications';
 import GlobalStyle from '../styles/Global.style';
 
 export const queryClient = new QueryClient();
-// export const queryClient = new QueryClient({ defaultOptions: { queries: { suspense: true, retry: 0 } } });
 
 const GlobalProvider = ({ children }) => (
   <RecoilRoot>

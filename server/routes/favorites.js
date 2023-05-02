@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const router = require('express').Router();
 
-const { toggleProductFavorite, findProduct } = require('../controllers/products');
-const { addFavoriteProduct, removeFavoriteProduct, hasFavorite, getMyFavorites } = require('../controllers/favorites');
 const { authCheck } = require('../middleware/auth');
+const { toggleProductFavorite, getProduct } = require('../controllers/products');
+const { addFavorite, removeFavoriteProduct, getFavorites, getFavorite } = require('../controllers/favorites');
 const { BRANDS, CATEGORIES, GENDER, COLORS } = require('../constants/products');
 
 router.get('/me', (req, res) => {
@@ -13,7 +13,7 @@ router.get('/me', (req, res) => {
     const { email } = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
 
     res.send(
-      getMyFavorites(email).products.map(({ id, brand, category, gender, color, ...rest }) => ({
+      getFavorites(email).products.map(({ id, brand, category, gender, color, ...rest }) => ({
         ...rest,
         id,
         brand: BRANDS[brand],
@@ -31,14 +31,12 @@ router.post('/me', authCheck, (req, res) => {
   const { email } = req.locals;
   const id = +req.body.id;
 
-  const isFavorite = hasFavorite({ email, id });
+  const isFavorite = !!getFavorite(email, id);
 
-  if (isFavorite) removeFavoriteProduct({ email, id });
-  else {
-    const product = findProduct(id);
-    addFavoriteProduct({ product, email });
-  }
+  isFavorite ? removeFavoriteProduct(email, id) : addFavorite(email, getProduct(id));
   toggleProductFavorite(id, isFavorite);
+
+  res.send({ message: '위시리스트에 추가되었습니다.' });
 });
 
 module.exports = router;
