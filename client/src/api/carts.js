@@ -14,9 +14,9 @@ export const fetchCarts = async () => {
 export const addCart = async ({ id, selectedSize }) => axios.post(`${url}/${id}`, { selectedSize });
 
 // cart 수량 변경
-export const changeQuantity = async ({ id, quantity }) => {
+export const changeQuantity = async ({ id, selectedSize, quantity }) => {
   try {
-    return axios.patch(`${url}/${id}`, { quantity });
+    return axios.patch(`${url}/${id}`, { selectedSize, quantity });
   } catch (e) {
     return e.message;
   }

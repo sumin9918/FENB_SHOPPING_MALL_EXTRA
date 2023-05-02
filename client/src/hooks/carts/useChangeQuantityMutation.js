@@ -6,8 +6,9 @@ const useChangeQuantityMutation = () =>
   useGenericMutation({
     queryKey: CARTS_QUERY_KEY,
     mutationFn: changeQuantity,
-    onMutate({ id, quantity }) {
-      return carts => carts.map(cart => (cart.id === id ? { ...cart, quantity } : cart));
+    onMutate({ id, selectedSize, quantity }) {
+      return carts =>
+        carts.map(cart => (cart.id === id && cart.selectedSize === selectedSize ? { ...cart, quantity } : cart));
     },
   });
 
