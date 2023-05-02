@@ -1,11 +1,11 @@
 import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import {
   Container,
   Stack,
   Group,
   Image,
-  Space,
   Title,
   Text,
   Button,
@@ -15,10 +15,11 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import styled from '@emotion/styled';
-import { FaAngleDoubleRight } from 'react-icons/fa';
 import { BiTrash } from 'react-icons/bi';
-import { useCartsQuery, useChangeQuantityMutation, useRemoveCartMutation } from '../hooks/carts';
+import { useChangeQuantityMutation, useRemoveCartMutation } from '../hooks/carts';
 import { PATH } from '../constants';
+import { cartsQuery } from '../api/query';
+import { NoProduct } from '../components';
 
 const CATEGORIES = [
   { en: 'sneakers', kr: '운동화' },
@@ -46,20 +47,6 @@ const COLORS = [
 ];
 
 // Styled Components
-const QuantityInput = styled(NumberInput)`
-  text-align: 'center';
-
-  input {
-    width: ${rem(54)};
-  }
-
-  input:disabled {
-    background: transparent;
-    color: #868e96;
-    cursor: default;
-  }
-`;
-
 const OrderButton = styled(Button)`
   display: block;
   margin-top: 2rem;
@@ -85,7 +72,7 @@ const Cart = () => (
 );
 
 const CartList = () => {
-  const { data: carts } = useCartsQuery();
+  const { data: carts } = useQuery(cartsQuery());
 
   return (
     <Stack w="66.66667%" pl="0.8rem" pr="10rem" spacing={0} fluid="true">
@@ -93,31 +80,9 @@ const CartList = () => {
       {carts.length ? (
         carts.map(cart => <CartItem key={`${cart.id}-${cart.selectedSize}`} cart={cart} />)
       ) : (
-        <NoCartItem />
+        <NoProduct pageName="장바구니" />
       )}
     </Stack>
-  );
-};
-
-const NoCartItem = () => {
-  const { colorScheme } = useMantineColorScheme();
-
-  return (
-    <Container py="4rem" c={colorScheme === 'dark' ? 'gray.6' : 'rgb(17,17,17)'}>
-      <Title>장바구니에 물건이 없습니다</Title>
-      <Space h="xl" />
-      <Link to={PATH.MAIN}>
-        <Text color={colorScheme === 'dark' ? 'gray.6' : 'rgba(117,117,117)'} style={{ verticalAlign: 'bottom' }}>
-          <FaAngleDoubleRight
-            style={{ verticalAlign: 'middle', transform: 'transLate3d(0, -1px, 0)', marginRight: '4px' }}
-          />
-          <Text span weight="bold" color={colorScheme === 'dark' ? 'gray.6' : 'rgb(17,17,17)'}>
-            FENB
-          </Text>
-          의 신발들을 둘러보세요
-        </Text>
-      </Link>
-    </Container>
   );
 };
 
@@ -173,7 +138,7 @@ const CartItem = ({ cart }) => {
                   onClick={() => handlers.current.decrement()}>
                   –
                 </ActionIcon>
-                <QuantityInput
+                <NumberInput
                   hideControls
                   size="lg"
                   max={maxQuantity}
@@ -182,6 +147,18 @@ const CartItem = ({ cart }) => {
                   handlersRef={handlers}
                   value={quantity}
                   onChange={e => changeQuantity({ id, quantity: e })}
+                  ta="center"
+                  w={rem(54)}
+                  sx={{
+                    'input:disabled': {
+                      backgroundColor: 'transparent',
+                      color: `${colorScheme === 'dark' ? '#ddd' : '#333'}`,
+                      cursor: 'default',
+                    },
+                    input: {
+                      borderColor: `${colorScheme === 'dark' && '#868e96'}`,
+                    },
+                  }}
                 />
                 <ActionIcon
                   size={rem(42)}
@@ -223,10 +200,12 @@ const OrderHistory = () => {
   const { colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
 
-  const { data: countCarts } = useCartsQuery({ select: carts => carts.length });
-  const { data: totalPrice } = useCartsQuery({
-    select: carts => carts.reduce((acc, cart) => acc + cart.quantity * cart.price, 0),
-  });
+  const { data: countCarts } = useQuery(cartsQuery({ select: carts => carts.length }));
+  const { data: totalPrice } = useQuery(
+    cartsQuery({
+      select: carts => carts.reduce((acc, cart) => acc + cart.quantity * cart.price, 0),
+    })
+  );
 
   return (
     <Stack w="33.33333%" px="0.8rem" py="0.8rem" mb="2.4rem" spacing={0}>

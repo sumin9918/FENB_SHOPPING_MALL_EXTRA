@@ -7,10 +7,7 @@ const useRemoveAddressMutation = () =>
     queryKey: ADDRESS_QUERY_KEY,
     mutationFn: removeAddress,
     onMutate(id) {
-      return user => {
-        console.log('user : ', user);
-        return { ...user, addresses: user.addresses.filter(address => address.id !== id) };
-      };
+      return user => ({ ...user, addresses: user.addresses.filter(address => address.id !== id) });
     },
   });
 

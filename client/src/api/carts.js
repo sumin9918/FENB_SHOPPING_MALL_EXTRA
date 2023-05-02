@@ -14,7 +14,13 @@ export const fetchCarts = async () => {
 export const addCart = async ({ id, selectedSize }) => axios.post(`${url}/${id}`, { selectedSize });
 
 // cart 수량 변경
-export const changeQuantity = async ({ id, quantity }) => axios.patch(`${url}/${id}`, { quantity });
+export const changeQuantity = async ({ id, quantity }) => {
+  try {
+    return axios.patch(`${url}/${id}`, { quantity });
+  } catch (e) {
+    return e.message;
+  }
+};
 
 // cart 삭제
 export const removeCart = async id => axios.delete(`${url}/${id}`);

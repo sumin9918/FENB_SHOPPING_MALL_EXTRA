@@ -66,6 +66,21 @@ const CustomButton = styled(Button)`
   }
 `;
 
+const AddressButton = styled(Button)`
+  display: block;
+  margin-top: 2rem;
+  padding: 1.8rem 2.4rem;
+  border-radius: 30px;
+  height: 6rem;
+  font-size: 1.6rem;
+  font-weight: 'bold';
+
+  :hover {
+    border-color: #228be6;
+    color: #228be6;
+  }
+`;
+
 // api --------------------------------------
 
 const postOrder = async paymentInfo => {
@@ -115,38 +130,52 @@ const Payment = ({ couponId, changeCouponId, totalPrice }) => {
 
   const navigate = useNavigate();
 
-  const [disabled, setDisabled] = useState(false);
-
-  const addressId = useRef(null);
   const paymentMethod = useRef('kakaoPay');
-
-  const changeAddressId = newAddressId => {
-    addressId.current = newAddressId;
-  };
 
   const changePaymentMethod = newPaymentMethod => {
     paymentMethod.current = newPaymentMethod;
   };
 
+  //------------------------------------------------
+  // Address 로직
+
+  const { data: addresses } = useQuery(userQuery({ select: user => user.addresses }));
+
+  const defaultAddress = !addresses.length ? {} : addresses.find(address => address.isDefault) ?? addresses[0];
+  const isValidAddress = defaultAddress.postcode ? defaultAddress.postcode !== '' : false;
+
+  // TODO : 더 나은 방식 생각하기
+  const [field, setFiled] = useState({ ...initField, info: isValidAddress, input: !isValidAddress });
+  const selectedAddress = useRef(defaultAddress);
+
+  const changeSelectedAddress = newAddress => {
+    selectedAddress.current = newAddress;
+  };
+
   return (
     <Stack w="66.66667%" pr="5rem" spacing="5rem">
-      <Address changeAddressId={changeAddressId} setDisabled={setDisabled} />
+      <Address
+        field={field}
+        setFiled={setFiled}
+        selectedAddress={selectedAddress}
+        changeSelectedAddress={changeSelectedAddress}
+      />
       <Coupons changeCouponId={changeCouponId} totalPrice={totalPrice} />
       <SelectPaymentMethod changePaymentMethod={changePaymentMethod} />
       <Container w="30rem">
         <CustomButton
           w="100%"
-          disabled={disabled}
+          disabled={!field.info}
           color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
           onClick={async () => {
             console.log({
-              addressId: addressId.current,
+              addressId: selectedAddress.current?.id,
               couponId: couponId.current,
               paymentMethod: paymentMethod.current,
             });
 
             await postOrder({
-              addressId: addressId.current,
+              addressId: selectedAddress.current?.id,
               couponId: couponId.current,
               paymentMethod: paymentMethod.current,
             });
@@ -160,56 +189,42 @@ const Payment = ({ couponId, changeCouponId, totalPrice }) => {
   );
 };
 
-const Address = ({ changeAddressId, setDisabled }) => {
-  const { data: addresses } = useQuery(userQuery({ select: user => user.addresses }));
-
-  const defaultAddress = !addresses.length ? {} : addresses.find(address => address.isDefault) ?? addresses[0];
-  const isValidAddress = defaultAddress?.postcode !== '' ?? false;
-
-  // TODO : 더 나은 방식 생각하기
-  const [field, setFiled] = useState({ ...initField, info: isValidAddress, input: !isValidAddress });
-  const selectedAddress = useRef(defaultAddress);
-  changeAddressId(selectedAddress.current.id);
-
-  const changeSelectedAddress = newAddress => {
-    selectedAddress.current = newAddress;
-  };
-
-  setDisabled(!field.info);
-
-  return (
-    <Stack w="100%" p="2rem">
-      <Group position="apart" pt="1.2rem" pb="2.8rem">
+const Address = ({ field, setFiled, selectedAddress, changeSelectedAddress }) => (
+  <Stack w="100%" p="2rem">
+    <Group position="apart" pt="1.2rem" pb="2.8rem">
+      <Group align="center">
         <Title fz="2.4rem" fw={500} sx={{ lineHeight: '2.8rem' }}>
-          배송 옵션{field.info && <BsCheck2 color="rgb(18, 138, 9)" />}
+          배송 옵션
         </Title>
-        {field.info && (
-          <Button
-            variant="subtle"
-            color="dark"
-            size="lg"
-            fz="1.4rem"
-            sx={{ ':hover': { background: 'transparent', textDecoration: 'underilne' } }}
-            onClick={() => {
-              setFiled({ ...initField, edit: true });
-            }}>
-            편집
-          </Button>
-        )}
+        {field.info && <BsCheck2 fz="2.4rem" color="rgb(18, 138, 9)" />}
       </Group>
 
-      {field.info && <AddressInfo selectedAddress={selectedAddress} />}
-      {field.edit && (
-        <EditAddress
-          setFiled={setFiled}
-          selectedAddress={selectedAddress}
-          changeSelectedAddress={changeSelectedAddress}
-        />
+      {field.info && (
+        <Button
+          variant="subtle"
+          color="dark"
+          size="lg"
+          fz="1.4rem"
+          sx={{ ':hover': { background: 'transparent', textDecoration: 'underline' } }}
+          onClick={() => {
+            setFiled({ ...initField, edit: true });
+          }}>
+          편집
+        </Button>
       )}
-      {field.input && <InputAddress setFiled={setFiled} changeSelectedAddress={changeSelectedAddress} />}
-    </Stack>
-  );
-};
+    </Group>
+
+    {field.info && <AddressInfo selectedAddress={selectedAddress} />}
+    {field.edit && (
+      <EditAddress
+        setFiled={setFiled}
+        selectedAddress={selectedAddress}
+        changeSelectedAddress={changeSelectedAddress}
+      />
+    )}
+    {field.input && <InputAddress setFiled={setFiled} changeSelectedAddress={changeSelectedAddress} />}
+  </Stack>
+);
 
 const AddressInfo = ({ selectedAddress }) => {
   const { recipient, mainAddress, detailAddress, postcode, recipientPhone } = selectedAddress.current;
@@ -249,9 +264,12 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
     setFiled({ ...initField, info: true });
   };
 
+  const { colorScheme } = useMantineColorScheme();
+
   return (
     <Stack
       w="100%"
+      align="center"
       sx={{
         input: {
           fontSize: '1.6rem',
@@ -316,11 +334,11 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           register={register}
           formState={formState}
         />
-        <Group position="right">
-          <CustomButton type="submit" sx={{ width: '20rem' }}>
+        <Center>
+          <AddressButton variant="outline" color={colorScheme ? 'gray' : 'dark'} type="submit" sx={{ width: '20rem' }}>
             배송지 추가
-          </CustomButton>
-        </Group>
+          </AddressButton>
+        </Center>
       </form>
     </Stack>
   );
@@ -328,6 +346,8 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
 
 const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
   const { data: addresses } = useQuery(userQuery({ select: user => user.addresses }));
+
+  const { colorScheme } = useMantineColorScheme();
 
   return (
     <Stack w="100%" px="2rem">
@@ -347,9 +367,13 @@ const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
         </Center>
       )}
       <Group position="right">
-        <CustomButton sx={{ width: '20rem' }} onClick={() => setFiled({ ...initField, input: true })}>
+        <AddressButton
+          variant="outline"
+          color={colorScheme ? 'gray' : 'dark'}
+          sx={{ width: '20rem' }}
+          onClick={() => setFiled({ ...initField, input: true })}>
           새 배송지 추가
-        </CustomButton>
+        </AddressButton>
       </Group>
     </Stack>
   );
@@ -358,8 +382,12 @@ const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
 const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAddress }) => {
   const { id, recipient, mainAddress, detailAddress, postcode, recipientPhone, isDefault } = address;
 
+  const { colorScheme } = useMantineColorScheme();
+
   const { mutate: removeAddress } = useRemoveAddressMutation();
   const { mutate: changeDefaultAddress } = useChangeDefaultAddressMutation();
+
+  const isSelected = selectedAddress.current.id === id;
 
   return (
     <Container
@@ -368,9 +396,12 @@ const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAdd
       size="content-fit"
       sx={{
         width: '100%',
-        border: `1px solid ${selectedAddress.current.id === id ? 'black' : 'lightgray'}`,
+        border: `1px solid ${
+          colorScheme === 'dark' ? (isSelected ? 'lightgray' : '#555') : isSelected ? '#333' : 'lightgray'
+        }`,
         borderRadius: '5px',
         cursor: 'pointer',
+        ':hover': { borderColor: '#228be6' },
       }}
       onClick={() => {
         changeSelectedAddress(address);
@@ -441,7 +472,7 @@ const Coupons = ({ changeCouponId, totalPrice }) => {
                   <Radio
                     key={id}
                     size="lg"
-                    value={`${id}`}
+                    value={id}
                     label={<CouponName title={title} endTime={endTime} />}
                     sx={{ '.mantine-Radio-labelWrapper': { width: '100%' } }}
                   />
@@ -470,11 +501,31 @@ const CouponName = ({ title, endTime }) => {
 };
 
 const paymentMethods = [
-  { value: 'kakaoPay', label: '카카오페이' },
-  { value: 'creditCard', label: '신용카드' },
-  { value: 'naverPay', label: '네이버페이' },
-  { value: 'applePay', label: '애플페이' },
-  { value: 'accountTransfer', label: '실시간 계좌이체' },
+  {
+    value: 'kakaoPay',
+    label: '카카오페이',
+    labelStyle: { width: '4rem', height: '1.8rem' },
+  },
+  {
+    value: 'creditCard',
+    label: '신용카드',
+    labelStyle: { width: '2rem', height: '1.5rem' },
+  },
+  {
+    value: 'naverPay',
+    label: '네이버페이',
+    labelStyle: { width: '4.3rem', height: '1.7rem' },
+  },
+  {
+    value: 'applePay',
+    label: '애플페이',
+    labelStyle: { width: '4rem', height: '2rem' },
+  },
+  {
+    value: 'accountTransfer',
+    label: '실시간 계좌이체',
+    labelStyle: { width: '2rem', height: '1.7rem' },
+  },
 ];
 
 const SelectPaymentMethod = ({ changePaymentMethod }) => (
@@ -489,20 +540,35 @@ const SelectPaymentMethod = ({ changePaymentMethod }) => (
         changePaymentMethod(e);
       }}>
       <Stack mt="xs" spacing="0.8rem">
-        {paymentMethods.map(({ value, label }) => (
-          <Radio key={value} value={value} label={label} size="xl" />
+        {paymentMethods.map(paymentMethod => (
+          <Radio
+            key={paymentMethod.value}
+            value={paymentMethod.value}
+            label={<SelectPaymentMethodLabel paymentMethod={paymentMethod} />}
+            size="xl"
+          />
         ))}
       </Stack>
     </Radio.Group>
   </Stack>
 );
 
-// const SelectPaymentMethodLabel = ({ value, label }) => (
-//   <Group px="0.4rem" fz="1.6rem">
-//     <Image src={`images/products/${value}`} />
-//     <Text span>{label}</Text>
-//   </Group>
-// );
+const SelectPaymentMethodLabel = ({ paymentMethod }) => {
+  const { colorScheme } = useMantineColorScheme();
+
+  const { value, label, labelStyle } = paymentMethod;
+
+  return (
+    <Group px="0.4rem" fz="1.6rem">
+      <Image
+        src={`./images/payments/${colorScheme === 'dark' ? `${value}Dark` : value}.svg`}
+        alt={value}
+        {...labelStyle}
+      />
+      <Text span>{label}</Text>
+    </Group>
+  );
+};
 
 const CartHistory = ({ discount, totalPrice }) => {
   const { colorScheme } = useMantineColorScheme();

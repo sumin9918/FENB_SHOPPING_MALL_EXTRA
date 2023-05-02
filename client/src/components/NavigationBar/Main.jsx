@@ -24,9 +24,8 @@ import { DarkMode } from '../index';
 import { userState } from '../../recoil/atoms';
 import { getDecodeSearch } from '../../utils/location';
 import { requestSignout } from '../../api/fetch';
-import { PATH } from '../../constants';
+import { PATH, AUTH_QUERY_KEY } from '../../constants';
 import { useSearchProducts } from '../../hooks/products';
-import { authQueryKey } from '../../constants/queryKey';
 
 const AutoCompleteItem = forwardRef(({ value, id, onMouseDown, ...rest }, ref) => {
   const navigate = useNavigate();
@@ -222,7 +221,7 @@ const Main = () => {
   const handleSignOutClick = async () => {
     await requestSignout();
     setUser(null);
-    queryClient.removeQueries(authQueryKey);
+    queryClient.removeQueries(AUTH_QUERY_KEY);
     navigate(PATH.MAIN);
   };
 

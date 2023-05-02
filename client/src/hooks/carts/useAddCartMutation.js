@@ -7,7 +7,6 @@ const useAddCartMutation = () =>
     queryKey: CARTS_QUERY_KEY,
     mutationFn: addCart,
     onMutate({ id, selectedSize }) {
-      // 추가되는 cart의 구성 프로퍼티가 달라질 수 있음
       return carts => [...carts, { id, selectedSize, quantity: 1 }];
     },
   });

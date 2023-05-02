@@ -64,6 +64,7 @@ const OrderInfo = ({ history }) => {
   const { orderDate, paymentMethod, discountedTotalPrice, deliveryAddress } = history;
 
   const address = `(${deliveryAddress.postcode})${deliveryAddress.mainAddress} ${deliveryAddress.detailAddress}`;
+  const orderedDate = new Date(orderDate);
 
   return (
     <Stack w="70%" p="2rem">
@@ -91,7 +92,7 @@ const OrderInfo = ({ history }) => {
         <Stack>
           <Text>{discountedTotalPrice.toLocaleString()} 원</Text>
           <Text>{paymentMethod}</Text>
-          <Text>{orderDate.toLocaleString('ko-KR')}</Text>
+          <Text>{orderedDate.toLocaleString('ko-KR')}</Text>
         </Stack>
       </Group>
     </Stack>
