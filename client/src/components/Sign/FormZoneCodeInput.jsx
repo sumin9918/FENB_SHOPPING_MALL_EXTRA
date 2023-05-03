@@ -18,20 +18,28 @@ const FormZoneCodeInput = ({
   const open = useDaumPostcodePopup();
 
   const handleComplete = data => {
-    let fullAddress = data.address;
-    let extraAddress = '';
+    let addr = '';
+    let extraAddr = '';
 
-    if (data.addressType === 'R') {
-      if (data.bname !== '') {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== '') {
-        extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+    if (data.userSelectedType === 'R') {
+      addr = data.roadAddress;
+    } else {
+      addr = data.jibunAddress;
     }
 
-    setValue('mainAddress', fullAddress);
+    if (data.userSelectedType === 'R') {
+      if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+        extraAddr += data.bname;
+      }
+
+      if (data.buildingName !== '') {
+        extraAddr += extraAddr !== '' ? `, ${data.buildingName}` : data.buildingName;
+      }
+
+      addr += extraAddr !== '' ? ` (${extraAddr})` : '';
+    }
+
+    setValue('mainAddress', addr);
     setValue('postcode', data.zonecode);
   };
 
