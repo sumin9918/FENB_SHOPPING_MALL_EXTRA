@@ -1,5 +1,5 @@
 import { Stack, Center, Text, Group, useMantineColorScheme } from '@mantine/core';
-import { useGetAddresses } from '../../hooks/order';
+import { useGetAddresses } from '../../hooks/address';
 import { INIT_FIELD } from '../../constants';
 import EditAddressItem from './EditAddressItem';
 import CustomButton from '../CustomButton';

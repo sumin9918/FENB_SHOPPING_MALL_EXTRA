@@ -1,7 +1,10 @@
 import { Stack, Title, Group, Text, useMantineColorScheme } from '@mantine/core';
+import { useTotalPrice } from '../../hooks/carts';
 import CartHistoryItemList from './CartHistoryItemList';
 
-const CartHistory = ({ discount, totalPrice }) => {
+const CartHistory = ({ discount }) => {
+  const totalPrice = useTotalPrice();
+
   const { colorScheme } = useMantineColorScheme();
 
   const { discountAmount, discountedTotalPrice } = discount;

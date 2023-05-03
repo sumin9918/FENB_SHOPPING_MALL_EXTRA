@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { Stack, Title, Accordion, Radio, Group, Text } from '@mantine/core';
+import { useTotalPrice } from '../../hooks/carts';
 import { couponsQuery } from '../../api/query';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-const Coupons = ({ changeCouponId, totalPrice }) => {
+const Coupons = ({ changeCouponId }) => {
   const { data: coupons } = useQuery(couponsQuery());
+  const totalPrice = useTotalPrice();
 
   return (
     <Stack w="100%" px="2rem">

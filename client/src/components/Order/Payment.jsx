@@ -1,20 +1,25 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Stack, Group, useMantineColorScheme } from '@mantine/core';
-import { useDefaultAddress, useOrderInfo } from '../../hooks/order';
+import { Container, Stack, useMantineColorScheme } from '@mantine/core';
+import { useOrderInfo } from '../../hooks/order';
+import { postOrder } from '../../api/fetch';
 import { INIT_FIELD, PATH } from '../../constants';
 import Address from './Address';
 import Coupons from './Coupons';
 import SelectPaymentMethod from './SelectPaymentMethod';
 import CustomButton from '../CustomButton';
 
-const Payment = ({ changeDiscount, totalPrice }) => {
+const Payment = ({ changeDiscount }) => {
+  const addresses = useGetAddresses();
+
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
 
-  const { defaultAddress, isValidAddress } = useDefaultAddress();
   const { changeAddressId, changeCouponId, changePaymentMethod, getOrderInfo } = useOrderInfo(changeDiscount);
+
+  const defaultAddress = !addresses?.length ? {} : addresses?.find(address => !!address.isDefault) ?? addresses[0];
+  const isValidAddress = defaultAddress.postcode ? defaultAddress.postcode !== '' : false;
 
   const [field, setFiled] = useState({ ...INIT_FIELD, info: isValidAddress, input: !isValidAddress });
   const selectedAddress = useRef(defaultAddress);
@@ -33,7 +38,7 @@ const Payment = ({ changeDiscount, totalPrice }) => {
         selectedAddress={selectedAddress}
         changeSelectedAddress={changeSelectedAddress}
       />
-      <Coupons changeCouponId={changeCouponId} totalPrice={totalPrice} />
+      <Coupons changeCouponId={changeCouponId} />
       <SelectPaymentMethod changePaymentMethod={changePaymentMethod} />
       <Container w="30rem">
         <CustomButton
