@@ -59,6 +59,7 @@ router.post('/signup', (req, res) => {
     mainAddress,
     detailAddress,
     postcode,
+    createAt: new Date(),
   });
   carts.createUser(email);
   coupons.createUser(email);

@@ -105,7 +105,7 @@ const CartItem = ({ cart }) => {
           <div style={{ marginTop: '24px' }}>
             <BiTrash
               style={{ width: '24px', height: '24px', verticalAlign: 'top', cursor: 'pointer' }}
-              onClick={() => removeCart(id)}
+              onClick={() => removeCart({ id, selectedSize })}
             />
           </div>
         </Stack>

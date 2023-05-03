@@ -23,4 +23,6 @@ export const changeQuantity = async ({ id, selectedSize, quantity }) => {
 };
 
 // cart 삭제
-export const removeCart = async id => axios.delete(`${url}/${id}`);
+export const removeCart = async ({ id, selectedSize }) => {
+  axios.delete(`${url}/${id}?selectedSize=${selectedSize}`);
+};

@@ -59,7 +59,7 @@ let users = [
 ];
 
 // 신규 회원가입 유저 정보 추가
-const createUser = ({ email, name, phone, password, ...address }) => {
+const createUser = ({ email, name, phone, password, createAt, postcode, ...address }) => {
   users = [
     {
       ...defaultUser,
@@ -67,16 +67,20 @@ const createUser = ({ email, name, phone, password, ...address }) => {
       password,
       name,
       phone,
-      addresses: [
-        {
-          ...defaultAddress,
-          ...address,
-          id: uuidv4(),
-          recipient: name,
-          recipientPhone: phone,
-          isDefault: true,
-        },
-      ],
+      createAt,
+      addresses: postcode
+        ? [
+            {
+              ...defaultAddress,
+              postcode,
+              ...address,
+              id: uuidv4(),
+              recipient: name,
+              recipientPhone: phone,
+              isDefault: true,
+            },
+          ]
+        : [],
     },
     ...users,
   ];
@@ -102,6 +106,8 @@ const addAddress = (email, { isDefault = false, ...address }) => {
         }
       : user
   );
+
+  console.log(users);
 
   return id;
 };
@@ -160,7 +166,10 @@ const removeAddress = (email, id) => {
   );
 };
 
-const getUser = email => users.find(user => user.email === email);
+const getUser = email => {
+  console.log(users);
+  return users.find(user => user.email === email);
+};
 
 const confirmUser = (email, password) => users.find(user => user.email === email && user.password === password);
 

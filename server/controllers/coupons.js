@@ -1,14 +1,12 @@
 const defaultUser = {
   email: '',
   coupons: [],
-  histories: [{ id: null, count: 0 }],
 };
 
 let users = [
   {
     email: 'test@test.com',
     coupons: [],
-    histories: [],
   },
 ];
 
