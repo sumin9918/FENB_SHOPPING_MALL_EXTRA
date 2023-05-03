@@ -45,8 +45,17 @@ export const requestVerify = async () => {
   return data;
 };
 
+export const fetchFavorites = async () => {
+  const { data } = await axios.get('/api/favorites/me');
+  return data;
+};
+
 export const requestSignout = async () => {
   await axios.get('api/auth/signout');
+};
+
+export const toggleFavorite = async id => {
+  await axios.post('/api/favorites/me', { id });
 };
 
 export const addCoupon = async id => {
@@ -61,4 +70,29 @@ export const postOrder = async paymentInfo => {
 export const checkCoupon = async id => {
   const { data } = await axios.get(`/api/order/coupons/${id}`);
   return data;
+};
+
+export const addAddress = async newAddress => {
+  const res = await axios.post('/api/users/me/address', { ...newAddress });
+  return res;
+};
+
+export const addCart = async ({ id, selectedSize }) => {
+  await axios.post(`/api/carts/me/${id}`, { selectedSize });
+};
+
+export const changeCartQuantity = async ({ id, selectedSize, quantity }) => {
+  await axios.patch(`/api/carts/me/${id}`, { selectedSize, quantity });
+};
+
+export const changeDefaultAddress = async id => {
+  await axios.patch(`/api/users/me/address/default/${id}`);
+};
+
+export const removeAddress = async id => {
+  await axios.delete(`/api/users/me/address/${id}`);
+};
+
+export const removeCart = async ({ id, selectedSize }) => {
+  await axios.delete(`/api/carts/me/${id}?selectedSize=${selectedSize}`);
 };

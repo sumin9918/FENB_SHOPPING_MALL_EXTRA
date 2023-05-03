@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Center, Stack, useMantineColorScheme } from '@mantine/core';
 import { addAddressSchema } from '../../schema';
-import { addAddress } from '../../api/address';
+import { addAddress } from '../../api/fetch';
 import { INIT_FIELD } from '../../constants';
 import FormInput from '../Sign/FormInput';
 import FormPhoneInput from '../Sign/FormPhoneInput';

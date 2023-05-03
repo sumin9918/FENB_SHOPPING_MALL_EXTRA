@@ -1,5 +1,5 @@
-import useGenericMutation from '../useGenericMutation';
-import { toggleFavorite } from '../../api/favorites';
+import { useGenericMutation } from '../index';
+import { toggleFavorite } from '../../api/fetch';
 import { WISHLIST_QUERY_KEY } from '../../constants/queryKey';
 
 // 낙관적 업데이트

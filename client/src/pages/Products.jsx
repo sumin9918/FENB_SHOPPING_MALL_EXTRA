@@ -4,8 +4,7 @@ import { Container, Stack, Group, Image } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useLocation } from 'react-router-dom';
 import { favoritesQuery, productsQuery, verifyQuery } from '../api/query';
-import { toggleFavorite } from '../api/favorites';
-import { addCart } from '../api/carts';
+import { toggleFavorite, addCart } from '../api/fetch';
 import { Title, Info, Description, CartButton, WishListButton } from '../components/Products';
 
 const MEDIAQUERY_WIDTH = 880;

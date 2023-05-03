@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Stack, Group, Image, Title, Text, ActionIcon, NumberInput, useMantineColorScheme, rem } from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
-import { useChangeQuantityMutation, useRemoveCartMutation } from '../../hooks/carts';
+import { useChangeCartQuantityMutation, useRemoveCartMutation } from '../../hooks/carts';
 import { CATEGORIES, COLORS, PATH } from '../../constants';
 
 const CartItem = ({ cart }) => {
@@ -12,7 +12,7 @@ const CartItem = ({ cart }) => {
 
   const handlers = useRef();
 
-  const { mutate: changeQuantity } = useChangeQuantityMutation();
+  const { mutate: changeQuantity } = useChangeCartQuantityMutation();
   const { mutate: removeCart } = useRemoveCartMutation();
 
   const maxQuantity = stocks?.find(({ size }) => size === selectedSize).stock;

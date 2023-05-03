@@ -1,5 +1,5 @@
-import useGenericMutation from '../useGenericMutation';
-import { removeCart } from '../../api/carts';
+import { useGenericMutation } from '../index';
+import { removeCart } from '../../api/fetch';
 import { CARTS_QUERY_KEY } from '../../constants';
 
 const useRemoveCartMutation = () =>

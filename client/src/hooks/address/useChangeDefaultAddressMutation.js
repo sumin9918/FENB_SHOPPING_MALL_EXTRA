@@ -1,5 +1,5 @@
-import useGenericMutation from '../useGenericMutation';
-import { changeDefaultAddress } from '../../api/address';
+import { useGenericMutation } from '../index';
+import { changeDefaultAddress } from '../../api/fetch';
 import { ADDRESS_QUERY_KEY } from '../../constants';
 
 const useChangeDefaultAddressMutation = () =>

@@ -1,4 +1,3 @@
-import { fetchCarts } from './carts';
 import {
   PRODUCTS_QUERY_KEY,
   PAGE_PRODUCTS_QUERY_KEY,
@@ -10,7 +9,6 @@ import {
   ADDRESS_QUERY_KEY,
   CARTS_QUERY_KEY,
 } from '../constants';
-import { fetchFavorites } from './favorites';
 import {
   requestVerify,
   fetchSlides,
@@ -20,6 +18,8 @@ import {
   fetchPageProducts,
   fetchProducts,
   fetchUser,
+  fetchFavorites,
+  fetchCarts,
 } from './fetch';
 
 export const productsQuery = options => ({
