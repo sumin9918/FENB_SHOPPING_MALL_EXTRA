@@ -22,7 +22,7 @@ const signupSchema = signinSchema
     path: ['confirmPassword'],
   });
 
-const addAdressSchema = z.object({
+const addAddressSchema = z.object({
   name: z.string().min(1, { message: '이름을 입력해 주세요.' }),
   phone: z.string().regex(/^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$/, { message: '휴대전화 번호를 정확히 입력해주세요.' }),
   mainAddress: z.string().min(1, { message: '주소를 입력해 주세요.' }),
@@ -30,4 +30,4 @@ const addAdressSchema = z.object({
   postcode: z.string().min(1, { message: '우편번호를 입력해 주세요.' }),
 });
 
-export { signinSchema, signupSchema, addAdressSchema };
+export { signinSchema, signupSchema, addAddressSchema };

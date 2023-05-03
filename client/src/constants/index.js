@@ -6,6 +6,7 @@ export { default as COLORS } from './colors';
 export { default as GENDER } from './gender';
 export { default as BRANDS } from './brands';
 export { default as INITIALFILTERS } from './initialFilters';
+export { default as INIT_FIELD } from './initField';
 export {
   PRODUCTS_QUERY_KEY,
   PAGE_PRODUCTS_QUERY_KEY,

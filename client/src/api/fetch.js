@@ -53,3 +53,12 @@ export const addCoupon = async id => {
   const { data } = await axios.post(`/api/coupons/${id}`);
   return data;
 };
+
+export const postOrder = async paymentInfo => {
+  await axios.post('/api/order/pay', { ...paymentInfo });
+};
+
+export const checkCoupon = async id => {
+  const { data } = await axios.get(`/api/order/coupons/${id}`);
+  return data;
+};
