@@ -3,8 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 const COUPONS = [
   {
     id: uuidv4(),
-    title: '신규회원 15% 할인쿠폰',
-    discountRate: 15,
+    title: '신규회원 10% 할인쿠폰',
+    discountRate: 10,
     discountPrice: null,
     minimumPrice: 100000,
     endTime: null,
