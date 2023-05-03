@@ -134,7 +134,7 @@ const moveForwardDefaultAddress = email => {
       ? {
           ...user,
           addresses: [
-            user.addresses.find(address => address.isDefault),
+            ...user.addresses.filter(address => address.isDefault),
             ...user.addresses.filter(address => !address.isDefault),
           ],
         }
