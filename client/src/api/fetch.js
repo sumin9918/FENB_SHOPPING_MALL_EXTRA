@@ -54,8 +54,9 @@ export const requestSignout = async () => {
   await axios.get('api/auth/signout');
 };
 
-export const toggleFavorite = async id => {
-  await axios.post('/api/favorites/me', { id });
+export const checkCoupon = async id => {
+  const { data } = await axios.get(`/api/order/coupons/${id}`);
+  return data;
 };
 
 export const addCoupon = async id => {
@@ -67,9 +68,8 @@ export const postOrder = async paymentInfo => {
   await axios.post('/api/order/pay', { ...paymentInfo });
 };
 
-export const checkCoupon = async id => {
-  const { data } = await axios.get(`/api/order/coupons/${id}`);
-  return data;
+export const toggleFavorite = async id => {
+  await axios.post('/api/favorites/me', { id });
 };
 
 export const addAddress = async newAddress => {

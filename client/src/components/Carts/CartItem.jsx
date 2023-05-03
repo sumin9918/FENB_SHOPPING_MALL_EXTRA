@@ -12,7 +12,7 @@ const CartItem = ({ cart }) => {
 
   const handlers = useRef();
 
-  const { mutate: changeQuantity } = useChangeCartQuantityMutation();
+  const { mutate: changeCartQuantity } = useChangeCartQuantityMutation();
   const { mutate: removeCart } = useRemoveCartMutation();
 
   const maxQuantity = stocks?.find(({ size }) => size === selectedSize).stock;
@@ -65,7 +65,7 @@ const CartItem = ({ cart }) => {
                   disabled={true}
                   handlersRef={handlers}
                   value={quantity}
-                  onChange={e => changeQuantity({ id, selectedSize, quantity: e })}
+                  onChange={e => changeCartQuantity({ id, selectedSize, quantity: e })}
                   ta="center"
                   w={rem(54)}
                   sx={{
