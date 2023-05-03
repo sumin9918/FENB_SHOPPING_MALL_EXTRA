@@ -1,10 +1,12 @@
 import { Stack, Title, Group, Text } from '@mantine/core';
+import { PAYMENT_METHODS } from '../../constants';
 
 const OrderInfo = ({ history }) => {
   const { orderDate, paymentMethod, discountedTotalPrice, deliveryAddress } = history;
 
   const address = `(${deliveryAddress.postcode})${deliveryAddress.mainAddress} ${deliveryAddress.detailAddress}`;
   const orderedDate = new Date(orderDate);
+  const payment = PAYMENT_METHODS.find(methods => methods.value === paymentMethod).label;
 
   return (
     <Stack w="70%" p="2rem">
@@ -31,7 +33,7 @@ const OrderInfo = ({ history }) => {
         </Stack>
         <Stack>
           <Text>{discountedTotalPrice.toLocaleString()} 원</Text>
-          <Text>{paymentMethod}</Text>
+          <Text>{payment}</Text>
           <Text>{orderedDate.toLocaleString('ko-KR')}</Text>
         </Stack>
       </Group>

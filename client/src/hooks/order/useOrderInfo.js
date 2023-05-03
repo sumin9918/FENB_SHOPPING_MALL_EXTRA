@@ -1,9 +1,6 @@
 import { useRef } from 'react';
-import useDefaultAddress from './useDefaultAddress';
 
-const useOrderInfo = changeDiscount => {
-  const { defaultAddress } = useDefaultAddress();
-
+const useOrderInfo = (defaultAddress, changeDiscount) => {
   const addressId = useRef(defaultAddress.id);
   const couponId = useRef(null);
   const paymentMethod = useRef('kakaoPay');

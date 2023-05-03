@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Stack, useMantineColorScheme } from '@mantine/core';
 import { useOrderInfo } from '../../hooks/order';
+import { useGetAddresses } from '../../hooks/address';
 import { postOrder } from '../../api/fetch';
 import { INIT_FIELD, PATH } from '../../constants';
 import Address from './Address';
@@ -16,10 +17,13 @@ const Payment = ({ changeDiscount }) => {
 
   const navigate = useNavigate();
 
-  const { changeAddressId, changeCouponId, changePaymentMethod, getOrderInfo } = useOrderInfo(changeDiscount);
-
   const defaultAddress = !addresses?.length ? {} : addresses?.find(address => !!address.isDefault) ?? addresses[0];
   const isValidAddress = defaultAddress.postcode ? defaultAddress.postcode !== '' : false;
+
+  const { changeAddressId, changeCouponId, changePaymentMethod, getOrderInfo } = useOrderInfo(
+    defaultAddress,
+    changeDiscount
+  );
 
   const [field, setFiled] = useState({ ...INIT_FIELD, info: isValidAddress, input: !isValidAddress });
   const selectedAddress = useRef(defaultAddress);
