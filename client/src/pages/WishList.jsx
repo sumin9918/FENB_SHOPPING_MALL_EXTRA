@@ -1,11 +1,11 @@
-import { Title, Container, Group, Card, Image, Text, Badge, UnstyledButton, Flex } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { Title, Container, Group, Card, Image, Text, Badge, UnstyledButton, Flex } from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
-import { PATH } from '../constants';
 import { favoritesQuery } from '../api/query';
-import { NoProduct } from '../components';
 import { useRemoveWishItemMutation } from '../hooks/wishList';
+import { PATH } from '../constants';
+import { NoProduct } from '../components';
 
 const WishList = () => {
   const { data: favorites } = useQuery(favoritesQuery());
