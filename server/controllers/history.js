@@ -42,8 +42,6 @@ const addCouponHistory = (email, historyId) =>
 
 const getPurchasesHistory = email => history.find(user => user.email === email).purchases;
 
-const getCouponsHistory = email => history.find(user => user.email === email).coupons;
-
 const getCouponHistory = (email, couponId) =>
   history.find(user => user.email === email).coupons.find(coupon => coupon.id === couponId);
 
@@ -52,6 +50,5 @@ module.exports = {
   addPurchaseHistory,
   addCouponHistory,
   getPurchasesHistory,
-  getCouponsHistory,
   getCouponHistory,
 };

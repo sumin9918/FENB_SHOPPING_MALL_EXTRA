@@ -35,7 +35,7 @@ router.post('/me/:id', authCheck, (req, res) => {
 
   const product = getProduct(id);
 
-  if (cartProduct.quantity) changeCart({ email, id, quantity: quantity + cartProduct.quantity });
+  if (cartProduct.quantity) changeCart({ email, id, selectedSize, quantity: quantity + cartProduct.quantity });
   else addCart({ email, selectedSize, quantity, ...product });
 
   res.send({ message: '장바구니에 상품이 정상적으로 추가되었습니다.' });

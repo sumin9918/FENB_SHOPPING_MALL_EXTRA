@@ -1,7 +1,7 @@
 import { Container, Stack, Text } from '@mantine/core';
 
 const Icon = () => (
-  <svg viewBox="0 0 24 24" width="50%" height="50%" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 24 24" width="15rem" height="15rem" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="icon" x1="20%" x2="80%" y1="20%" y2="80%">
         <stop offset="0%" stopColor="#cc208e" />

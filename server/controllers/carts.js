@@ -20,8 +20,6 @@ const addCart = ({ email, ...newProduct }) => {
   );
 };
 
-const getCarts = () => carts;
-
 const getUserCart = email => carts.find(cart => cart.email === email);
 
 const getUserCartSelectProductStock = (products, id, selectedSize) =>
@@ -34,6 +32,7 @@ const getUserCartSelectProductStock = (products, id, selectedSize) =>
   );
 
 const changeCart = ({ email, id, selectedSize, quantity }) => {
+  console.log(quantity);
   carts = carts.map(cart =>
     cart.email === email
       ? {
@@ -64,10 +63,9 @@ const removeAllCart = email => {
 module.exports = {
   createUser,
   addCart,
-  getCarts,
+  getUserCart,
+  getUserCartSelectProductStock,
   changeCart,
   removeCart,
-  getUserCart,
   removeAllCart,
-  getUserCartSelectProductStock,
 };
