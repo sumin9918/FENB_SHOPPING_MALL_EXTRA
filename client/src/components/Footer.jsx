@@ -45,7 +45,7 @@ const Creator = () => {
           <Text c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'}>{role}</Text>
           <Text c={colorScheme === 'dark' ? 'gray.6' : 'rgba(34,34,34,.5)'}>{mbti}</Text>
           <Tooltip label="깃허브">
-            <Anchor href={githubURL} target="_blank">
+            <Anchor href={githubURL} target="_blank" color="dark">
               <BsGithub />
             </Anchor>
           </Tooltip>
