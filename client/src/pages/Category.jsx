@@ -24,7 +24,7 @@ const Category = () => {
   const { search, searchValue } = getDecodeSearch(rawSearch);
   const { data: products } = useQuery(filteredProductsQuery(search, searchValue));
 
-  const [sortOption, setSortOption] = useState(null);
+  const [sortOption, setSortOption] = useState('favorite');
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
