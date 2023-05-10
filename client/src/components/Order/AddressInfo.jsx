@@ -5,7 +5,9 @@ const AddressInfo = ({ selectedAddress }) => {
 
   return (
     <Stack w="100%" spacing={0}>
-      <Title fz="1.6rem">배송 주소</Title>
+      <Title fz="1.6rem" mb="0.4rem">
+        배송 주소
+      </Title>
       <Text>{recipient}</Text>
       <Text>{mainAddress}</Text>
       <Text>{detailAddress}</Text>

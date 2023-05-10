@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Center, Stack, useMantineColorScheme } from '@mantine/core';
+import { Center, Stack } from '@mantine/core';
 import { addAddressSchema } from '../../schema';
 import { addAddress } from '../../api/fetch';
 import { INIT_FIELD } from '../../constants';
@@ -29,8 +29,6 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
     changeSelectedAddress({ ...newAddress, id: res.data.id });
     setFiled({ ...INIT_FIELD, info: true });
   };
-
-  const { colorScheme } = useMantineColorScheme();
 
   return (
     <Stack
@@ -102,10 +100,10 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
         />
         <Center>
           <CustomButton
-            variant="outline"
-            color={colorScheme ? 'gray' : 'dark'}
+            variant="default"
+            // color={colorScheme ? 'gray' : 'dark'}
             type="submit"
-            sx={{ width: '20rem', ':hover': { borderColor: '#228be6', color: '#228be6' } }}>
+            sx={{ width: '20rem' }}>
             배송지 추가
           </CustomButton>
         </Center>

@@ -10,7 +10,7 @@ const Order = () => {
 
   return (
     <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
-      <Title p="4.8rem" sx={{ textAlign: 'center' }}>
+      <Title fz="2.4rem" p="4.8rem" pt="2.4rem" sx={{ textAlign: 'center' }}>
         결제하기
       </Title>
       <Group mih="5rem" justify="center" align="flex-start" spacing={0} px="0.8rem">

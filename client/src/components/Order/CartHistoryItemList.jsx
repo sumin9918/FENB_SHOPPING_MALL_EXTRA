@@ -14,20 +14,25 @@ const CartHistoryItemList = () => {
         주문 상품
       </Title>
       {carts.map(({ id, selectedSize, imgURL, name, color, quantity, price }) => (
-        <Group key={`${id}-${selectedSize}`} align="flex-start" fz="1.4rem" mx="0.8rem">
+        <Group
+          key={`${id}-${selectedSize}`}
+          align="flex-start"
+          fz="1.4rem"
+          mx="0.8rem"
+          c={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
           <div style={{ width: '70px', minWidth: '70px' }}>
             <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '70px' } }} />
           </div>
           <Stack pl="2rem" align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
-            <Title fz="1.4rem" fw="bold" c={colorScheme === 'dark' ? 'gray.6' : '#111'} sx={{ cursor: 'pointer' }}>
+            <Title fz="1.4rem" fw="bold" c={colorScheme === 'dark' ? 'gray.4' : '#111'} sx={{ cursor: 'pointer' }}>
               {name}
             </Title>
             <Text>사이즈 : {selectedSize}</Text>
             <Text>색상 : {COLORS[color].kr}</Text>
             <Text>
-              수량 : {quantity} / {price.toLocaleString()}
+              수량/상품가격 : {quantity} / {price.toLocaleString()} 원
             </Text>
-            <Text>가격 {(price * quantity).toLocaleString()}</Text>
+            <Text>가격 : {(price * quantity).toLocaleString()} 원</Text>
           </Stack>
         </Group>
       ))}

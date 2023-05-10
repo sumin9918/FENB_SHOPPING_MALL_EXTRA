@@ -11,15 +11,13 @@ const Coupons = ({ changeCouponId }) => {
 
   return (
     <Stack w="100%" px="2rem">
-      <Title fz="2.4rem" fw={500}>
-        쿠폰
-      </Title>
+      <Title py="1.2rem">쿠폰</Title>
       <Accordion variant="separated">
         <Accordion.Item value="coupons">
           <Accordion.Control fz="1.6rem">쿠폰을 선택하세요</Accordion.Control>
           <Accordion.Panel>
             <Radio.Group name="coupons" onChange={changeCouponId}>
-              <Stack mt="xs" spacing="0.8rem">
+              <Stack mt="xs" spacing="0.8rem" justify="center">
                 {coupons.map(({ id, title, endTime, minimumPrice }) => (
                   <Radio
                     key={id}
@@ -29,7 +27,10 @@ const Coupons = ({ changeCouponId }) => {
                     label={
                       <CouponName title={title} endTime={endTime} totalPrice={totalPrice} minimumPrice={minimumPrice} />
                     }
-                    sx={{ '.mantine-Radio-labelWrapper': { width: '100%' } }}
+                    sx={{
+                      '.mantine-Radio-labelWrapper': { width: '100%' },
+                      '.mantine-Radio-inner': { paddingTop: '0.2rem', paddingBottom: '0.2rem' },
+                    }}
                   />
                 ))}
               </Stack>
@@ -46,7 +47,7 @@ const CouponName = ({ title, endTime, totalPrice, minimumPrice }) => {
   const leftDay = Math.floor((Date.parse(endTime) - Date.parse(currentTime)) / ONE_DAY);
 
   return (
-    <Group position="apart" px="0.4rem" fz="1.6rem">
+    <Group position="apart" px="0.4rem" fz="1.6rem" justify="center" align="center">
       <Text>{title}</Text>
       <Text c="#F36B26">
         {totalPrice < minimumPrice

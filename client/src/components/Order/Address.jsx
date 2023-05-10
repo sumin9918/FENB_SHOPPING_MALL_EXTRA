@@ -6,13 +6,11 @@ import EditAddress from './EditAddress';
 import InputAddress from './InputAddress';
 
 const Address = ({ field, setFiled, selectedAddress, changeSelectedAddress }) => (
-  <Stack w="100%" p="2rem">
+  <Stack w="100%" p="2rem" pt={0}>
     <Group position="apart" pt="1.2rem" pb="2.8rem">
       <Group align="center">
-        <Title fz="2.4rem" fw={500} sx={{ lineHeight: '2.8rem' }}>
-          배송 옵션
-        </Title>
-        {field.info && <BsCheck2 fz="2.4rem" color="rgb(18, 138, 9)" />}
+        <Title>배송 옵션</Title>
+        {field.info && <BsCheck2 size="2.4rem" color="rgb(18, 138, 9)" />}
       </Group>
 
       {field.info && (

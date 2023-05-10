@@ -1,4 +1,4 @@
-import { Stack, Center, Text, Group, useMantineColorScheme } from '@mantine/core';
+import { Stack, Center, Text, Group } from '@mantine/core';
 import { useGetAddresses } from '../../hooks/address';
 import { INIT_FIELD } from '../../constants';
 import EditAddressItem from './EditAddressItem';
@@ -6,8 +6,6 @@ import CustomButton from '../CustomButton';
 
 const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
   const addresses = useGetAddresses();
-
-  const { colorScheme } = useMantineColorScheme();
 
   return (
     <Stack w="100%" px="2rem">
@@ -28,9 +26,9 @@ const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
       )}
       <Group position="right">
         <CustomButton
-          variant="outline"
-          color={colorScheme ? 'gray' : 'dark'}
-          sx={{ width: '20rem', ':hover': { borderColor: '#228be6', color: '#228be6' } }}
+          variant="default"
+          // color={colorScheme ? 'gray' : 'dark'}
+          sx={{ width: '20rem' }}
           onClick={() => setFiled({ ...INIT_FIELD, input: true })}>
           새 배송지 추가
         </CustomButton>

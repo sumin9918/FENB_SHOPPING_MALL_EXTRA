@@ -15,9 +15,9 @@ const PAYMENT_METHODS = [
     labelStyle: { width: '4.3rem', height: '1.7rem' },
   },
   {
-    value: 'applePay',
-    label: '애플페이',
-    labelStyle: { width: '4rem', height: '2rem' },
+    value: 'payco',
+    label: '페이코',
+    labelStyle: { width: '5.4rem', height: '1.2rem' },
   },
   {
     value: 'accountTransfer',

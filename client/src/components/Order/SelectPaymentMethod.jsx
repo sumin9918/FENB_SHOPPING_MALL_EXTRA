@@ -3,9 +3,7 @@ import { PAYMENT_METHODS } from '../../constants';
 
 const SelectPaymentMethod = ({ changePaymentMethod }) => (
   <Stack w="100%" px="2rem">
-    <Title fz="2.4rem" fw={500}>
-      결제
-    </Title>
+    <Title py="1.2rem">결제</Title>
     <Radio.Group defaultValue={PAYMENT_METHODS[0].value} name="paymentMethods" onChange={changePaymentMethod}>
       <Stack mt="xs" spacing="0.8rem">
         {PAYMENT_METHODS.map(paymentMethod => (
