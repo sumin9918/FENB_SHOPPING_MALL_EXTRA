@@ -1,6 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Title, Container, Group, Card, Image, Text, Badge, UnstyledButton, Flex } from '@mantine/core';
+import {
+  Title,
+  Container,
+  Group,
+  Card,
+  Image,
+  Text,
+  Badge,
+  UnstyledButton,
+  Flex,
+  useMantineTheme,
+} from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
 import { favoritesQuery } from '../api/query';
 import { useRemoveWishItemMutation } from '../hooks/wishList';
@@ -9,6 +20,7 @@ import { NoProduct } from '../components';
 
 const WishList = () => {
   const { data: favorites } = useQuery(favoritesQuery());
+  const theme = useMantineTheme();
   const navigate = useNavigate();
 
   const { mutate } = useRemoveWishItemMutation();
@@ -50,7 +62,10 @@ const WishList = () => {
               <Group position="apart" my="md">
                 <Text fw="500">{`${price.toLocaleString()} 원`}</Text>
                 <UnstyledButton sx={{ cursor: 'pointer' }} onClick={() => handleRemoveWishItemClick(id)}>
-                  <BiTrash size="2.5rem" />
+                  <BiTrash
+                    size="2.5rem"
+                    color={theme.colorScheme === 'dark' ? theme.colors.gray[6] : 'rgb(117,117,117)'}
+                  />
                 </UnstyledButton>
               </Group>
             </Card>
