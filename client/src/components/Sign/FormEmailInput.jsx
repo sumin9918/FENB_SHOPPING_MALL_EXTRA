@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { TextInput } from '@mantine/core';
+import CustomFormInput from '../CustomFormInput';
 
 const FormEmailInput = ({ inputType, id, name, placeholder, withAsterisk = false, register, formState }) => {
   const [duplicateEmailError, setDuplicateEmailError] = useState('');
@@ -22,7 +22,7 @@ const FormEmailInput = ({ inputType, id, name, placeholder, withAsterisk = false
   };
 
   return (
-    <TextInput
+    <CustomFormInput
       type={inputType}
       label={name}
       placeholder={placeholder}
@@ -31,14 +31,6 @@ const FormEmailInput = ({ inputType, id, name, placeholder, withAsterisk = false
       {...register(id)}
       onBlur={e => checkEmailDuplicate(e.target.value)}
       error={formState?.errors[id]?.message || duplicateEmailError}
-      w="40rem"
-      h="3.8rem"
-      mb="3.5rem"
-      sx={{
-        '@media (max-width: 765px)': {
-          width: '100vw',
-        },
-      }}
     />
   );
 };

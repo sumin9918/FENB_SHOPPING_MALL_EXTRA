@@ -1,21 +1,19 @@
 import axios from 'axios';
-import styled from '@emotion/styled';
-import { useMantineColorScheme, Button, Stack, Title, Center } from '@mantine/core';
+import { useMantineColorScheme, Stack, Title, Center } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput, FormMainAddressInput, FormZoneCodeInput, FormEmailInput, FormPhoneInput } from '../components';
+import {
+  FormInput,
+  FormMainAddressInput,
+  FormZoneCodeInput,
+  FormEmailInput,
+  FormPhoneInput,
+  CustomButton,
+  CustomLink,
+} from '../components';
 import { signupSchema } from '../schema';
-
-const SignInLink = styled(Link)`
-  margin-left: 1rem;
-  text-decoration: none;
-  font-weight: 700;
-  &:hover {
-    color: blue;
-  }
-`;
 
 const SignUp = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -88,7 +86,7 @@ const SignUp = () => {
           inputType="text"
           id="email"
           name="이메일 주소"
-          placeholder="예) fenb@fenb.com"
+          // placeholder="예) fenb@fenb.com"
           register={register}
           formState={formState}
           withAsterisk
@@ -97,7 +95,7 @@ const SignUp = () => {
           inputType="text"
           id="name"
           name="이름"
-          placeholder="예) 김펜비"
+          // placeholder="예) 김펜비"
           register={register}
           formState={formState}
           withAsterisk
@@ -106,7 +104,7 @@ const SignUp = () => {
           inputType="tel"
           id="phone"
           name="휴대전화번호"
-          placeholder="예) 01012345678"
+          // placeholder="예) 010-1234-5678"
           trigger={trigger}
           setValue={setValue}
           register={register}
@@ -117,7 +115,8 @@ const SignUp = () => {
           inputType="password"
           id="password"
           name="비밀번호"
-          placeholder="영문 또는 숫자를 6~12자 입력하세요."
+          description="영문 또는 숫자를 6~12자 입력하세요."
+          label="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
           formState={formState}
           withAsterisk
@@ -126,7 +125,7 @@ const SignUp = () => {
           inputType="password"
           id="confirmPassword"
           name="비밀번호 확인"
-          placeholder="영문 또는 숫자를 6~12자 입력하세요."
+          // placeholder="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
           formState={formState}
           withAsterisk
@@ -135,7 +134,7 @@ const SignUp = () => {
           inputType="text"
           id="postcode"
           name="우편번호"
-          placeholder="주소찾기 버튼을 클릭주세요."
+          // placeholder="주소찾기 버튼을 클릭주세요."
           setValue={setValue}
           register={register}
           formState={formState}
@@ -144,7 +143,7 @@ const SignUp = () => {
           inputType="text"
           id="mainAddress"
           name="주소"
-          placeholder="주소를 선택하시면 자동으로 입력됩니다."
+          // placeholder="주소를 선택하시면 자동으로 입력됩니다."
           register={register}
           formState={formState}
         />
@@ -152,27 +151,24 @@ const SignUp = () => {
           inputType="text"
           id="detailAddress"
           name="상세주소"
-          placeholder="상세 주소를 입력하세요."
+          // placeholder="상세 주소를 입력하세요."
           register={register}
           formState={formState}
         />
-        <Button
+        <CustomButton
           type="submit"
           w="40rem"
-          h="5.2rem"
-          p="0"
           color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-          radius="md"
           sx={{
             '@media (max-width: 765px)': {
               width: '100vw',
             },
           }}>
           가입하기
-        </Button>
+        </CustomButton>
         <Center mt="2rem">
           회원이신가요?
-          <SignInLink to={'/signin'}>로그인</SignInLink>
+          <CustomLink to={'/signin'}>로그인</CustomLink>
         </Center>
       </form>
     </Stack>

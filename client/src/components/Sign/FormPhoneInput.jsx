@@ -1,4 +1,4 @@
-import { TextInput } from '@mantine/core';
+import CustomFormInput from '../CustomFormInput';
 
 const FormPhoneInput = ({
   inputType,
@@ -20,7 +20,7 @@ const FormPhoneInput = ({
   };
 
   return (
-    <TextInput
+    <CustomFormInput
       type={inputType}
       label={name}
       placeholder={placeholder}
@@ -29,14 +29,6 @@ const FormPhoneInput = ({
       {...register(id)}
       error={formState?.errors[id]?.message}
       onBlur={e => addHypen(e.target.value)}
-      w="40rem"
-      h="3.8rem"
-      mb="3.5rem"
-      sx={{
-        '@media (max-width: 765px)': {
-          width: '100vw',
-        },
-      }}
     />
   );
 };

@@ -1,5 +1,6 @@
-import { useMantineColorScheme, TextInput, Button } from '@mantine/core';
+import { useMantineColorScheme, Button } from '@mantine/core';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
+import CustomFormInput from '../CustomFormInput';
 
 const FormZoneCodeInput = ({
   inputType,
@@ -52,7 +53,7 @@ const FormZoneCodeInput = ({
   };
 
   return (
-    <TextInput
+    <CustomFormInput
       type={inputType}
       label={name}
       placeholder={placeholder}
@@ -63,29 +64,20 @@ const FormZoneCodeInput = ({
       readOnly
       rightSection={
         <Button
-          size="xs"
-          type="button"
-          p="0"
-          m="-4.5rem 4rem 0 0"
-          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-          radius="md"
+          variant="outline"
+          m="-0.5rem 6rem 0 0"
+          color={colorScheme === 'dark' ? 'gray.6' : 'gray'}
           sx={{
-            '@media (max-width: 765px)': {
-              margin: '-4.5rem 10rem 0 0',
-            },
+            width: '12rem',
+            height: '3rem',
+            borderRadius: '3rem',
+            ':hover': { border: '1px solid #228be6', color: '#228be6' },
+            '.mantine-Button-inner': { fontSize: '1.4rem' },
           }}
           onClick={handleClick}>
           주소찾기
         </Button>
       }
-      w="40rem"
-      h="3.8rem"
-      mb="3.5rem"
-      sx={{
-        '@media (max-width: 765px)': {
-          width: '100vw',
-        },
-      }}
     />
   );
 };

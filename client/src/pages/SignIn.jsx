@@ -1,23 +1,13 @@
 import axios from 'axios';
-import styled from '@emotion/styled';
-import { useMantineColorScheme, Button, Image, Stack, Center, Title } from '@mantine/core';
+import { useMantineColorScheme, Image, Stack, Center, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSetRecoilState } from 'recoil';
-import { FormInput } from '../components';
+import { CustomButton, CustomLink, FormInput } from '../components';
 import { signinSchema } from '../schema';
 import { userState } from '../recoil/atoms';
-
-const SignUpLink = styled(Link)`
-  margin-left: 1rem;
-  text-decoration: none;
-  font-weight: 700;
-  &:hover {
-    color: blue;
-  }
-`;
 
 const SignIn = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -111,28 +101,25 @@ const SignIn = () => {
           inputType="text"
           id="email"
           name="이메일 주소"
-          placeholder="예) fenb@fenb.com"
+          // placeholder="예) fenb@fenb.com"
           register={register}
           formState={formState}
         />
         <FormInput inputType="password" id="password" name="비밀번호" register={register} formState={formState} />
-        <Button
+        <CustomButton
           type="submit"
           w="40rem"
-          h="5.2rem"
-          p="0"
           color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-          radius="md"
           sx={{
             '@media (max-width: 765px)': {
               width: '100vw',
             },
           }}>
           로그인
-        </Button>
+        </CustomButton>
         <Center mt="2rem">
           회원이 아니신가요?
-          <SignUpLink to={'/signup'}>회원가입</SignUpLink>
+          <CustomLink to={'/signup'}>회원가입</CustomLink>
         </Center>
       </form>
     </Stack>
