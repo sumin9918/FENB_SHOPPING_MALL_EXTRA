@@ -17,6 +17,7 @@ const INITIAL_FILTERS = {
   brandFilters: Array.from({ length: BRANDS.length }, () => false),
 };
 
+const INITIAL_SORT = 'favorite';
 const MEDIAQUERY_WIDTH = 1000;
 
 const Category = () => {
@@ -24,7 +25,7 @@ const Category = () => {
   const { search, searchValue } = getDecodeSearch(rawSearch);
   const { data: products } = useQuery(filteredProductsQuery(search, searchValue));
 
-  const [sortOption, setSortOption] = useState('favorite');
+  const [sortOption, setSortOption] = useState(INITIAL_SORT);
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
@@ -41,9 +42,10 @@ const Category = () => {
 
   const handleResetFilters = () => {
     setFilters(INITIAL_FILTERS);
+    setSortOption(INITIAL_SORT);
 
     sessionStorage.setItem('filters', JSON.stringify(INITIAL_FILTERS));
-    sessionStorage.setItem('sortOption', JSON.stringify(null));
+    sessionStorage.setItem('sortOption', JSON.stringify(INITIAL_SORT));
   };
 
   const handleSelectSortOption = selectedSortOption => {
