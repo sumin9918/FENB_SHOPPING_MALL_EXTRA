@@ -18,7 +18,6 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
       <Select
         size="xl"
         maxDropdownHeight={500}
-        placeholder="정렬 기준"
         value={sortOption}
         data={[
           { value: 'favorite', label: '추천순' },
@@ -26,6 +25,21 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
           { value: 'high', label: '높은 가격순' },
           { value: 'low', label: '낮은 가격순' },
         ]}
+        styles={theme => ({
+          input: {
+            '&:focus': {
+              borderColor: theme.colors.gray[4],
+            },
+          },
+          item: {
+            '&[data-selected]': {
+              '&, &:hover': {
+                backgroundColor: theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[1],
+                color: theme.colorScheme === 'dark' ? theme.white : 'black',
+              },
+            },
+          },
+        })}
         onChange={e => handleSelectSortOption(e)}
       />
     </Flex>
