@@ -13,7 +13,6 @@ const OrderProducts = ({ products }) => {
         {products.map(({ selectedSize, quantity, name, price, color, imgURL, id }) => (
           <Group key={id} position="center" align="flex-start" fz="1.4rem">
             <div style={{ width: '20%', minWidth: '110px' }}>
-              {/* <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '100px' } }} /> */}
               <Image src={imgURL} alt={name} withPlaceholder width="11rem" height="11rem" />
             </div>
             <Group position="apart" align="flex-start" justify="center" w="70%" my="auto">
