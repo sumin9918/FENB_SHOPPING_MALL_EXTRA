@@ -1,9 +1,20 @@
 import { FaCheck } from 'react-icons/fa';
-import { Stack, Accordion, Checkbox, Button, UnstyledButton, ColorSwatch, SimpleGrid, Text } from '@mantine/core';
+import {
+  Stack,
+  Accordion,
+  Checkbox,
+  Button,
+  UnstyledButton,
+  ColorSwatch,
+  SimpleGrid,
+  Text,
+  useMantineTheme,
+} from '@mantine/core';
 import { SizeButton } from '..';
 import { PRICES, SIZES, COLORS, GENDER, BRANDS } from '../../constants';
 
 const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
+  const theme = useMantineTheme();
   const { priceFilters, sizeFilters, colorFilters, genderFilters, brandFilters } = filters;
 
   return (
@@ -69,9 +80,14 @@ const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
                   <UnstyledButton>
                     <ColorSwatch
                       color={color}
-                      size={'3.0rem'}
+                      size="3rem"
                       selected={colorFilters.at(i)}
-                      onClick={() => handleCheckFilters({ color: en })}>
+                      onClick={() => handleCheckFilters({ color: en })}
+                      sx={{
+                        '.mantine-ColorSwatch-shadowOverlay': {
+                          boxShadow: en === 'black' && `${theme.colors.gray[6]} 0 0 0 0.0625rem inset`,
+                        },
+                      }}>
                       {colorFilters.at(i) && (
                         <FaCheck size={'1.2rem'} color={en === 'white' || en === 'beige' ? 'black' : 'white'} />
                       )}
