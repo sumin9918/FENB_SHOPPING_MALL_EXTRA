@@ -70,7 +70,7 @@ const Products = () => {
             <Image src={imgURL} />
             <Description>{description}</Description>
           </Stack>
-          <Stack m="4.8rem 0.8rem 0 0" p="0 4.8rem 0 2.4rem" miw="45.6rem" fz="1.6rem">
+          <Stack m="4.8rem 0.8rem 0 0" p="0 4.8rem 0 2.4rem" miw="45.6rem" fz="1.6rem" spacing={0}>
             <Title>{name}</Title>
             <Info
               currentProduct={currentProduct}
@@ -95,7 +95,7 @@ const Products = () => {
           </Stack>
         </Group>
       ) : (
-        <Stack m="4.8rem 0.8rem 0 0" p="0 5rem" miw="45rem" fz="1.6rem">
+        <Stack m="4.8rem 0.8rem 0 0" p="0 5rem" miw="45rem" fz="1.6rem" spacing={0}>
           <Title>{name}</Title>
           <Image src={imgURL} />
           <Info

@@ -13,10 +13,11 @@ const Info = ({ currentProduct, isSizeSelected, currentSelectedSize, handleSizeC
 
   return (
     <>
-      <Text fw="500" color="dimmed">
+      {/* 2. 묻기 */}
+      <Text fw={500} size="2rem">{`${price.toLocaleString()} 원`}</Text>
+      <Text size="1.4rem" color="dimmed" m="1.2rem 0">
         {brand.kr}
       </Text>
-      <Text fw="600" m="1.2rem 0">{`${price.toLocaleString()} 원`}</Text>
       <Stack>
         <Text fw="600">사이즈 선택</Text>
         <SizeButtonContainer cols={5} selected={isSizeSelected === false}>
@@ -25,7 +26,7 @@ const Info = ({ currentProduct, isSizeSelected, currentSelectedSize, handleSizeC
               key={size}
               variant="default"
               radius="0.4rem"
-              color="red"
+              fw="normal"
               disabled={stock === 0}
               selected={size === currentSelectedSize}
               styles={theme => ({
