@@ -27,6 +27,7 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
         ]}
         styles={theme => ({
           input: {
+            fontSize: '1.5rem',
             '&:focus': {
               borderColor: theme.colors.gray[4],
             },
