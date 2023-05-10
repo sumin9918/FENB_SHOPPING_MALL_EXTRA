@@ -19,7 +19,6 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
         size="xl"
         maxDropdownHeight={500}
         placeholder="정렬 기준"
-        variant="unstyled"
         value={sortOption}
         data={[
           { value: 'favorite', label: '추천순' },
