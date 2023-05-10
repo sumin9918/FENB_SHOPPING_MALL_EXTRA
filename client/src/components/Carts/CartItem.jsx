@@ -38,7 +38,7 @@ const CartItem = ({ cart }) => {
         </div>
         <Stack justify="space-between" grow="true" spacing={0} sx={{ flex: 1 }}>
           <Group position="apart" grow="true" spacing={0} align="flex-start">
-            <Stack align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
+            <Stack align="flex-start" justify="flex-start" spacing="0.2rem" maw="fit-content">
               <Title
                 mb="0.8rem"
                 fz="1.6rem"
