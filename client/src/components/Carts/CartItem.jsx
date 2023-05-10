@@ -20,10 +20,10 @@ const CartItem = ({ cart }) => {
   return (
     <Stack
       w="100%"
-      py="2.4rem"
       spacing={0}
+      py="2.4rem"
       c={colorScheme === 'dark' ? 'gray.6' : 'rgb(117,117,117)'}
-      sx={{ borderBottom: '1px solid rgb(117,117,117)' }}>
+      sx={{ borderBottom: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}` }}>
       <Group align="flex-start">
         <div
           style={{
@@ -52,7 +52,7 @@ const CartItem = ({ cart }) => {
               <Text>{CATEGORIES[category]}</Text>
               <Text>{COLORS[color].kr}</Text>
               <Text>사이즈 {selectedSize}</Text>
-              <Group spacing="0.4rem">
+              <Group spacing="0.4rem" mb="0.8rem">
                 <Text sx={{ verticalAlign: 'bottom' }}>수량</Text>
                 <ActionIcon
                   size={rem(42)}
@@ -102,12 +102,12 @@ const CartItem = ({ cart }) => {
               maw="fit-content"
               c={colorScheme === 'dark' ? 'gray.6' : '#111'}
               ta="right">
-              <Title fz="1.8rem" fw={500} c={colorScheme === 'dark' ? 'gray.6' : '#111'}>
+              <Title fz="1.6rem" fw={500} c={colorScheme === 'dark' ? 'gray.6' : '#111'}>
                 {(price * quantity).toLocaleString()} 원
               </Title>
             </Stack>
           </Group>
-          <div style={{ marginTop: '24px' }}>
+          <div style={{ marginTop: '1.6rem' }}>
             <BiTrash
               style={{ width: '24px', height: '24px', verticalAlign: 'top', cursor: 'pointer' }}
               onClick={() => removeCart({ id, selectedSize })}

@@ -3,3 +3,4 @@ export { default as useChangeCartQuantityMutation } from './useChangeCartQuantit
 export { default as useRemoveCartMutation } from './useRemoveCartMutation';
 export { default as useCountCarts } from './useCountCarts';
 export { default as useTotalPrice } from './useTotalPrice';
+export { default as useTotalCartItems } from './useTotalCartItems';
