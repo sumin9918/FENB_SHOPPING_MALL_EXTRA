@@ -39,7 +39,12 @@ const CartItem = ({ cart }) => {
         <Stack justify="space-between" grow="true" spacing={0} sx={{ flex: 1 }}>
           <Group position="apart" grow="true" spacing={0} align="flex-start">
             <Stack align="flex-start" justify="flex-start" spacing={0} maw="fit-content">
-              <Title fz="1.6rem" fw={500} c={colorScheme === 'dark' ? 'gray.6' : '#111'} sx={{ cursor: 'pointer' }}>
+              <Title
+                mb="0.8rem"
+                fz="1.6rem"
+                fw={500}
+                c={colorScheme === 'dark' ? 'gray.6' : '#111'}
+                sx={{ cursor: 'pointer' }}>
                 <Link to={`${PATH.PRODUCTS}/${id}`} state={id}>
                   {name}
                 </Link>
@@ -98,7 +103,7 @@ const CartItem = ({ cart }) => {
               c={colorScheme === 'dark' ? 'gray.6' : '#111'}
               ta="right">
               <Title fz="1.8rem" fw={500} c={colorScheme === 'dark' ? 'gray.6' : '#111'}>
-                {(price * quantity).toLocaleString()}
+                {(price * quantity).toLocaleString()} 원
               </Title>
             </Stack>
           </Group>
