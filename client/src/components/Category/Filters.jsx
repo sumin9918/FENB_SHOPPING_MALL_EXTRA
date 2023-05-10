@@ -16,6 +16,7 @@ const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
         h="5rem"
         fz="1.6rem"
         radius="lg"
+        fw="normal"
         onClick={handleResetFilters}>
         필터 초기화
       </Button>
@@ -50,6 +51,7 @@ const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
                   variant="default"
                   radius="md"
                   selected={sizeFilters.at(i)}
+                  fw="normal"
                   onClick={() => handleCheckFilters({ size })}>
                   {size}
                 </SizeButton>
