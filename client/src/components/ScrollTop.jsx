@@ -8,7 +8,13 @@ const ScrollTop = ({ positionY }) => {
   return (
     <>
       {scroll.y >= positionY && (
-        <ActionIcon color="blue.6" size="3rem" pos="fixed" bottom="2rem" right="2rem" sx={{ borderRadius: '50%' }}>
+        <ActionIcon
+          color="blue.6"
+          size="3rem"
+          pos="fixed"
+          bottom="2rem"
+          right="2rem"
+          sx={{ borderRadius: '50%', zIndex: 1 }}>
           <SlArrowUpCircle onClick={() => scrollTo({ y: 0 })} size="5rem" />
         </ActionIcon>
       )}
