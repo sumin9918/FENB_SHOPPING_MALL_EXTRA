@@ -1,4 +1,4 @@
-import { Stack, ColorSwatch, Text, SimpleGrid } from '@mantine/core';
+import { Stack, ColorSwatch, Text, SimpleGrid, useMantineColorScheme } from '@mantine/core';
 import styled from '@emotion/styled';
 import { SizeButton } from '..';
 
@@ -8,6 +8,7 @@ const SizeButtonContainer = styled(SimpleGrid)`
 `;
 
 const Info = ({ currentProduct, isSizeSelected, currentSelectedSize, handleSizeClick }) => {
+  const { colorScheme } = useMantineColorScheme();
   const { price, color, brand, stocks } = currentProduct;
 
   return (
@@ -24,8 +25,16 @@ const Info = ({ currentProduct, isSizeSelected, currentSelectedSize, handleSizeC
               key={size}
               variant="default"
               radius="0.4rem"
+              color="red"
               disabled={stock === 0}
               selected={size === currentSelectedSize}
+              styles={theme => ({
+                root: {
+                  '&:disabled': {
+                    color: colorScheme === 'dark' && theme.colors.gray[6],
+                  },
+                },
+              })}
               onClick={() => handleSizeClick(size)}>
               {size}
             </SizeButton>
