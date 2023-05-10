@@ -69,7 +69,7 @@ const Category = () => {
   };
 
   return (
-    <Container top="0" left="0" sx={{ maxWidth: '192rem', padding: '0 8rem' }}>
+    <Container top="0" left="0" sx={{ maxWidth: '150rem', padding: '0 8rem' }}>
       <Header
         sortOption={sortOption}
         searchValue={searchValue}
