@@ -18,7 +18,7 @@ const INITIAL_FILTERS = {
 };
 
 const INITIAL_SORT = 'favorite';
-const MEDIAQUERY_WIDTH = 1000;
+const MEDIAQUERY_WIDTH = 768;
 
 const Category = () => {
   const { search: rawSearch } = useLocation();
@@ -69,7 +69,7 @@ const Category = () => {
   };
 
   return (
-    <Container top="0" left="0" sx={{ maxWidth: '150rem', padding: '0 8rem' }}>
+    <Container top="0" left="0" size="150rem">
       <Header
         sortOption={sortOption}
         searchValue={searchValue}

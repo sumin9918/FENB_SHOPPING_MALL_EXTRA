@@ -21,7 +21,15 @@ const FiltersContainer = ({ type, filters, handleResetFilters, handleCheckFilter
   const [opened, { open, close }] = useDisclosure(false);
 
   return type === 'larger' ? (
-    <ScrollFiltersArea m="0" miw="26rem" maw="26rem" h="65rem" pos="sticky" top="6.8rem" sx={{ overflowY: 'auto' }}>
+    <ScrollFiltersArea
+      m="0"
+      miw="26rem"
+      maw="26rem"
+      h="65rem"
+      pos="sticky"
+      top="6.8rem"
+      sx={{ overflowY: 'auto' }}
+      mr="2rem">
       <Filters filters={filters} handleResetFilters={handleResetFilters} handleCheckFilters={handleCheckFilters} />
     </ScrollFiltersArea>
   ) : (

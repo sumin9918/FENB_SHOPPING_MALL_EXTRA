@@ -8,7 +8,7 @@ const ResultProducts = ({ products, cols = 3 }) => (
     {products.length === 0 ? (
       <SadIcon>등록된 상품이 없습니다.</SadIcon>
     ) : (
-      <SimpleGrid cols={cols} pl="2rem">
+      <SimpleGrid cols={3} breakpoints={[{ maxWidth: 1024, cols: 2 }]}>
         {products.map(({ id, imgURL, name, price, brand, feature }) => (
           <Link key={id} to={`${PATH.PRODUCTS}/${id}`}>
             <Card fz="1.6rem" padding="lg" withBorder>
