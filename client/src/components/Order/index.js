@@ -6,4 +6,5 @@ export { default as InputAddress } from './InputAddress';
 export { default as Coupons } from './Coupons';
 export { default as SelectPaymentMethod } from './SelectPaymentMethod';
 export { default as CartHistory } from './CartHistory';
+export { default as ResponsiveCartHistory } from './ResponsiveCartHistory';
 export { default as CartHistoryItemList } from './CartHistoryItemList';

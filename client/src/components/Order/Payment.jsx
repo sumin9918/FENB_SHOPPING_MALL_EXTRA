@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Stack, useMantineColorScheme } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { useOrderInfo } from '../../hooks/order';
 import { useGetAddresses } from '../../hooks/address';
 import { postOrder } from '../../api/fetch';
@@ -10,9 +11,12 @@ import Coupons from './Coupons';
 import SelectPaymentMethod from './SelectPaymentMethod';
 import CustomButton from '../CustomButton';
 
+const MEDIAQUERY_WIDTH = 768;
+
 const Payment = ({ changeDiscount }) => {
   const addresses = useGetAddresses();
 
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
@@ -35,7 +39,7 @@ const Payment = ({ changeDiscount }) => {
   };
 
   return (
-    <Stack w="66.66667%" pr="5rem" spacing="5rem">
+    <Stack w={matches ? '66.66667%' : '90%'} pr={!matches && '5rem'} mx="auto" spacing="5rem">
       <Address
         field={field}
         setFiled={setFiled}

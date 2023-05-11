@@ -25,10 +25,9 @@ const CartList = () => {
           align="center"
           spacing={0}
           pb="4rem"
-          c={colorScheme === 'dark' ? 'gray.5' : 'gray.7'}
           sx={{ borderBottom: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}` }}>
           <Title py="0.8rem">장바구니</Title>
-          <Group spacing="0.8rem">
+          <Group spacing="0.8rem" c={colorScheme === 'dark' ? 'gray.5' : 'gray.7'}>
             <Text>{totalCartItems} 개의 제품</Text>
             <Text>l</Text>
             <Text>{totalPrice.toLocaleString()} 원</Text>

@@ -1,4 +1,4 @@
-import { Stack, Title, Group, Text } from '@mantine/core';
+import { Stack, Title, Group, Text, useMantineColorScheme } from '@mantine/core';
 import { useTotalPrice } from '../../hooks/carts';
 import CartHistoryItemList from './CartHistoryItemList';
 
@@ -6,6 +6,8 @@ const CartHistory = ({ discount }) => {
   const totalPrice = useTotalPrice();
 
   const { discountAmount, discountedTotalPrice } = discount;
+
+  const { colorScheme } = useMantineColorScheme();
 
   return (
     <Stack w="33.33333%" px="0.8rem">
@@ -26,7 +28,10 @@ const CartHistory = ({ discount }) => {
         position="apart"
         my="1.2rem"
         py="2.4rem"
-        style={{ borderBottom: '1px solid rgb(117,117,117)', borderTop: '1px solid rgb(117,117,117)' }}>
+        style={{
+          borderBottom: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}`,
+          borderTop: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}`,
+        }}>
         <Text>총 결제 금액</Text>
         <Text>{discountedTotalPrice.toLocaleString()} 원</Text>
       </Group>
