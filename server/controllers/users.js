@@ -107,8 +107,6 @@ const addAddress = (email, { isDefault = false, ...address }) => {
       : user
   );
 
-  console.log(users);
-
   return id;
 };
 
@@ -166,10 +164,7 @@ const removeAddress = (email, id) => {
   );
 };
 
-const getUser = email => {
-  console.log(users);
-  return users.find(user => user.email === email);
-};
+const getUser = email => users.find(user => user.email === email);
 
 const confirmUser = (email, password) => users.find(user => user.email === email && user.password === password);
 

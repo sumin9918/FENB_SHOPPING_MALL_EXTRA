@@ -32,7 +32,6 @@ const getUserCartSelectProductStock = (products, id, selectedSize) =>
   );
 
 const changeCart = ({ email, id, selectedSize, quantity }) => {
-  console.log(quantity);
   carts = carts.map(cart =>
     cart.email === email
       ? {
