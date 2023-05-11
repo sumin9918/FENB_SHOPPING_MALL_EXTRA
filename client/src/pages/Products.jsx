@@ -7,7 +7,7 @@ import { favoritesQuery, productsQuery, verifyQuery } from '../api/query';
 import { toggleFavorite, addCart } from '../api/fetch';
 import { Info, Description, CartButton, WishListButton } from '../components/Products';
 
-const MEDIAQUERY_WIDTH = 880;
+const MEDIAQUERY_WIDTH = 768;
 
 const Products = () => {
   const { data: products } = useQuery(productsQuery());
@@ -70,7 +70,7 @@ const Products = () => {
             <Image src={imgURL} />
             <Description>{description}</Description>
           </Stack>
-          <Stack m="4.8rem 0.8rem 0 0" p="0 4.8rem 0 2.4rem" miw="45.6rem" fz="1.6rem" spacing={0}>
+          <Stack m="4.8rem 0.8rem 0 0" p="0 4.8rem 0 2.4rem" miw="40rem" fz="1.6rem" spacing={0}>
             <Title>{`[${brand.kr}] ${name}`}</Title>
             <Info
               currentProduct={currentProduct}
