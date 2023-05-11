@@ -29,7 +29,7 @@ const Coupons = ({ changeCouponId }) => {
                     }
                     sx={{
                       '.mantine-Radio-labelWrapper': { width: '100%' },
-                      '.mantine-Radio-inner': { paddingTop: '0.2rem', paddingBottom: '0.2rem' },
+                      '.mantine-Radio-inner': { transform: 'translate3D(0, 3px, 0)' },
                     }}
                   />
                 ))}

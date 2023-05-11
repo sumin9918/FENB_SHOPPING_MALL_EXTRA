@@ -24,7 +24,7 @@ const CartItem = ({ cart }) => {
       py="2.4rem"
       c={colorScheme === 'dark' ? 'gray.6' : 'rgb(117,117,117)'}
       sx={{ borderBottom: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}` }}>
-      <Group align="flex-start">
+      <Group align="flex-start" sx={{ flexWrap: 'nowrap' }}>
         <div
           style={{
             width: '180px',

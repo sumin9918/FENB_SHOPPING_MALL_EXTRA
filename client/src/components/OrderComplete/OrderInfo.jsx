@@ -22,7 +22,7 @@ const OrderInfo = ({ history }) => {
         py="1.6rem"
         px={matches ? '3.2rem' : '1.6rem'}
         spacing={matches ? '3.2rem' : '1.6rem'}
-        sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
+        sx={{ border: '1px solid lightgray', borderRadius: '5px', flexWrap: 'nowrap' }}>
         <Stack miw="7rem" w="10%">
           <Text>받는 사람</Text>
           <Text>주소</Text>
@@ -38,7 +38,7 @@ const OrderInfo = ({ history }) => {
         py="1.6rem"
         px={matches ? '3.2rem' : '1.6rem'}
         spacing={matches ? '3.2rem' : '1.6rem'}
-        sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
+        sx={{ border: '1px solid lightgray', borderRadius: '5px', flexWrap: 'nowrap' }}>
         <Stack miw="7rem" w="10%">
           <Text>결제 금액</Text>
           <Text>결제 방식</Text>

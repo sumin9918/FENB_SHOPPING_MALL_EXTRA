@@ -26,9 +26,12 @@ const EditAddress = ({ setFiled, selectedAddress, changeSelectedAddress }) => {
       )}
       <Group position="right">
         <CustomButton
-          variant="default"
-          // color={colorScheme ? 'gray' : 'dark'}
-          sx={{ width: '20rem' }}
+          variant="outline"
+          color="gray"
+          sx={{
+            width: '20rem',
+            ':hover': { backgroundColor: 'transparent', borderColor: '#228be6', color: '#228be6' },
+          }}
           onClick={() => setFiled({ ...INIT_FIELD, input: true })}>
           새 배송지 추가
         </CustomButton>

@@ -7,7 +7,7 @@ import InputAddress from './InputAddress';
 
 const Address = ({ field, setFiled, selectedAddress, changeSelectedAddress }) => (
   <Stack w="100%" p="2rem" pt={0}>
-    <Group position="apart" pt="1.2rem" pb="2.8rem">
+    <Group position="apart" pt="1.2rem" pb="1.2rem">
       <Group align="center">
         <Title>배송 옵션</Title>
         {field.info && <BsCheck2 size="2.4rem" color="rgb(18, 138, 9)" />}

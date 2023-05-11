@@ -101,7 +101,7 @@ const SignIn = () => {
           inputType="text"
           id="email"
           name="이메일 주소"
-          // placeholder="예) fenb@fenb.com"
+          placeholder="fenb@fenb.com"
           register={register}
           formState={formState}
         />

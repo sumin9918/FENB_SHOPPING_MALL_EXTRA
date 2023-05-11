@@ -56,7 +56,7 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           withAsterisk
           id="name"
           name="이름"
-          // placeholder="예) 김펜비"
+          placeholder="김펜비"
           register={register}
           formState={formState}
         />
@@ -65,7 +65,7 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           withAsterisk
           id="phone"
           name="휴대전화번호"
-          // placeholder="예) 01012345678"
+          placeholder="'-' 없이 입력"
           trigger={trigger}
           setValue={setValue}
           register={register}
@@ -76,7 +76,7 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           withAsterisk
           id="postcode"
           name="우편번호"
-          // placeholder="주소찾기 버튼을 클릭주세요"
+          placeholder="주소찾기 버튼을 클릭주세요"
           setValue={setValue}
           register={register}
           formState={formState}
@@ -86,7 +86,7 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           withAsterisk
           id="mainAddress"
           name="주소"
-          // placeholder="주소를 선택하시면 자동으로 입력됩니다."
+          placeholder="주소를 선택하시면 자동으로 입력됩니다."
           register={register}
           formState={formState}
         />
@@ -94,12 +94,19 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
           inputType="text"
           id="detailAddress"
           name="상세주소"
-          // placeholder="상세 주소를 입력하세요."
+          placeholder="상세 주소를 입력하세요."
           register={register}
           formState={formState}
         />
         <Center>
-          <CustomButton variant="default" type="submit" sx={{ width: '20rem' }}>
+          <CustomButton
+            variant="outline"
+            type="submit"
+            color="gray"
+            sx={{
+              width: '20rem',
+              ':hover': { backgroundColor: 'transparent', borderColor: '#228be6', color: '#228be6' },
+            }}>
             배송지 추가
           </CustomButton>
         </Center>

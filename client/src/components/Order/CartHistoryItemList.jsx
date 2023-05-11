@@ -25,7 +25,8 @@ const CartHistoryItemList = () => {
           align="flex-start"
           fz="1.4rem"
           mx="0.8rem"
-          c={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
+          c={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+          sx={{ flexWrap: 'nowrap' }}>
           <div style={{ width: '70px', minWidth: '70px' }}>
             <Image src={imgURL} alt={name} withPlaceholder sx={{ img: { width: '70px' } }} />
           </div>
@@ -34,16 +35,17 @@ const CartHistoryItemList = () => {
               fz="1.4rem"
               fw="bold"
               c={colorScheme === 'dark' ? 'gray.4' : '#111'}
-              sx={{ cursor: 'pointer' }}
-              mb="0.4rem">
+              mb="0.4rem"
+              truncate
+              sx={{ cursor: 'pointer' }}>
               {name}
             </Title>
             <Text>사이즈 : {selectedSize}</Text>
             <Text>색상 : {COLORS[color].kr}</Text>
             <Text>
-              수량/상품가격 : {quantity} / {price.toLocaleString()} 원
+              수량 / 가격 : {quantity} / {price.toLocaleString()} 원
             </Text>
-            <Text>가격 : {(price * quantity).toLocaleString()} 원</Text>
+            <Text>총 가격 : {(price * quantity).toLocaleString()} 원</Text>
           </Stack>
         </Group>
       ))}

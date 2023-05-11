@@ -19,7 +19,7 @@ const OrderProducts = ({ products }) => {
         spacing="2rem"
         sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
         {products.map(({ selectedSize, quantity, name, price, color, imgURL, id }) => (
-          <Group key={id} justify="center" fz="1.4rem">
+          <Group key={id} justify="center" fz="1.4rem" sx={{ flexWrap: 'nowrap' }}>
             <div style={{ width: '20%', minWidth: `${matches ? '10.8rem' : '7.8rem'}` }}>
               <Image
                 src={imgURL}
@@ -37,7 +37,7 @@ const OrderProducts = ({ products }) => {
                 <Text pl="0.2rem">사이즈 : {selectedSize}</Text>
                 <Text pl="0.2rem">색상 : {COLORS[color].kr}</Text>
                 <Text pl="0.2rem">
-                  수량/상품가격 : {quantity} / {price.toLocaleString()} 원
+                  수량 / 가격 : {quantity} / {price.toLocaleString()} 원
                 </Text>
               </Stack>
               <Stack>

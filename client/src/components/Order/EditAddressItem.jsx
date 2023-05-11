@@ -48,7 +48,7 @@ const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAdd
             w="3.2rem"
             h="3.2rem"
             iconSize="1.6rem"
-            sx={{ ':hover': { background: colorScheme === 'dark' ? '#212529' : '#f1f3f5' } }}
+            sx={{ ':hover': { background: 'transparent', border: '1px solid #228be6' } }}
             onClick={e => {
               e.stopPropagation();
               removeAddress(id);
@@ -57,7 +57,9 @@ const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAdd
           <Button
             variant="subtle"
             color="dark"
-            sx={{ ':hover': { background: colorScheme === 'dark' ? '#212529' : '#f1f3f5' } }}
+            h="3.2rem"
+            py="0.8rem"
+            sx={{ ':hover': { background: 'transparent', border: '1px solid #228be6' } }}
             onClick={e => {
               e.stopPropagation();
               changeDefaultAddress(id);

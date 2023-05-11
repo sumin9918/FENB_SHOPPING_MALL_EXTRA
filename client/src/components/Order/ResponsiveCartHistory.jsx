@@ -14,10 +14,18 @@ const ResponsiveCartHistory = ({ discount }) => {
       w="90%"
       my="2rem"
       mx="auto"
-      chevronSize="4rem"
+      chevronSize="3rem"
       sx={{
         borderTop: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}`,
-      }}>
+      }}
+      styles={() => ({
+        chevron: {
+          svg: {
+            width: '3rem',
+            height: '3rem',
+          },
+        },
+      })}>
       <Accordion.Item value="CartHistory" py="2.4rem">
         <Accordion.Control sx={{ ':hover': { backgroundColor: 'transparent' } }}>
           <Title>장바구니</Title>

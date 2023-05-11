@@ -86,7 +86,7 @@ const SignUp = () => {
           inputType="text"
           id="email"
           name="이메일 주소"
-          // placeholder="예) fenb@fenb.com"
+          placeholder="fenb@fenb.com"
           register={register}
           formState={formState}
           withAsterisk
@@ -95,7 +95,7 @@ const SignUp = () => {
           inputType="text"
           id="name"
           name="이름"
-          // placeholder="예) 김펜비"
+          placeholder="김펜비"
           register={register}
           formState={formState}
           withAsterisk
@@ -104,7 +104,7 @@ const SignUp = () => {
           inputType="tel"
           id="phone"
           name="휴대전화번호"
-          // placeholder="예) 010-1234-5678"
+          placeholder="'-' 없이 입력"
           trigger={trigger}
           setValue={setValue}
           register={register}
@@ -115,8 +115,7 @@ const SignUp = () => {
           inputType="password"
           id="password"
           name="비밀번호"
-          description="영문 또는 숫자를 6~12자 입력하세요."
-          label="영문 또는 숫자를 6~12자 입력하세요."
+          placeholder="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
           formState={formState}
           withAsterisk
@@ -125,7 +124,7 @@ const SignUp = () => {
           inputType="password"
           id="confirmPassword"
           name="비밀번호 확인"
-          // placeholder="영문 또는 숫자를 6~12자 입력하세요."
+          placeholder="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
           formState={formState}
           withAsterisk
@@ -134,7 +133,7 @@ const SignUp = () => {
           inputType="text"
           id="postcode"
           name="우편번호"
-          // placeholder="주소찾기 버튼을 클릭주세요."
+          placeholder="주소찾기 버튼을 클릭주세요."
           setValue={setValue}
           register={register}
           formState={formState}
@@ -143,7 +142,7 @@ const SignUp = () => {
           inputType="text"
           id="mainAddress"
           name="주소"
-          // placeholder="주소를 선택하시면 자동으로 입력됩니다."
+          placeholder="주소를 선택하시면 자동으로 입력됩니다."
           register={register}
           formState={formState}
         />
@@ -151,7 +150,7 @@ const SignUp = () => {
           inputType="text"
           id="detailAddress"
           name="상세주소"
-          // placeholder="상세 주소를 입력하세요."
+          placeholder="상세 주소를 입력하세요."
           register={register}
           formState={formState}
         />
