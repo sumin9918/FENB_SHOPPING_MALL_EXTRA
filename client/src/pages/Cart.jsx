@@ -8,7 +8,7 @@ const Cart = () => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
 
   return (
-    <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
+    <Container size="1200px" w="100%" fz="1.6rem">
       {matches ? (
         <Group mih="5rem" justify="center" align="flex-start" spacing={0}>
           <CartList />

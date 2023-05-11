@@ -9,15 +9,14 @@ const SizeButtonContainer = styled(SimpleGrid)`
 
 const Info = ({ currentProduct, isSizeSelected, currentSelectedSize, handleSizeClick }) => {
   const { colorScheme } = useMantineColorScheme();
-  const { price, color, brand, stocks } = currentProduct;
+  const { price, color, brand, stocks, feature } = currentProduct;
 
   return (
     <>
-      {/* 2. 묻기 */}
-      <Text fw={500} size="2rem">{`${price.toLocaleString()} 원`}</Text>
-      <Text size="1.4rem" color="dimmed" m="1.2rem 0">
-        {brand.kr}
+      <Text size="1.4rem" c={colorScheme === 'dark' ? 'gray.4' : 'gray.8'}>
+        {brand.kr} / {feature}
       </Text>
+      <Text fw={500} size="2rem" m="2rem 0">{`${price.toLocaleString()} 원`}</Text>
       <Stack>
         <Text fw="600">사이즈 선택</Text>
         <SizeButtonContainer cols={5} selected={isSizeSelected === false}>

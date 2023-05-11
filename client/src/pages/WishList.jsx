@@ -34,14 +34,24 @@ const WishList = () => {
   };
 
   return (
-    <Container size="120rem" pt="4rem">
+    <Container size="120rem">
       <Title p="0.8rem 0 0 0.8rem">관심상품 목록</Title>
       {favorites.length === 0 ? (
         <NoProduct pageName={'관심상품 목록'} />
       ) : (
-        <Flex p="3.5rem 0 0 1rem" align="center" gap="xl" wrap="wrap">
-          {favorites.map(({ id, imgURL, name, brand, price }) => (
-            <Card key={id} padding="lg" maw="38rem" fz="1.6rem" withBorder>
+        <Flex p="3.5rem 0 0 1rem" align="center" maw="120rem" m="auto" justify="" gap="xl" wrap="wrap">
+          {favorites.map(({ id, imgURL, name, brand, price, feature }) => (
+            <Card
+              key={id}
+              padding="lg"
+              maw="35rem"
+              fz="1.6rem"
+              withBorder
+              sx={{
+                '@media (max-width: 768px)': {
+                  width: '20rem',
+                },
+              }}>
               <Card.Section>
                 <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
               </Card.Section>
@@ -56,7 +66,7 @@ const WishList = () => {
               </Group>
 
               <Text align="left" size="1.4rem" color="dimmed">
-                {brand.kr}
+                {brand.kr} / {feature}
               </Text>
 
               <Group position="apart" my="md">

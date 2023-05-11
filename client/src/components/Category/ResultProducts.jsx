@@ -9,7 +9,7 @@ const ResultProducts = ({ products, cols = 3 }) => (
       <SadIcon>등록된 상품이 없습니다.</SadIcon>
     ) : (
       <SimpleGrid cols={cols} pl="2rem">
-        {products.map(({ id, imgURL, name, price, brand }) => (
+        {products.map(({ id, imgURL, name, price, brand, feature }) => (
           <Link key={id} to={`${PATH.PRODUCTS}/${id}`}>
             <Card fz="1.6rem" padding="lg" withBorder>
               <Card.Section pos="relative">
@@ -26,11 +26,8 @@ const ResultProducts = ({ products, cols = 3 }) => (
               </Group>
 
               <Text align="left" size="1.4rem" color="dimmed">
-                {brand.kr}
+                {brand.kr} / {feature}
               </Text>
-              {/* 1. 묻기 */}
-              {/* <Text>{feature}</Text>
-              <Text>{color}</Text> */}
               <Text fw={500} size="1.5rem" m="1rem 0">
                 {`${price.toLocaleString('ko-KR')} 원`}
               </Text>

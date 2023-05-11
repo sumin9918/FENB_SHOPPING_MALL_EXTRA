@@ -85,7 +85,7 @@ const Filters = ({ filters, handleResetFilters, handleCheckFilters }) => {
                       onClick={() => handleCheckFilters({ color: en })}
                       sx={{
                         '.mantine-ColorSwatch-shadowOverlay': {
-                          boxShadow: en === 'black' && `${theme.colors.gray[6]} 0 0 0 0.0625rem inset`,
+                          boxShadow: en === 'black' && `${theme.colors.gray[7]} 0 0 0 0.0625rem inset`,
                         },
                       }}>
                       {colorFilters.at(i) && (

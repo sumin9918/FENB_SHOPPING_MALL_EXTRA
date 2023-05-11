@@ -14,7 +14,7 @@ const OrderComplete = () => {
   const navigate = useNavigate();
 
   return (
-    <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
+    <Container size="1200px" w="100%" fz="1.6rem">
       <Title p="4.8rem" sx={{ textAlign: 'center' }}>
         결제가 정상적으로 완료되었습니다
       </Title>

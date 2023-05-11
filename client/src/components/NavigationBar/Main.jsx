@@ -209,7 +209,7 @@ const UtilArea = ({ user, handleSignOutClick, redirectTo }) => {
 };
 
 const Main = () => {
-  const matches = useMediaQuery('(min-width: 880px)');
+  const matches = useMediaQuery('(min-width: 768px)');
   const [user, setUser] = useRecoilState(userState);
   const { search: rawSearch, pathname } = useLocation();
   const { search } = getDecodeSearch(rawSearch);

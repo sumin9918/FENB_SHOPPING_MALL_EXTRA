@@ -15,10 +15,8 @@ const Order = () => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const { colorScheme } = useMantineColorScheme();
 
-  console.log('matches : ', matches);
-
   return (
-    <Container size="1200px" w="100%" py="4rem" fz="1.6rem">
+    <Container size="1200px" w="100%" fz="1.6rem">
       {matches ? (
         <Title fz="2.4rem" p="4.8rem" pt="2.4rem" sx={{ textAlign: 'center' }}>
           결제하기

@@ -20,19 +20,27 @@ const Category = () => {
     <Navbar.Section grow mt="md" m="auto" h="auto">
       <Flex m="auto" justify="space-between">
         <Tabs
-          color={colorScheme === 'dark' ? 'gray.0' : 'blue.6'}
+          color={colorScheme === 'dark' ? 'gray.0' : 'dark'}
           sx={{
             'button[data-active]': {
               fontWeight: 'bold',
-              borderWidth: '.2rem',
+              borderBottom: '2px solid',
             },
           }}
           value={activeTab}
           onTabChange={setActiveTab}>
-          <Tabs.List fw="bold" sx={{ border: 'none' }}>
+          <Tabs.List fw="bold">
             {categories.map(({ kr, en }) => (
               <Link key={en} to={`${PATH.CATEGORY}?category=${en}`}>
-                <Tabs.Tab value={en} fz="1.6rem" c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'}>
+                <Tabs.Tab
+                  value={en}
+                  fz="1.6rem"
+                  c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'}
+                  sx={{
+                    ':hover': {
+                      border: 'none',
+                    },
+                  }}>
                   {kr}
                 </Tabs.Tab>
               </Link>

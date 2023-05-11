@@ -9,7 +9,7 @@ const Products = () => {
   return (
     <Container p="0" maw="120rem" pos="relative">
       <Flex gap="xl" justify="center" align="center" direction="row" wrap="wrap" m="5rem 0">
-        {products.map(({ id, name, price, imgURL, brand }) => (
+        {products.map(({ id, name, price, imgURL, brand, feature }) => (
           <Link to={`${PATH.PRODUCTS}/${id}`} key={id}>
             <Card
               fz="1.6rem"
@@ -17,7 +17,7 @@ const Products = () => {
               w="28rem"
               withBorder
               sx={{
-                '@media (max-width: 900px)': {
+                '@media (max-width: 768px)': {
                   width: '20rem',
                 },
               }}>
@@ -35,7 +35,7 @@ const Products = () => {
               </Group>
 
               <Text align="left" size="1.4rem" color="dimmed">
-                {brand.kr}
+                {brand.kr} / {feature}
               </Text>
               <Text fw={500} size="1.5rem" m="1rem 0">
                 {`${price.toLocaleString('ko-KR')} 원`}

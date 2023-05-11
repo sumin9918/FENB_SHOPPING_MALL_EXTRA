@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Container, Stack, Group, Image } from '@mantine/core';
+import { Container, Stack, Group, Image, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useLocation } from 'react-router-dom';
 import { favoritesQuery, productsQuery, verifyQuery } from '../api/query';
 import { toggleFavorite, addCart } from '../api/fetch';
-import { Title, Info, Description, CartButton, WishListButton } from '../components/Products';
+import { Info, Description, CartButton, WishListButton } from '../components/Products';
 
 const MEDIAQUERY_WIDTH = 880;
 
@@ -19,7 +19,7 @@ const Products = () => {
 
   const currentProduct = products?.find(product => product.id === getIdfromPath(pathname));
 
-  const { id, name, description, imgURL } = currentProduct;
+  const { id, name, brand, description, imgURL } = currentProduct;
 
   const [currentSelectedSize, setCurrentSelectedSize] = useState(-1);
   const [isSizeSelected, setIsSizeSelected] = useState(null);
@@ -71,7 +71,7 @@ const Products = () => {
             <Description>{description}</Description>
           </Stack>
           <Stack m="4.8rem 0.8rem 0 0" p="0 4.8rem 0 2.4rem" miw="45.6rem" fz="1.6rem" spacing={0}>
-            <Title>{name}</Title>
+            <Title>{`[${brand.kr}] ${name}`}</Title>
             <Info
               currentProduct={currentProduct}
               isSizeSelected={isSizeSelected}
@@ -96,7 +96,7 @@ const Products = () => {
         </Group>
       ) : (
         <Stack m="4.8rem 0.8rem 0 0" p="0 5rem" miw="45rem" fz="1.6rem" spacing={0}>
-          <Title>{name}</Title>
+          <Title>{`[${brand.kr}] ${name}`}</Title>
           <Image src={imgURL} />
           <Info
             currentProduct={currentProduct}
