@@ -1,10 +1,4 @@
-# FENB 486 Shoes Shopping Mall
-
-> _Contributors: [Kyusung Sohn](https://github.com/sqsung) and [Dong Gyu Lee](https://github.com/tenenger7125)_
-
-🧠 **[김경우's github](https://github.com/KimKyungWoo94)**
-
-🍇 **[김경재's github](https://github.com/GitHub-KJKim)**
+# FENB 486 Shoes Shopping Mall - 2차 추가 작업
 
 ⭐ **[이동규's github](https://github.com/tenenger7125)**
 
