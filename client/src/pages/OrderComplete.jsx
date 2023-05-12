@@ -5,6 +5,7 @@ import { OrderInfo, OrderProducts } from '../components/OrderComplete';
 import { CustomButton } from '../components';
 import { historyQuery } from '../api/query';
 import { PATH } from '../constants';
+import usePreventGoBack from '../hooks/usePreventGoBack';
 
 const OrderComplete = () => {
   const { data: history } = useQuery(historyQuery());
@@ -12,6 +13,8 @@ const OrderComplete = () => {
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
+
+  usePreventGoBack();
 
   return (
     <Container size="1200px" w="100%" fz="1.6rem">
