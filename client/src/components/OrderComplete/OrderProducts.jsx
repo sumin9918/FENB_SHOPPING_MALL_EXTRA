@@ -1,8 +1,6 @@
 import { Stack, Title, Group, Image, Text, useMantineColorScheme } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { COLORS } from '../../constants';
-
-const MEDIAQUERY_WIDTH = 768;
+import { useMediaQuery } from '../../hooks';
+import { COLORS, MEDIAQUERY_WIDTH } from '../../constants';
 
 const OrderProducts = ({ products }) => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);

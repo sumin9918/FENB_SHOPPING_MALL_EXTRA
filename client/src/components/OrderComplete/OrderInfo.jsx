@@ -1,8 +1,6 @@
 import { Stack, Title, Group, Text } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { PAYMENT_METHODS } from '../../constants';
-
-const MEDIAQUERY_WIDTH = 768;
+import { useMediaQuery } from '../../hooks';
+import { PAYMENT_METHODS, MEDIAQUERY_WIDTH } from '../../constants';
 
 const OrderInfo = ({ history }) => {
   const { orderDate, paymentMethod, discountedTotalPrice, deliveryAddress } = history;
