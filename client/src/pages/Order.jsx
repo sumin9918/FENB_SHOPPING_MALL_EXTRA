@@ -1,10 +1,9 @@
 import { Container, Title, Group, Stack, Text, useMantineColorScheme } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
 import { Payment, CartHistory, ResponsiveCartHistory } from '../components/Order';
 import { useCoupon } from '../hooks/order';
 import { useTotalCartItems, useTotalPrice } from '../hooks/carts';
-
-const MEDIAQUERY_WIDTH = 768;
+import { MEDIAQUERY_WIDTH } from '../constants';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 const Order = () => {
   const totalCartItems = useTotalCartItems();
