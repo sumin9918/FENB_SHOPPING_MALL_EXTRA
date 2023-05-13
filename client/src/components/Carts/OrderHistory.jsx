@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { Stack, Title, Group, Text, useMantineColorScheme } from '@mantine/core';
-import { PATH } from '../../constants';
 import CustomButton from '../CustomButton';
+import { useMediaQuery } from '../../hooks';
 import { useCountCarts, useTotalPrice } from '../../hooks/carts';
+import { MEDIAQUERY_WIDTH, PATH } from '../../constants';
 
 const OrderHistory = () => {
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
@@ -13,25 +15,8 @@ const OrderHistory = () => {
   const totalPrice = useTotalPrice();
 
   return (
-    <Stack
-      w="33.333333%"
-      px="0.8rem"
-      py="0.8rem"
-      mb="2.4rem"
-      mx="auto"
-      spacing={0}
-      sx={{
-        '@media (max-width: 768px)': {
-          width: '90%',
-        },
-      }}>
-      <Title
-        mb="2.4rem"
-        sx={{
-          '@media (max-width: 768px)': {
-            textAlign: 'center',
-          },
-        }}>
+    <Stack w={matches ? '33.333333%' : '90%'} px="0.8rem" py="0.8rem" mb="2.4rem" mx="auto" spacing={0}>
+      <Title mb="2.4rem" ta={!matches && 'center'}>
         주문 내역
       </Title>
       <Group position="apart" mb="0.8rem" py="0.4rem">

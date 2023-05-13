@@ -16,18 +16,7 @@ const CartList = () => {
   const { colorScheme } = useMantineColorScheme();
 
   return (
-    <Stack
-      w="66.66666%"
-      pl="0.8rem"
-      pr="10rem"
-      mx="auto"
-      spacing={0}
-      sx={{
-        '@media (max-width: 768px)': {
-          width: '90%',
-          paddingRight: '0.8rem',
-        },
-      }}>
+    <Stack w={matches ? '66.66666%' : '90%'} pl="0.8rem" pr={matches ? '10rem' : '0.8rem'} mx="auto" spacing={0}>
       {matches ? (
         <Title py="0.8rem">장바구니</Title>
       ) : (
