@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { Group, Stack, Title, Text, useMantineColorScheme } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
 import CartItem from './CartItem';
 import NoProduct from '../NoProduct';
 import { cartsQuery } from '../../api/query';
+import { useMediaQuery } from '../../hooks';
 import { useTotalCartItems, useTotalPrice } from '../../hooks/carts';
-
-const MEDIAQUERY_WIDTH = 768;
+import { MEDIAQUERY_WIDTH } from '../../constants';
 
 const CartList = () => {
   const { data: carts } = useQuery(cartsQuery());
@@ -17,7 +16,18 @@ const CartList = () => {
   const { colorScheme } = useMantineColorScheme();
 
   return (
-    <Stack w={matches ? '66.66666%' : '90%'} pl="0.8rem" pr={matches ? '10rem' : '0.8rem'} mx="auto" spacing={0}>
+    <Stack
+      w="66.66666%"
+      pl="0.8rem"
+      pr="10rem"
+      mx="auto"
+      spacing={0}
+      sx={{
+        '@media (max-width: 768px)': {
+          width: '90%',
+          paddingRight: '0.8rem',
+        },
+      }}>
       {matches ? (
         <Title py="0.8rem">장바구니</Title>
       ) : (

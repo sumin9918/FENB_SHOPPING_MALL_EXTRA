@@ -8,6 +8,7 @@ export { default as BRANDS } from './brands';
 export { default as INITIALFILTERS } from './initialFilters';
 export { default as INIT_FIELD } from './initField';
 export { default as PAYMENT_METHODS } from './paymentMethods';
+export { default as MEDIAQUERY_WIDTH } from './mediaqueryWidth';
 export {
   PRODUCTS_QUERY_KEY,
   PAGE_PRODUCTS_QUERY_KEY,

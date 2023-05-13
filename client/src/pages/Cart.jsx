@@ -1,8 +1,7 @@
 import { Container, Group, Stack } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
 import { CartList, OrderHistory } from '../components/Carts';
-
-const MEDIAQUERY_WIDTH = 768;
+import { useMediaQuery } from '../hooks';
+import { MEDIAQUERY_WIDTH } from '../constants';
 
 const Cart = () => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);

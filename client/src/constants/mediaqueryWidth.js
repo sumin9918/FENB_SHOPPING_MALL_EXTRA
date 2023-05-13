@@ -1,0 +1,3 @@
+const MEDIAQUERY_WIDTH = 768;
+
+export default MEDIAQUERY_WIDTH;
