@@ -1,10 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { Stack, Title, Group, Image, Text, useMantineColorScheme } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
 import { cartsQuery } from '../../api/query';
-import { COLORS } from '../../constants';
-
-const MEDIAQUERY_WIDTH = 768;
+import { useMediaQuery } from '../../hooks';
+import { MEDIAQUERY_WIDTH } from '../../constants';
 
 const CartHistoryItemList = () => {
   const { data: carts } = useQuery(cartsQuery());
@@ -41,7 +39,7 @@ const CartHistoryItemList = () => {
               {name}
             </Title>
             <Text>사이즈 : {selectedSize}</Text>
-            <Text>색상 : {COLORS[color].kr}</Text>
+            <Text>색상 : {color.kr}</Text>
             <Text>
               수량 / 가격 : {quantity} / {price.toLocaleString()} 원
             </Text>
