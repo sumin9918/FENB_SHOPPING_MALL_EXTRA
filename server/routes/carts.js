@@ -5,6 +5,7 @@ const { getStock, getSelectedSizeStock } = require('../controllers/stocks');
 const { cartStockCheck } = require('../middleware/stock');
 const { authCheck } = require('../middleware/auth');
 const { getProduct } = require('../controllers/products');
+const { CATEGORIES, COLORS } = require('../constants/products');
 
 router.get('/me', authCheck, cartStockCheck, (req, res) => {
   const { email } = req.locals;
@@ -12,6 +13,8 @@ router.get('/me', authCheck, cartStockCheck, (req, res) => {
   const { products } = getUserCart(email);
   const addStockToUserCart = products.map(product => ({
     ...product,
+    category: CATEGORIES[product.category],
+    color: COLORS[product.color],
     stocks: getStock(product.id),
   }));
 
