@@ -6,8 +6,11 @@ const useAddCartMutation = () =>
   useGenericMutation({
     queryKey: CARTS_QUERY_KEY,
     mutationFn: addCart,
-    onMutate({ id, selectedSize }) {
-      return carts => [...carts, { id, selectedSize, quantity: 1 }];
+    onMutate({ selectedSize, currentProduct }) {
+      return carts =>
+        carts
+          ? [...carts, { ...currentProduct, selectedSize, quantity: 1 }]
+          : [{ ...currentProduct, selectedSize, quantity: 1 }];
     },
   });
 

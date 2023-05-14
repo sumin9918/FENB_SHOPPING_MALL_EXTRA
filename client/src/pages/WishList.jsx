@@ -26,7 +26,7 @@ const WishList = () => {
   const { mutate } = useRemoveWishItemMutation();
 
   const handleRemoveWishItemClick = id => {
-    mutate(id);
+    mutate({ id });
   };
 
   const handleClickProduct = id => {
@@ -36,7 +36,7 @@ const WishList = () => {
   return (
     <Container size="120rem">
       <Title p="0.8rem 0 0 0.8rem">관심상품 목록</Title>
-      {favorites.length === 0 ? (
+      {!favorites.length ? (
         <NoProduct pageName={'관심상품 목록'} />
       ) : (
         <Flex p="3.5rem 0 0 1rem" align="center" maw="120rem" m="auto" justify="" gap="xl" wrap="wrap">

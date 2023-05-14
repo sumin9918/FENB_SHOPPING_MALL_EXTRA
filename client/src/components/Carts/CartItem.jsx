@@ -2,13 +2,14 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Stack, Group, Image, Title, Text, ActionIcon, NumberInput, useMantineColorScheme, rem } from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
-import { useChangeCartQuantityMutation, useRemoveCartMutation } from '../../hooks/carts';
-import { CATEGORIES, COLORS, PATH } from '../../constants';
+import { useChangeCartQuantityMutation, useRemoveCartMutation, useGetStocks } from '../../hooks/carts';
+import { PATH } from '../../constants';
 
 const CartItem = ({ cart }) => {
   const { colorScheme } = useMantineColorScheme();
 
-  const { id, category, color, name, price, imgURL, selectedSize, quantity, stocks } = cart;
+  const { id, category, color, name, price, imgURL, selectedSize, quantity } = cart;
+  const stocks = useGetStocks(id);
 
   const handlers = useRef();
 
@@ -49,8 +50,8 @@ const CartItem = ({ cart }) => {
                   {name}
                 </Link>
               </Title>
-              <Text>{CATEGORIES[category]}</Text>
-              <Text>{COLORS[color].kr}</Text>
+              <Text>{category.kr}</Text>
+              <Text>{color.kr}</Text>
               <Text>사이즈 {selectedSize}</Text>
               <Group spacing="0.4rem" mb="0.8rem">
                 <Text sx={{ verticalAlign: 'bottom' }}>수량</Text>

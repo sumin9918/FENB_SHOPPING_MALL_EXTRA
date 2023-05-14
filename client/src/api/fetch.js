@@ -68,7 +68,7 @@ export const postOrder = async paymentInfo => {
   await axios.post('/api/order/pay', { ...paymentInfo });
 };
 
-export const toggleFavorite = async id => {
+export const toggleFavorite = async ({ id }) => {
   await axios.post('/api/favorites/me', { id });
 };
 

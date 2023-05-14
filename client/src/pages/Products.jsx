@@ -4,8 +4,9 @@ import { Container, Stack, Group, Image, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useLocation } from 'react-router-dom';
 import { favoritesQuery, productsQuery, verifyQuery } from '../api/query';
-import { toggleFavorite, addCart } from '../api/fetch';
 import { Info, Description, CartButton, WishListButton } from '../components/Products';
+import { useAddCartMutation } from '../hooks/carts';
+import { useToggleWishItemMutation } from '../hooks/wishList';
 
 const MEDIAQUERY_WIDTH = 768;
 
@@ -14,6 +15,9 @@ const Products = () => {
   const { data: favorites } = useQuery(favoritesQuery());
   const { data: verify } = useQuery(verifyQuery());
   const { pathname } = useLocation();
+
+  const { mutateAsync: addCart } = useAddCartMutation();
+  const { mutate: toggleFavorite } = useToggleWishItemMutation();
 
   const getIdfromPath = pathname => +pathname.split('/').at(-1);
 
@@ -50,7 +54,7 @@ const Products = () => {
 
   const handleCartClick = async selectedSize => {
     try {
-      await addCart({ id, selectedSize });
+      await addCart({ id, selectedSize, currentProduct });
     } catch (e) {
       setHasStock(selectedSize !== currentSelectedSize);
     }
@@ -59,7 +63,7 @@ const Products = () => {
   const handleWishListToggle = () => {
     setIsFavorite(!isFavorite);
 
-    toggleFavorite(id);
+    toggleFavorite({ id, isFavorite, currentProduct });
   };
 
   return (
