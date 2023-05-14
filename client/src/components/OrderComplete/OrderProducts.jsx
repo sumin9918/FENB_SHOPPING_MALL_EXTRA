@@ -17,7 +17,7 @@ const OrderProducts = ({ products }) => {
         spacing="2rem"
         sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
         {products.map(({ selectedSize, quantity, name, price, color, imgURL, id }) => (
-          <Group key={id} justify="center" fz="1.4rem" sx={{ flexWrap: 'nowrap' }}>
+          <Group key={`${id}-${selectedSize}`} justify="center" fz="1.4rem" sx={{ flexWrap: 'nowrap' }}>
             <div style={{ width: '20%', minWidth: `${matches ? '10.8rem' : '7.8rem'}` }}>
               <Image
                 src={imgURL}
