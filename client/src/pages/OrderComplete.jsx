@@ -4,8 +4,8 @@ import { Container, Stack, Title, useMantineColorScheme } from '@mantine/core';
 import { OrderInfo, OrderProducts } from '../components/OrderComplete';
 import { CustomButton } from '../components';
 import { historyQuery } from '../api/query';
+import { usePreventGoBack } from '../hooks';
 import { PATH } from '../constants';
-import usePreventGoBack from '../hooks/usePreventGoBack';
 
 const OrderComplete = () => {
   const { data: history } = useQuery(historyQuery());

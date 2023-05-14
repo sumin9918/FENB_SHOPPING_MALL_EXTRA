@@ -18,18 +18,10 @@ const useMediaQuery = query => {
 
     handleChange();
 
-    if (matchMedia.onchange) {
-      matchMedia.onchange(handleChange);
-    } else {
-      matchMedia.addEventListener('change', handleChange);
-    }
+    matchMedia.addEventListener('change', handleChange);
 
     return () => {
-      if (matchMedia.onchange) {
-        matchMedia.onchange(handleChange);
-      } else {
-        matchMedia.addEventListener('change', handleChange);
-      }
+      matchMedia.removeEventListener('change', handleChange);
     };
   }, [query]);
 

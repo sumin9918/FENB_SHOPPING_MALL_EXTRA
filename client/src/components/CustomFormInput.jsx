@@ -15,7 +15,7 @@ const CustomFormInput = styled(TextInput)`
     font-size: 1.4rem;
   }
 
-  @media (max-width: 765px) {
+  @media (max-width: 768px) {
     width: 100vw;
   }
 `;

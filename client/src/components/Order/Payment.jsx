@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Stack, useMantineColorScheme } from '@mantine/core';
+import { useMediaQuery } from '../../hooks';
 import { useOrderInfo } from '../../hooks/order';
 import { useGetAddresses } from '../../hooks/address';
 import { postOrder } from '../../api/fetch';
-import { INIT_FIELD, PATH } from '../../constants';
+import { INIT_FIELD, MEDIAQUERY_WIDTH, PATH } from '../../constants';
 import Address from './Address';
 import Coupons from './Coupons';
 import SelectPaymentMethod from './SelectPaymentMethod';
@@ -13,6 +14,7 @@ import CustomButton from '../CustomButton';
 const Payment = ({ changeDiscount }) => {
   const addresses = useGetAddresses();
 
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
@@ -35,16 +37,7 @@ const Payment = ({ changeDiscount }) => {
   };
 
   return (
-    <Stack
-      w="66.66667%"
-      mx="auto"
-      spacing="5rem"
-      sx={{
-        '@media (max-width: 768px)': {
-          width: '90%',
-          paddingRight: '5rem',
-        },
-      }}>
+    <Stack w={matches ? '66.66667%' : '90%'} mx="auto" pr={!matches && '5rem'} spacing="5rem">
       <Address
         field={field}
         setFiled={setFiled}
