@@ -4,7 +4,6 @@ import { Container, Stack, Title, useMantineColorScheme } from '@mantine/core';
 import { OrderInfo, OrderProducts } from '../components/OrderComplete';
 import { CustomButton } from '../components';
 import { historyQuery } from '../api/query';
-import { usePreventGoBack } from '../hooks';
 import { PATH } from '../constants';
 
 const OrderComplete = () => {
@@ -13,8 +12,6 @@ const OrderComplete = () => {
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
-
-  usePreventGoBack();
 
   return (
     <Container size="1200px" w="100%" fz="1.6rem">

@@ -14,7 +14,7 @@ import {
 } from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
 import { favoritesQuery } from '../api/query';
-import { useRemoveWishItemMutation } from '../hooks/wishList';
+import { useToggleWishItemMutation } from '../hooks/wishList';
 import { PATH } from '../constants';
 import { NoProduct } from '../components';
 
@@ -23,10 +23,10 @@ const WishList = () => {
   const theme = useMantineTheme();
   const navigate = useNavigate();
 
-  const { mutate } = useRemoveWishItemMutation();
+  const { mutate } = useToggleWishItemMutation();
 
   const handleRemoveWishItemClick = id => {
-    mutate({ id });
+    mutate({ id, isFavorite: true });
   };
 
   const handleClickProduct = id => {

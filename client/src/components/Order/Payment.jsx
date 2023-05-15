@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Stack, useMantineColorScheme } from '@mantine/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMediaQuery } from '../../hooks';
 import { useOrderInfo } from '../../hooks/order';
 import { useGetAddresses } from '../../hooks/address';
 import { postOrder } from '../../api/fetch';
-import { INIT_FIELD, MEDIAQUERY_WIDTH, PATH } from '../../constants';
+import { CARTS_QUERY_KEY, INIT_FIELD, MEDIAQUERY_WIDTH, PATH } from '../../constants';
 import Address from './Address';
 import Coupons from './Coupons';
 import SelectPaymentMethod from './SelectPaymentMethod';
@@ -36,6 +37,8 @@ const Payment = ({ changeDiscount }) => {
     changeAddressId(newAddress.id);
   };
 
+  const queryClient = useQueryClient();
+
   return (
     <Stack w={matches ? '66.66667%' : '90%'} mx="auto" pr={!matches && '5rem'} spacing="5rem">
       <Address
@@ -52,9 +55,11 @@ const Payment = ({ changeDiscount }) => {
           disabled={!field.info}
           color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
           onClick={async () => {
+            queryClient.removeQueries(CARTS_QUERY_KEY);
+
             await postOrder(getOrderInfo());
 
-            navigate(PATH.ORDER_COMPLETE);
+            navigate(PATH.ORDER_COMPLETE, { replace: true });
           }}>
           주문결제
         </CustomButton>

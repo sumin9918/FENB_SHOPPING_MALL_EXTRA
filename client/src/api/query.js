@@ -75,7 +75,7 @@ export const cartsQuery = options => ({
   queryKey: CARTS_QUERY_KEY,
   queryFn: fetchCarts,
   retry: 0,
-  staleTime: 3000,
+  // staleTime: 3000,
   ...options,
 });
 
