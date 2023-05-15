@@ -1,31 +1,32 @@
+import { BiSearch } from 'react-icons/bi';
+import { BsFillSuitHeartFill } from 'react-icons/bs';
+import { SlHandbag } from 'react-icons/sl';
+import { forwardRef, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRecoilState } from 'recoil';
 import {
-  useMantineColorScheme,
-  Navbar,
-  Flex,
-  Image,
-  Autocomplete,
   ActionIcon,
+  Autocomplete,
+  Avatar,
+  Flex,
   Group,
+  Image,
+  Menu,
+  Navbar,
   Stack,
   Text,
-  Menu,
-  Avatar,
   Tooltip,
+  useMantineColorScheme,
 } from '@mantine/core';
-import { BiSearch } from 'react-icons/bi';
-import { SlHandbag } from 'react-icons/sl';
-import { BsFillSuitHeartFill } from 'react-icons/bs';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { forwardRef, useEffect, useState } from 'react';
-import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
-import { useQueryClient } from '@tanstack/react-query';
-import { DarkMode } from '../index';
-import { userState } from '../../recoil/atoms';
-import { getDecodeSearch } from '../../utils/location';
+import { useDebouncedValue } from '@mantine/hooks';
 import { requestSignout } from '../../api/fetch';
-import { PATH, AUTH_QUERY_KEY } from '../../constants';
+import { userState } from '../../recoil/atoms';
+import { useMediaQuery } from '../../hooks';
 import { useSearchProducts } from '../../hooks/products';
+import { getDecodeSearch } from '../../utils/location';
+import { AUTH_QUERY_KEY, MEDIAQUERY_WIDTH, PATH } from '../../constants';
+import { DarkMode } from '../index';
 
 const AutoCompleteItem = forwardRef(({ value, id, onMouseDown, ...rest }, ref) => {
   const navigate = useNavigate();
@@ -209,7 +210,7 @@ const UtilArea = ({ user, handleSignOutClick, redirectTo }) => {
 };
 
 const Main = () => {
-  const matches = useMediaQuery('(min-width: 768px)');
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const [user, setUser] = useRecoilState(userState);
   const { search: rawSearch, pathname } = useLocation();
   const { search } = getDecodeSearch(rawSearch);

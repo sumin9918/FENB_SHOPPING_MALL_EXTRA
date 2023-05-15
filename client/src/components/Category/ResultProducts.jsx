@@ -3,7 +3,7 @@ import { SimpleGrid, Image, Text, Card, Group, Badge } from '@mantine/core';
 import { SadIcon } from '..';
 import { PATH } from '../../constants';
 
-const ResultProducts = ({ products, cols = 3 }) => (
+const ResultProducts = ({ products }) => (
   <>
     {products.length === 0 ? (
       <SadIcon>등록된 상품이 없습니다.</SadIcon>

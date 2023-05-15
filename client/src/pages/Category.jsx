@@ -1,13 +1,13 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Container, Stack, Flex } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { getDecodeSearch } from '../utils/location';
+import { Container, Flex } from '@mantine/core';
+import { FiltersContainer, Header, ResultProducts } from '../components/Category';
 import { filteredProductsQuery } from '../api/query';
+import { useMediaQuery } from '../hooks';
 import { filteredAndSortedProducts } from '../utils';
-import { PRICES, SIZES, COLORS, GENDER, BRANDS } from '../constants';
-import { Header, FiltersContainer, ResultProducts } from '../components/Category';
+import { getDecodeSearch } from '../utils/location';
+import { BRANDS, COLORS, GENDER, MEDIAQUERY_WIDTH, PRICES, SIZES } from '../constants';
 
 const INITIAL_FILTERS = {
   priceFilters: Array.from({ length: PRICES.length }, () => false),
@@ -18,7 +18,6 @@ const INITIAL_FILTERS = {
 };
 
 const INITIAL_SORT = 'favorite';
-const MEDIAQUERY_WIDTH = 768;
 
 const Category = () => {
   const { search: rawSearch } = useLocation();
@@ -76,27 +75,16 @@ const Category = () => {
         productCount={newProducts.length}
         handleSelectSortOption={handleSelectSortOption}
       />
-      {matches ? (
-        <Flex>
-          <FiltersContainer
-            type={'larger'}
-            filters={filters}
-            handleResetFilters={handleResetFilters}
-            handleCheckFilters={handleCheckFilters}
-          />
-          <ResultProducts products={newProducts} />
-        </Flex>
-      ) : (
-        <Stack>
-          <FiltersContainer
-            type={'smaller'}
-            filters={filters}
-            handleResetFilters={handleResetFilters}
-            handleCheckFilters={handleCheckFilters}
-          />
-          <ResultProducts cols={2} products={newProducts} />
-        </Stack>
-      )}
+
+      <Flex direction={matches ? 'row' : 'column'}>
+        <FiltersContainer
+          type={matches ? 'larger' : 'smaller'}
+          filters={filters}
+          handleResetFilters={handleResetFilters}
+          handleCheckFilters={handleCheckFilters}
+        />
+        <ResultProducts cols={matches ? 3 : 2} products={newProducts} />
+      </Flex>
     </Container>
   );
 };
