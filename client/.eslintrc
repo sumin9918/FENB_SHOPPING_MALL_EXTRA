@@ -12,7 +12,8 @@
     "plugin:import/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/jsx-runtime"
   ],
   "settings": {
     "react": { "version": "detect" },
@@ -24,18 +25,90 @@
     }
   },
   "rules": {
-    // Note: you must disable the base rule as it can report incorrect errors
+    // before define to use rule
     "no-use-before-define": "off",
+    // other scope variable declare rule
     "no-shadow": "off",
+    // ternary expressions rule
     "no-nested-ternary": "off",
+    // to use absolute path rule
+    "import/no-unresolved": "off",
+    // cycle refer rule
     "import/no-cycle": "off",
+    // import external module rule
     "import/no-extraneous-dependencies": "off",
+    // code rule(ex. for, for-in, while ...etc)
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
-    "react/react-in-jsx-scope": "off", // "React" must be in scope when using JSX
-    "react/prop-types": "off",
+    // for debug(display name) rule
     "react/display-name": "off",
-    "import/prefer-default-export": "off"
-    // "no-var": "warn"
-    // "react-hooks/exhaustive-deps": ["warn", { additionalHooks: "useRecoilCallback" }], // for recoil
+    // props type rule
+    "react/prop-types": "off",
+    // export default prefer rule
+    "import/prefer-default-export": "off",
+    // import react in jsx rules : 2 property
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-uses-react": "off",
+    // attribute boolean value rule
+    "react/jsx-boolean-value": ["error", "never"],
+    // useEffect deps rule
+    "react-hooks/exhaustive-deps": ["warn", { "enableDangerousAutofixThisMayCauseInfiniteLoops": true }], // for recoil
+    // props sort rule : 2 property
+    "react/require-default-props": "error",
+    "react/jsx-sort-props": [
+      2,
+      {
+        "callbacksLast": true,
+        "shorthandFirst": false,
+        "shorthandLast": true,
+        "multiline": "last",
+        "ignoreCase": true,
+        "reservedFirst": true,
+        "noSortAlphabetically": false
+      }
+    ],
+    // import sort rule
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "unknown", ["internal", "parent", "sibling", "index"], "object", "type"],
+        "pathGroups": [
+          { "pattern": "react", "group": "builtin", "position": "before" },
+          { "pattern": "{react-dom,react-dom/**}", "group": "builtin", "position": "before" },
+
+          { "pattern": "react-router-dom", "group": "external", "position": "before" },
+          { "pattern": "axios", "group": "external", "position": "before" },
+          { "pattern": "@tanstack/**", "group": "external", "position": "before" },
+          { "pattern": "recoil", "group": "external", "position": "before" },
+          { "pattern": "react-hook-form", "group": "external", "position": "before" },
+          { "pattern": "{@hookform/resolvers,@hookform/resolvers/**}", "group": "external", "position": "before" },
+          { "pattern": "zod", "group": "external", "position": "before" },
+          { "pattern": "react-daum-postcode", "group": "external", "position": "before" },
+
+          { "pattern": "@mantine/core", "group": "unknown", "position": "before" },
+          { "pattern": "@mantine/**", "group": "unknown", "position": "before" },
+          { "pattern": "@emotion/**", "group": "unknown", "position": "before" },
+          { "pattern": "embla-carousel-autoplay", "group": "unknown", "position": "before" },
+          { "pattern": "react-icons/**", "group": "unknown", "position": "before" },
+
+          { "pattern": "{src,src/**}", "group": "internal", "position": "before" },
+          { "pattern": "{pages,pages/**}", "group": "internal", "position": "before" },
+          { "pattern": "{components,components/**}", "group": "internal", "position": "before" },
+          { "pattern": "{api,api/**}", "group": "internal", "position": "before" },
+          { "pattern": "{recoil/**}", "group": "internal", "position": "before" },
+          { "pattern": "{hooks,hooks/**}", "group": "internal", "position": "before" },
+          { "pattern": "{utils,utils/**}", "group": "internal", "position": "before" },
+          { "pattern": "{schema,schema/**}", "group": "internal", "position": "before" },
+          { "pattern": "{constants,constants/**}", "group": "internal", "position": "before" },
+          { "pattern": "{styles,styles/**}", "group": "internal", "position": "before" }
+        ],
+        "distinctGroup": false,
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
   }
 }
