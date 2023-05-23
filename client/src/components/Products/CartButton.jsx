@@ -74,7 +74,7 @@ const CartButton = ({ currentProduct, currentSelectedSize, isSignInRef, isSizeSe
                         <Text color="dimmed" fw="500" fz="1.4rem">
                           {brand.kr}
                         </Text>
-                        <Text>{`${price.toLocaleString()} 원`}</Text>
+                        <Text>{`${price.toLocaleString('ko-KR')} 원`}</Text>
                       </Stack>
                     </Group>
                     <Button

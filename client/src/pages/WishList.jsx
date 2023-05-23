@@ -10,7 +10,7 @@ import {
   Text,
   Badge,
   UnstyledButton,
-  Flex,
+  Grid,
   useMantineTheme,
 } from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
@@ -41,37 +41,47 @@ const WishList = () => {
 
   return (
     <Container size="120rem">
-      <Title p="0.8rem 0 0 0.8rem">관심상품 목록</Title>
+      <Title>관심상품 목록</Title>
       {favorites.length ? (
-        <Flex align="center" gap="xl" m="auto" maw="120rem" p="3.5rem 0 0 1rem" wrap="wrap">
+        <Grid p="3.5rem">
           {favorites.map(({ id, imgURL, name, brand, price, feature }) => (
-            <Card key={id} fz="1.6rem" maw={matches ? '35rem' : '20rem'} padding="lg" withBorder>
-              <Card.Section>
-                <Image alt={name} src={imgURL} sx={{ cursor: 'pointer' }} onClick={handleProductClick(id)} />
-              </Card.Section>
+            <Grid.Col
+              key={id}
+              span={4}
+              sx={{
+                '@media (max-width: 768px)': {
+                  flexBasis: '50%',
+                  maxWidth: '50%',
+                },
+              }}>
+              <Card fz="1.6rem" maw={matches ? '35rem' : '20rem'} padding="lg" withBorder>
+                <Card.Section>
+                  <Image alt={name} src={imgURL} sx={{ cursor: 'pointer' }} truncate onClick={handleProductClick(id)} />
+                </Card.Section>
 
-              <Group mb="xs" mt="md" position="apart">
-                <Text sx={{ cursor: 'pointer' }} weight={500} onClick={handleProductClick(id)}>
-                  {name}
+                <Group mb="xs" mt="md" position="apart" noWrap>
+                  <Text sx={{ cursor: 'pointer' }} weight={500} truncate onClick={handleProductClick(id)}>
+                    {name}
+                  </Text>
+                  <Badge color="skyblue" h="2rem" sx={{ flexShrink: 0 }} variant="light">
+                    무료배송
+                  </Badge>
+                </Group>
+
+                <Text align="left" color="dimmed" size="1.4rem">
+                  {brand.kr} / {feature}
                 </Text>
-                <Badge color="skyblue" h="2rem" variant="light">
-                  무료배송
-                </Badge>
-              </Group>
 
-              <Text align="left" color="dimmed" size="1.4rem">
-                {brand.kr} / {feature}
-              </Text>
-
-              <Group my="md" position="apart">
-                <Text fw="500">{`${price.toLocaleString('ko-KR')} 원`}</Text>
-                <UnstyledButton sx={{ cursor: 'pointer' }} onClick={handleRemoveWishItemClick(id)}>
-                  <BiTrash color={theme.colors.gray[6]} size="2.5rem" />
-                </UnstyledButton>
-              </Group>
-            </Card>
+                <Group my="md" position="apart">
+                  <Text fw="500">{`${price.toLocaleString('ko-KR')} 원`}</Text>
+                  <UnstyledButton sx={{ cursor: 'pointer' }} onClick={handleRemoveWishItemClick(id)}>
+                    <BiTrash color={theme.colors.gray[6]} size="2.5rem" />
+                  </UnstyledButton>
+                </Group>
+              </Card>
+            </Grid.Col>
           ))}
-        </Flex>
+        </Grid>
       ) : (
         <NoProduct pageName={'관심상품 목록'} />
       )}

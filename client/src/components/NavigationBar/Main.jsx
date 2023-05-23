@@ -1,7 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
-import { userState } from 'recoil/atoms';
 
 import {
   ActionIcon,
@@ -25,12 +24,13 @@ import { signOut } from 'api/fetch';
 import { useMediaQuery } from 'hooks';
 import { getDecodeSearch } from 'utils';
 import { QUERY_KEY, MEDIAQUERY_WIDTH, PATH } from 'constants';
+import { userState } from 'recoil/atoms';
 
 const Main = () => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
 
   const navigate = useNavigate();
-  const { search: rawSearch, pathname } = useLocation();
+  const { search: rawSearch, pathname, state } = useLocation();
   const { search } = getDecodeSearch(rawSearch);
 
   const queryClient = useQueryClient();
@@ -46,7 +46,7 @@ const Main = () => {
     navigate(PATH.MAIN);
   };
 
-  const redirectTo = `${pathname}${search}`;
+  const redirectTo = pathname === PATH.SIGNIN || pathname === PATH.SIGNUP ? state : `${pathname}${search}`;
 
   return (
     <Group position="apart">

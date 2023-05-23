@@ -1,16 +1,16 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Center, Stack } from '@mantine/core';
-import { addressSchema } from '../../schema';
-import { addAddress } from '../../api/fetch';
-import { INIT_FIELD } from '../../constants';
-import FormInput from '../Sign/FormInput';
-import FormPhoneInput from '../Sign/FormPhoneInput';
-import FormZoneCodeInput from '../Sign/FormZoneCodeInput';
-import FormMainAddressInput from '../Sign/FormMainAddressInput';
-import CustomButton from '../CustomButton';
+
+import { Center, Container, useMantineTheme } from '@mantine/core';
+
+import { CustomButton } from 'components';
+import { FormInput, FormAddressInput } from 'components/Sign';
+import { addAddress } from 'api/fetch';
+import { addressSchema } from 'schema';
+import { INIT_FIELD } from 'constants';
 
 const InputAddress = ({ setFiled, changeSelectedAddress }) => {
+  const { colors } = useMantineTheme();
   const { handleSubmit, register, formState, trigger, setValue } = useForm({
     resolver: zodResolver(addressSchema),
   });
@@ -24,94 +24,77 @@ const InputAddress = ({ setFiled, changeSelectedAddress }) => {
       postcode: data.postcode,
     };
 
-    const res = await addAddress(newAddress);
+    const { id } = await addAddress(newAddress);
 
-    changeSelectedAddress({ ...newAddress, id: res.data.id });
+    changeSelectedAddress({ ...newAddress, id });
     setFiled({ ...INIT_FIELD, info: true });
   };
 
   return (
-    <Stack
-      w="100%"
-      align="center"
-      sx={{
-        input: {
-          fontSize: '1.6rem',
-          border: 'none',
-          borderBottomStyle: 'solid',
-          borderBottomWidth: '0.07rem',
-          borderBottomColor: '#ced4da',
-        },
-        label: {
-          fontSize: '1.6rem',
-        },
-        div: {
-          padding: '0',
-          fontSize: '1.6rem',
-        },
-      }}>
+    <Container miw="45rem">
       <form noValidate onSubmit={handleSubmit(handleAddAddress)}>
         <FormInput
-          inputType="text"
-          withAsterisk
+          formState={formState}
           id="name"
-          name="이름"
+          label="이름"
           placeholder="김펜비"
           register={register}
-          formState={formState}
-        />
-        <FormPhoneInput
-          inputType="tel"
+          type="text"
           withAsterisk
-          id="phone"
-          name="휴대전화번호"
-          placeholder="'-' 없이 입력"
-          trigger={trigger}
-          setValue={setValue}
-          register={register}
-          formState={formState}
-        />
-        <FormZoneCodeInput
-          inputType="text"
-          withAsterisk
-          id="postcode"
-          name="우편번호"
-          placeholder="주소찾기 버튼을 클릭주세요"
-          setValue={setValue}
-          register={register}
-          formState={formState}
-        />
-        <FormMainAddressInput
-          inputType="text"
-          withAsterisk
-          id="mainAddress"
-          name="주소"
-          placeholder="주소를 선택하시면 자동으로 입력됩니다."
-          register={register}
-          formState={formState}
         />
         <FormInput
-          inputType="text"
+          formState={formState}
+          id="phone"
+          label="휴대전화번호"
+          placeholder="'-' 없이 입력"
+          register={register}
+          setValue={setValue}
+          trigger={trigger}
+          type="tel"
+          withAsterisk
+        />
+        <FormAddressInput
+          formState={formState}
+          id="postcode"
+          label="우편번호"
+          placeholder="주소찾기 버튼을 클릭주세요."
+          register={register}
+          setValue={setValue}
+          type="text"
+          readOnly
+          withAsterisk
+        />
+        <FormInput
+          formState={formState}
+          id="mainAddress"
+          label="주소"
+          placeholder="주소를 선택하시면 자동으로 입력됩니다."
+          register={register}
+          type="text"
+          withAsterisk
+        />
+        <FormInput
+          formState={formState}
           id="detailAddress"
-          name="상세주소"
+          label="상세주소"
           placeholder="상세 주소를 입력하세요."
           register={register}
-          formState={formState}
+          type="text"
         />
         <Center>
           <CustomButton
-            variant="outline"
-            type="submit"
             color="gray"
+            type="submit"
+            variant="outline"
             sx={{
               width: '20rem',
-              ':hover': { backgroundColor: 'transparent', borderColor: '#228be6', color: '#228be6' },
+              ':hover': { backgroundColor: 'transparent', borderColor: colors.blue[6], color: colors.blue[6] },
             }}>
             배송지 추가
           </CustomButton>
         </Center>
       </form>
-    </Stack>
+    </Container>
   );
 };
 

@@ -1,46 +1,39 @@
-import { Container, Title, Group, Stack, Text, useMantineColorScheme } from '@mantine/core';
-import { Payment, CartHistory, ResponsiveCartHistory } from '../components/Order';
-import { useCoupon } from '../hooks/order';
-import { useTotalCartItems, useTotalPrice } from '../hooks/carts';
-import { MEDIAQUERY_WIDTH } from '../constants';
-import useMediaQuery from '../hooks/useMediaQuery';
+import { Container, Title, Group, Stack, Text, useMantineTheme, Flex } from '@mantine/core';
+
+import { Payment, CartHistory } from 'components/Order';
+import { useMediaQuery } from 'hooks';
+import { useTotalCartItems, useTotalPrice } from 'hooks/carts';
+import { useCoupon } from 'hooks/order';
+import { MEDIAQUERY_WIDTH } from 'constants';
 
 const Order = () => {
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
+  const { colorScheme } = useMantineTheme();
+
   const totalCartItems = useTotalCartItems();
   const totalPrice = useTotalPrice();
 
   const { discount, changeDiscount } = useCoupon(totalPrice);
 
-  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
-  const { colorScheme } = useMantineColorScheme();
-
   return (
-    <Container size="1200px" w="100%" fz="1.6rem">
-      {matches ? (
-        <Title fz="2.4rem" p="4.8rem" pt="2.4rem" sx={{ textAlign: 'center' }}>
+    <Container fz="1.6rem" size="1200px">
+      <Stack align="center" pb="4rem" spacing={0}>
+        <Title fz="2.4rem" py="0.8rem">
           결제하기
         </Title>
-      ) : (
-        <Stack align="center" spacing={0} pb="4rem">
-          <Title py="0.8rem">결제하기</Title>
-          <Group spacing="0.8rem" c={colorScheme === 'dark' ? 'gray.5' : 'gray.7'}>
+        {!matches && (
+          <Group c={colorScheme === 'dark' ? 'gray.5' : 'gray.7'} spacing="0.8rem">
             <Text>{totalCartItems} 개의 제품</Text>
-            <Text>l</Text>
-            <Text>{totalPrice.toLocaleString()} 원</Text>
+            <Text>/</Text>
+            <Text>{totalPrice.toLocaleString('ko-KR')} 원</Text>
           </Group>
-        </Stack>
-      )}
-      {matches ? (
-        <Group mih="5rem" justify="center" align="flex-start" spacing={0} px="0.8rem">
-          <Payment changeDiscount={changeDiscount} />
-          <CartHistory discount={discount} />
-        </Group>
-      ) : (
-        <Stack justify="center" align="flex-start" spacing={0} px="0.8rem">
-          <ResponsiveCartHistory discount={discount} />
-          <Payment changeDiscount={changeDiscount} />
-        </Stack>
-      )}
+        )}
+      </Stack>
+
+      <Flex direction={matches ? 'row' : 'column-reverse'} mih="5rem" spacing={0}>
+        <Payment changeDiscount={changeDiscount} />
+        <CartHistory discount={discount} />
+      </Flex>
     </Container>
   );
 };

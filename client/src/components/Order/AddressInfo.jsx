@@ -4,7 +4,7 @@ const AddressInfo = ({ selectedAddress }) => {
   const { recipient, mainAddress, detailAddress, postcode, recipientPhone } = selectedAddress.current;
 
   return (
-    <Stack w="100%" spacing={0}>
+    <Stack spacing={0} w="100%">
       <Title fz="1.6rem" mb="0.4rem">
         배송 주소
       </Title>

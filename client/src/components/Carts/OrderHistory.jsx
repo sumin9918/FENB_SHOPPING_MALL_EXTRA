@@ -1,47 +1,52 @@
 import { useNavigate } from 'react-router-dom';
-import { Stack, Title, Group, Text, useMantineColorScheme } from '@mantine/core';
-import CustomButton from '../CustomButton';
+
+import { Stack, Title, Group, Text, useMantineTheme } from '@mantine/core';
+
+import { MEDIAQUERY_WIDTH, PATH } from '../../constants';
 import { useMediaQuery } from '../../hooks';
 import { useCountCarts, useTotalPrice } from '../../hooks/carts';
-import { MEDIAQUERY_WIDTH, PATH } from '../../constants';
+import CustomButton from '../CustomButton';
+
+// Link 사용? navigate() 사용?
 
 const OrderHistory = () => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
-  const { colorScheme } = useMantineColorScheme();
+  const { colors, colorScheme } = useMantineTheme();
 
   const navigate = useNavigate();
-
   const countCarts = useCountCarts();
   const totalPrice = useTotalPrice();
 
+  const handleOrderButtonClick = () => navigate(PATH.ORDER);
+
   return (
-    <Stack w={matches ? '33.333333%' : '90%'} px="0.8rem" py="0.8rem" mb="2.4rem" mx="auto" spacing={0}>
+    <Stack mb="2.4rem" mx="auto" px="0.8rem" py="0.8rem" spacing={0} w={matches ? '50%' : '100%'}>
       <Title mb="2.4rem" ta={!matches && 'center'}>
         주문 내역
       </Title>
-      <Group position="apart" mb="0.8rem" py="0.4rem">
+      <Group mb="0.8rem" position="apart" py="0.4rem">
         <Text>상품 금액</Text>
-        <Text>{totalPrice.toLocaleString()} 원</Text>
+        <Text>{totalPrice.toLocaleString('ko-KR')} 원</Text>
       </Group>
-      <Group position="apart" mb="0.8rem" py="0.4rem">
+      <Group mb="0.8rem" position="apart" py="0.4rem">
         <Text>배송비</Text>
         <Text>무료</Text>
       </Group>
       <Group
-        position="apart"
         my="1.2rem"
+        position="apart"
         py="2.4rem"
         style={{
-          borderBottom: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}`,
-          borderTop: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}`,
+          borderBottom: `1px solid ${colorScheme === 'dark' ? colors.gray[8] : colors.gray[3]}`,
+          borderTop: `1px solid ${colorScheme === 'dark' ? colors.gray[8] : colors.gray[3]}`,
         }}>
         <Text>총 결제 금액</Text>
-        <Text>{totalPrice.toLocaleString()} 원</Text>
+        <Text>{totalPrice.toLocaleString('ko-KR')} 원</Text>
       </Group>
       <CustomButton
-        disabled={!countCarts}
         color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-        onClick={() => navigate(PATH.ORDER)}>
+        disabled={!countCarts}
+        onClick={handleOrderButtonClick}>
         주문결제
       </CustomButton>
     </Stack>

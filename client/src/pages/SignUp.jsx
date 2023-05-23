@@ -1,161 +1,171 @@
-import { useMantineColorScheme, Stack, Title, Center } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CustomButton, CustomLink } from '../components';
-import { FormInput, FormEmailInput, FormPhoneInput, FormZoneCodeInput, FormMainAddressInput } from '../components/Sign';
-import { signupSchema } from '../schema';
-import { requestSignUp } from '../api/fetch';
-import { MEDIAQUERY_WIDTH, PATH } from '../constants';
-import { useMediaQuery } from '../hooks';
+
+import { Stack, Title, Center, useMantineTheme, Text } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+
+import { CustomButton } from 'components';
+import { FormInput, FormAddressInput } from 'components/Sign';
+import { checkEmailDuplicate, signUp } from 'api/fetch';
+import { signupSchema } from 'schema';
+import { PATH } from 'constants';
 
 const SignUp = () => {
-  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
-  const { colorScheme } = useMantineColorScheme();
+  const { colors, colorScheme } = useMantineTheme();
 
+  const { state } = useLocation();
   const navigate = useNavigate();
-
-  const { handleSubmit, register, formState, trigger, setValue } = useForm({
+  const { handleSubmit, register, formState, setValue } = useForm({
     resolver: zodResolver(signupSchema),
   });
 
-  const handleSignUp = async signUpInfo => {
-    try {
-      const { message } = await requestSignUp({
-        email: signUpInfo.email,
-        name: signUpInfo.name,
-        phone: signUpInfo.phone,
-        password: signUpInfo.password,
-        mainAddress: signUpInfo.mainAddress,
-        detailAddress: signUpInfo.detailAddress,
-        postcode: signUpInfo.postcode,
-      });
+  const [error, setError] = useState('');
 
+  const handleEmailDuplicateBlur = async e => {
+    try {
+      const data = await checkEmailDuplicate(e.target.value);
+
+      setError(data.isDuplicate ? '이미 사용중인 이메일 입니다.' : '');
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const handlePhoneNumberChange = e => {
+    const formatted = e.target.value
+      .replace(/[^0-9]/g, '')
+      .replace(/(\d{0,3})(\d{0,4})(\d{0,4})/, '$1-$2-$3')
+      .replace(/-{1,2}$/g, '');
+
+    setValue('phone', formatted);
+  };
+
+  const handleSignUpSubmit = async data => {
+    try {
+      await signUp(data);
+
+      navigate(PATH.SIGNIN);
       notifications.show({
         color: 'blue',
         autoClose: 2000,
         title: '알림',
-        message,
+        message: '회원가입이 완료되었습니다.',
         sx: { div: { fontSize: '1.5rem' } },
       });
-
-      navigate(PATH.SIGNIN);
-    } catch (e) {
+    } catch (error) {
       notifications.show({
         color: 'red',
         autoClose: 2000,
         title: '알림',
-        message: e.response.data.message ? e.response.data.message : e.message,
+        message: '필수 정보가 전달되지 않았습니다.',
         sx: { div: { fontSize: '1.5rem' } },
       });
     }
   };
 
   return (
-    <Stack
-      align="center"
-      h="100rem"
-      ml="3rem"
-      sx={{
-        input: {
-          padding: '0',
-          fontSize: '1.6rem',
-          border: 'none',
-          borderBottomStyle: 'solid',
-          borderBottomWidth: '0.07rem',
-          borderBottomColor: '#ced4da',
-        },
-        label: {
-          fontSize: '1.6rem',
-        },
-        div: {
-          padding: '0',
-          fontSize: '1.6rem',
-        },
-      }}>
-      <Title order={2} mt="6rem" mb="3rem" fz="3.2rem">
+    <Stack align="center" mih="90rem">
+      <Title fz="3.2rem" mb="3rem" mt="6rem" order={2}>
         회원 가입
       </Title>
-      <form noValidate onSubmit={handleSubmit(handleSignUp)}>
-        <FormEmailInput
-          inputType="text"
+      <form noValidate onSubmit={handleSubmit(handleSignUpSubmit)}>
+        <FormInput
+          error={error}
+          formState={formState}
           id="email"
-          name="이메일 주소"
+          label="이메일 주소"
           placeholder="fenb@fenb.com"
           register={register}
-          formState={formState}
+          type="text"
           withAsterisk
+          onBlur={handleEmailDuplicateBlur}
         />
         <FormInput
-          inputType="text"
+          formState={formState}
           id="name"
-          name="이름"
+          label="이름"
           placeholder="김펜비"
           register={register}
-          formState={formState}
+          type="text"
           withAsterisk
         />
-        <FormPhoneInput
-          inputType="tel"
+        <FormInput
+          formState={formState}
           id="phone"
-          name="휴대전화번호"
+          label="휴대전화번호"
           placeholder="'-' 없이 입력"
-          trigger={trigger}
-          setValue={setValue}
           register={register}
-          formState={formState}
+          setValue={setValue}
+          type="tel"
           withAsterisk
+          onChange={handlePhoneNumberChange}
         />
         <FormInput
-          inputType="password"
+          formState={formState}
           id="password"
-          name="비밀번호"
+          label="비밀번호"
           placeholder="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
-          formState={formState}
+          type="password"
           withAsterisk
         />
         <FormInput
-          inputType="password"
+          formState={formState}
           id="confirmPassword"
-          name="비밀번호 확인"
+          label="비밀번호 확인"
           placeholder="영문 또는 숫자를 6~12자 입력하세요."
           register={register}
-          formState={formState}
+          type="password"
           withAsterisk
         />
-        <FormZoneCodeInput
-          inputType="text"
-          id="postcode"
-          name="우편번호"
-          placeholder="주소찾기 버튼을 클릭주세요."
-          setValue={setValue}
-          register={register}
+        <FormAddressInput
           formState={formState}
+          id="postcode"
+          label="우편번호"
+          placeholder="주소찾기 버튼을 클릭주세요."
+          register={register}
+          setValue={setValue}
+          type="text"
+          readOnly
         />
-        <FormMainAddressInput
-          inputType="text"
+        <FormInput
+          formState={formState}
           id="mainAddress"
-          name="주소"
+          label="주소"
           placeholder="주소를 선택하시면 자동으로 입력됩니다."
           register={register}
-          formState={formState}
+          type="text"
+          readOnly
         />
         <FormInput
-          inputType="text"
+          formState={formState}
           id="detailAddress"
-          name="상세주소"
+          label="상세주소"
           placeholder="상세 주소를 입력하세요."
           register={register}
-          formState={formState}
+          type="text"
         />
-        <CustomButton type="submit" w={matches ? '40rem' : '100vw'} color={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
+        <CustomButton color={colorScheme === 'dark' ? 'gray.6' : 'dark'} type="submit" w="40rem">
           가입하기
         </CustomButton>
-        <Center mt="2rem">
+        <Center fz="1.6rem" mt="2rem">
           회원이신가요?
-          <CustomLink to={PATH.SIGNIN}>로그인</CustomLink>
+          <Text
+            component={Link}
+            fw="bold"
+            ml="1rem"
+            state={state}
+            to={PATH.SIGNIN}
+            sx={{
+              ':hover': {
+                color: colors.blue[6],
+              },
+            }}>
+            로그인
+          </Text>
         </Center>
       </form>
     </Stack>

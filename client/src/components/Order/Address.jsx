@@ -1,43 +1,46 @@
-import { Stack, Group, Title, Button } from '@mantine/core';
+import { Stack, Group, Title, Button, useMantineTheme } from '@mantine/core';
 import { BsCheck2 } from 'react-icons/bs';
-import { INIT_FIELD } from '../../constants';
-import AddressInfo from './AddressInfo';
-import EditAddress from './EditAddress';
-import InputAddress from './InputAddress';
 
-const Address = ({ field, setFiled, selectedAddress, changeSelectedAddress }) => (
-  <Stack w="100%" p="2rem" pt={0}>
-    <Group position="apart" pt="1.2rem" pb="1.2rem">
-      <Group align="center">
-        <Title>배송 옵션</Title>
-        {field.info && <BsCheck2 size="2.4rem" color="rgb(18, 138, 9)" />}
+import { AddressInfo, EditAddress, InputAddress } from 'components/Order';
+import { INIT_FIELD } from 'constants';
+
+const Address = ({ field, setFiled, selectedAddress, changeSelectedAddress }) => {
+  const { colors } = useMantineTheme();
+
+  return (
+    <Stack pt={0} w="100%">
+      <Group align="center" pb="1.2rem" position="apart" pt="1.2rem">
+        <Group align="center">
+          <Title>배송 옵션</Title>
+          {field.info && <BsCheck2 color={colors.green[8]} size="2.4rem" />}
+        </Group>
+
+        {field.info && (
+          <Button
+            color="dark"
+            fz="1.4rem"
+            size="lg"
+            sx={{ ':hover': { background: 'transparent', textDecoration: 'underline' } }}
+            variant="subtle"
+            onClick={() => {
+              setFiled({ ...INIT_FIELD, edit: true });
+            }}>
+            편집
+          </Button>
+        )}
       </Group>
 
-      {field.info && (
-        <Button
-          variant="subtle"
-          color="dark"
-          size="lg"
-          fz="1.4rem"
-          sx={{ ':hover': { background: 'transparent', textDecoration: 'underline' } }}
-          onClick={() => {
-            setFiled({ ...INIT_FIELD, edit: true });
-          }}>
-          편집
-        </Button>
+      {field.info && <AddressInfo selectedAddress={selectedAddress} />}
+      {field.edit && (
+        <EditAddress
+          changeSelectedAddress={changeSelectedAddress}
+          selectedAddress={selectedAddress}
+          setFiled={setFiled}
+        />
       )}
-    </Group>
-
-    {field.info && <AddressInfo selectedAddress={selectedAddress} />}
-    {field.edit && (
-      <EditAddress
-        setFiled={setFiled}
-        selectedAddress={selectedAddress}
-        changeSelectedAddress={changeSelectedAddress}
-      />
-    )}
-    {field.input && <InputAddress setFiled={setFiled} changeSelectedAddress={changeSelectedAddress} />}
-  </Stack>
-);
+      {field.input && <InputAddress changeSelectedAddress={changeSelectedAddress} setFiled={setFiled} />}
+    </Stack>
+  );
+};
 
 export default Address;

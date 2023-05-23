@@ -1,35 +1,37 @@
 import { useQuery } from '@tanstack/react-query';
-import { Group, Stack, Title, Text, useMantineColorScheme } from '@mantine/core';
+
+import { Stack, Title, useMantineTheme, Group, Text } from '@mantine/core';
+
+import { NoProduct } from 'components/common';
+import { cartsQuery } from 'api/query';
+import { useMediaQuery } from 'hooks';
+import { useTotalCartItems, useTotalPrice } from 'hooks/carts';
+import { MEDIAQUERY_WIDTH } from 'constants';
 import CartItem from './CartItem';
-import { NoProduct } from '../common';
-import { cartsQuery } from '../../api/query';
-import { useMediaQuery } from '../../hooks';
-import { useTotalCartItems, useTotalPrice } from '../../hooks/carts';
-import { MEDIAQUERY_WIDTH } from '../../constants';
 
 const CartList = () => {
-  const { data: carts } = useQuery(cartsQuery());
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
+  const { colors, colorScheme } = useMantineTheme();
+
   const totalCartItems = useTotalCartItems();
   const totalPrice = useTotalPrice();
-
-  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
-  const { colorScheme } = useMantineColorScheme();
+  const { data: carts } = useQuery(cartsQuery());
 
   return (
-    <Stack w={matches ? '66.66666%' : '90%'} pl="0.8rem" pr={matches ? '10rem' : '0.8rem'} mx="auto" spacing={0}>
+    <Stack mx="auto" pl="0.8rem" pr={matches ? '5rem' : '0.8rem'} spacing={0} w="100%">
       {matches ? (
         <Title py="0.8rem">장바구니</Title>
       ) : (
         <Stack
           align="center"
-          spacing={0}
           pb="4rem"
-          sx={{ borderBottom: `1px solid ${colorScheme === 'dark' ? '#343a40' : '#dee2e6'}` }}>
+          spacing={0}
+          sx={{ borderBottom: `1px solid ${colorScheme === 'dark' ? colors.gray[8] : colors.gray[3]}` }}>
           <Title py="0.8rem">장바구니</Title>
-          <Group spacing="0.8rem" c={colorScheme === 'dark' ? 'gray.5' : 'gray.7'}>
+          <Group c={colorScheme === 'dark' ? 'gray.5' : 'gray.7'} spacing="0.8rem">
             <Text>{totalCartItems} 개의 제품</Text>
             <Text>l</Text>
-            <Text>{totalPrice.toLocaleString()} 원</Text>
+            <Text>{totalPrice.toLocaleString('ko-KR')} 원</Text>
           </Group>
         </Stack>
       )}

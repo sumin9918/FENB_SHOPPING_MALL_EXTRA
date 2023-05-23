@@ -1,6 +1,7 @@
 import { Stack, Title, Group, Text } from '@mantine/core';
-import { useMediaQuery } from '../../hooks';
+
 import { PAYMENT_METHODS, MEDIAQUERY_WIDTH } from '../../constants';
+import { useMediaQuery } from '../../hooks';
 
 const OrderInfo = ({ history }) => {
   const { orderDate, paymentMethod, discountedTotalPrice, deliveryAddress } = history;
@@ -12,11 +13,11 @@ const OrderInfo = ({ history }) => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
 
   return (
-    <Stack w={matches ? '70%' : '90%'} p="2rem">
+    <Stack p="2rem" w={matches ? '70%' : '90%'}>
       <Title fz="2.4rem" mb="2rem" sx={{ textAlign: 'center' }}>
         주문 정보
       </Title>
-      <Stack py="1.6rem" px={matches ? '3.2rem' : '1.6rem'} sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
+      <Stack px={matches ? '3.2rem' : '1.6rem'} py="1.6rem" sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
         <Group spacing={matches ? '3.2rem' : '1.6rem'} sx={{ flexWrap: 'nowrap' }}>
           <Text miw="7rem" w="10%">
             수령인
@@ -42,13 +43,13 @@ const OrderInfo = ({ history }) => {
           </Text>
         </Group>
       </Stack>
-      <Stack py="1.6rem" px={matches ? '3.2rem' : '1.6rem'} sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
+      <Stack px={matches ? '3.2rem' : '1.6rem'} py="1.6rem" sx={{ border: '1px solid lightgray', borderRadius: '5px' }}>
         <Group spacing={matches ? '3.2rem' : '1.6rem'} sx={{ flexWrap: 'nowrap' }}>
           <Text miw="7rem" w="10%">
             결제 금액
           </Text>
           <Text miw="18rem" w="70%">
-            {discountedTotalPrice.toLocaleString()} 원
+            {discountedTotalPrice.toLocaleString('ko-KR')} 원
           </Text>
         </Group>
         <Group spacing={matches ? '3.2rem' : '1.6rem'} sx={{ flexWrap: 'nowrap' }}>

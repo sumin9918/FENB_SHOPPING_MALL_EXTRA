@@ -1,16 +1,17 @@
 import { useRef, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import { Container, Stack, useMantineColorScheme } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMediaQuery } from '../../hooks';
-import { useOrderInfo } from '../../hooks/order';
-import { useGetAddresses } from '../../hooks/address';
-import { postOrder } from '../../api/fetch';
-import { QUERY_KEY, INIT_FIELD, MEDIAQUERY_WIDTH, PATH } from '../../constants';
-import Address from './Address';
-import Coupons from './Coupons';
-import SelectPaymentMethod from './SelectPaymentMethod';
-import CustomButton from '../CustomButton';
+
+import { Stack, useMantineColorScheme } from '@mantine/core';
+
+import { CustomButton } from 'components';
+import { Address, Coupons, PaymentMethod } from 'components/Order';
+import { order } from 'api/fetch';
+import { useMediaQuery } from 'hooks';
+import { useGetAddresses } from 'hooks/address';
+import { useOrderInfo } from 'hooks/order';
+import { INIT_FIELD, MEDIAQUERY_WIDTH, PATH, QUERY_KEY } from 'constants';
 
 const Payment = ({ changeDiscount }) => {
   const addresses = useGetAddresses();
@@ -19,6 +20,7 @@ const Payment = ({ changeDiscount }) => {
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const defaultAddress = !addresses?.length ? {} : addresses?.find(address => !!address.isDefault) ?? addresses[0];
   const isValidAddress = defaultAddress.postcode ? defaultAddress.postcode !== '' : false;
@@ -37,33 +39,32 @@ const Payment = ({ changeDiscount }) => {
     changeAddressId(newAddress.id);
   };
 
-  const queryClient = useQueryClient();
+  const handleOrderClick = async () => {
+    queryClient.removeQueries(QUERY_KEY.CARTS);
+
+    await order(getOrderInfo());
+
+    navigate(PATH.ORDER_COMPLETE, { replace: true });
+  };
 
   return (
-    <Stack w={matches ? '66.66667%' : '90%'} mx="auto" pr={!matches && '5rem'} spacing="5rem">
+    <Stack mx="auto" pr={matches && '5rem'} spacing="5rem" w="100%">
       <Address
-        field={field}
-        setFiled={setFiled}
-        selectedAddress={selectedAddress}
         changeSelectedAddress={changeSelectedAddress}
+        field={field}
+        selectedAddress={selectedAddress}
+        setFiled={setFiled}
       />
       <Coupons changeCouponId={changeCouponId} />
-      <SelectPaymentMethod changePaymentMethod={changePaymentMethod} />
-      <Container w="30rem">
-        <CustomButton
-          w="100%"
-          disabled={!field.info}
-          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-          onClick={async () => {
-            queryClient.removeQueries(QUERY_KEY.CARTS);
-
-            await postOrder(getOrderInfo());
-
-            navigate(PATH.ORDER_COMPLETE, { replace: true });
-          }}>
-          주문결제
-        </CustomButton>
-      </Container>
+      <PaymentMethod changePaymentMethod={changePaymentMethod} />
+      <CustomButton
+        color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+        disabled={!field.info}
+        m="0 auto"
+        w="30rem"
+        onClick={handleOrderClick}>
+        주문결제
+      </CustomButton>
     </Stack>
   );
 };

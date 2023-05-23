@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+
 import { Container, Stack, Title, useMantineColorScheme } from '@mantine/core';
-import { OrderInfo, OrderProducts } from '../components/OrderComplete';
-import { CustomButton } from '../components';
-import { historyQuery } from '../api/query';
-import { PATH } from '../constants';
+
+import { CustomButton } from 'components';
+import { OrderInfo, OrderProducts } from 'components/OrderComplete';
+import { historyQuery } from 'api/query';
+import { PATH } from 'constants';
 
 const OrderComplete = () => {
   const { data: history } = useQuery(historyQuery());
@@ -14,14 +16,14 @@ const OrderComplete = () => {
   const navigate = useNavigate();
 
   return (
-    <Container size="1200px" w="100%" fz="1.6rem">
-      <Title p="4.8rem" sx={{ textAlign: 'center' }}>
+    <Container fz="1.6rem" size="1200px" w="100%">
+      <Title p="4.8rem" ta="center">
         결제가 정상적으로 완료되었습니다
       </Title>
-      <Stack mih="5rem" justify="center" align="center" spacing={0} px="0.8rem">
+      <Stack align="center" justify="center" mih="5rem" px="0.8rem" spacing={0}>
         <OrderInfo history={history} />
         <OrderProducts products={history.products} />
-        <CustomButton w="20rem" color={colorScheme === 'dark' ? 'gray.6' : 'dark'} onClick={() => navigate(PATH.MAIN)}>
+        <CustomButton color={colorScheme === 'dark' ? 'gray.6' : 'dark'} w="20rem" onClick={() => navigate(PATH.MAIN)}>
           확인
         </CustomButton>
       </Stack>

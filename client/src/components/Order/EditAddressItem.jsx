@@ -1,7 +1,8 @@
 import { Button, Stack, Text, Group, Container, CloseButton, useMantineColorScheme } from '@mantine/core';
 import { FaHome } from 'react-icons/fa';
-import { useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../../hooks/mutation';
+
 import { INIT_FIELD } from '../../constants';
+import { useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../../hooks/mutation';
 
 const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAddress }) => {
   const { id, recipient, mainAddress, detailAddress, postcode, recipientPhone, isDefault } = address;
@@ -30,9 +31,9 @@ const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAdd
         changeSelectedAddress(address);
         setFiled({ ...INIT_FIELD, info: true });
       }}>
-      <Group position="apart" align="flex-start" sx={{ flexWrap: 'nowrap' }}>
+      <Group align="flex-start" position="apart" sx={{ flexWrap: 'nowrap' }}>
         <Stack spacing={0}>
-          <Group spacing="0.4rem" align="center" justify="center">
+          <Group align="center" justify="center" spacing="0.4rem">
             <Text>{recipient}</Text>
             {isDefault && <FaHome />}
           </Group>
@@ -41,30 +42,30 @@ const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAdd
           <Text>{postcode}</Text>
           <Text>{recipientPhone}</Text>
         </Stack>
-        <Stack align="flex-end" justify="space-between" h="12.4rem">
+        <Stack align="flex-end" h="12.4rem" justify="space-between">
           <CloseButton
             color="dark"
-            p="0.4rem"
-            w="3.2rem"
             h="3.2rem"
             iconSize="1.6rem"
+            p="0.4rem"
             sx={{ ':hover': { background: 'transparent', border: '1px solid #228be6' } }}
+            w="3.2rem"
             onClick={e => {
               e.stopPropagation();
               removeAddress(id);
             }}
           />
           <Button
-            variant="subtle"
             color="dark"
             h="3.2rem"
             py="0.8rem"
             sx={{ ':hover': { background: 'transparent', border: '1px solid #228be6' } }}
+            variant="subtle"
             onClick={e => {
               e.stopPropagation();
               changeDefaultAddress(id);
             }}>
-            <Text fz="1.2rem" fw="normal">
+            <Text fw="normal" fz="1.2rem">
               기본 배송지로 변경
             </Text>
           </Button>

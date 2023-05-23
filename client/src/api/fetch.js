@@ -59,23 +59,37 @@ export const fetchHistory = async () => {
   return data;
 };
 
+export const signIn = async ({ email, password }) => {
+  const { data } = await axios.post('/api/auth/signin', {
+    email,
+    password,
+  });
+
+  return data;
+};
+
+export const checkEmailDuplicate = async email => {
+  const { data } = await axios.post('/api/auth/signup/email', {
+    email,
+  });
+
+  return data;
+};
+
+export const signUp = async ({ email, name, password, phone, mainAddress, detailAddress, postcode }) => {
+  await axios.post('/api/auth/signup', {
+    email,
+    name,
+    phone,
+    password,
+    mainAddress,
+    detailAddress,
+    postcode,
+  });
+};
+
 export const addCoupon = async id => {
   const { data } = await axios.post(`/api/coupons/${id}`);
-  return data;
-};
-
-export const requestSignIn = async signInInfo => {
-  const { data } = await axios.post('/api/auth/signin', { ...signInInfo });
-  return data;
-};
-
-export const requestSignUp = async signUpInfo => {
-  const { data } = await axios.post('/api/auth/signup', { ...signUpInfo });
-  return data;
-};
-
-export const requestCheckEmailDuplicate = async email => {
-  const { data } = await axios.post('/api/auth/signup/email', { email });
   return data;
 };
 
@@ -88,11 +102,11 @@ export const addCart = async ({ id, selectedSize }) => {
 };
 
 export const addAddress = async newAddress => {
-  const res = await axios.post('/api/users/me/address', { ...newAddress });
-  return res;
+  const { data } = await axios.post('/api/users/me/address', { ...newAddress });
+  return data;
 };
 
-export const postOrder = async paymentInfo => {
+export const order = async paymentInfo => {
   await axios.post('/api/order/pay', { ...paymentInfo });
 };
 
