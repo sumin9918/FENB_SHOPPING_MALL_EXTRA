@@ -1,23 +1,21 @@
 import { useState } from 'react';
-import axios from 'axios';
 import CustomFormInput from '../CustomFormInput';
+import { requestCheckEmailDuplicate } from '../../api/fetch';
 
 const FormEmailInput = ({ inputType, id, name, placeholder, withAsterisk = false, register, formState }) => {
   const [duplicateEmailError, setDuplicateEmailError] = useState('');
 
   const checkEmailDuplicate = async emailAddress => {
     try {
-      const response = await axios.post('/api/auth/signup/email', {
-        email: emailAddress,
-      });
+      const { isDuplicate } = await requestCheckEmailDuplicate(emailAddress);
 
-      if (response.data.isDuplicate) {
+      if (isDuplicate) {
         setDuplicateEmailError('이미 사용중인 이메일 입니다.');
       } else {
         setDuplicateEmailError('');
       }
-    } catch (error) {
-      throw new Error(error);
+    } catch (e) {
+      throw new Error(e);
     }
   };
 

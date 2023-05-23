@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+const { COLORS } = require('../constants/products');
 const { getUserCart, removeAllCart } = require('../controllers/carts');
 const { removeStock } = require('../controllers/stocks');
 const { getPurchasesHistory, addPurchaseHistory } = require('../controllers/history');
@@ -82,7 +83,10 @@ router.get('/history', authCheck, (req, res) => {
   const { email } = req.locals;
   const history = getPurchasesHistory(email);
 
-  res.send(history[0]);
+  res.send({
+    ...history[0],
+    products: history[0].products?.map(product => ({ ...product, color: COLORS[product.color] })),
+  });
 });
 
 module.exports = router;

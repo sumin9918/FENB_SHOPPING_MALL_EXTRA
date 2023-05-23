@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Center, Stack } from '@mantine/core';
-import { addAddressSchema } from '../../schema';
+import { addressSchema } from '../../schema';
 import { addAddress } from '../../api/fetch';
 import { INIT_FIELD } from '../../constants';
 import FormInput from '../Sign/FormInput';
@@ -12,7 +12,7 @@ import CustomButton from '../CustomButton';
 
 const InputAddress = ({ setFiled, changeSelectedAddress }) => {
   const { handleSubmit, register, formState, trigger, setValue } = useForm({
-    resolver: zodResolver(addAddressSchema),
+    resolver: zodResolver(addressSchema),
   });
 
   const handleAddAddress = async data => {

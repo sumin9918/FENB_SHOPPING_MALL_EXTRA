@@ -1,14 +1,5 @@
-import { Container, Navbar } from '@mantine/core';
-import Category from './Category';
-import Main from './Main';
-
-const NavigationBar = () => (
-  <Navbar height="auto" mb="4rem" position={{ top: 0, left: 0, borderBottom: '1px solid #ced4da' }}>
-    <Container w="100%" size="120rem" m="auto">
-      <Main />
-      <Category />
-    </Container>
-  </Navbar>
-);
-
-export default NavigationBar;
+export { default as NavigationBar } from './NavigationBar';
+export { default as Main } from './Main';
+export { default as Category } from './Category';
+export { default as SearchBar } from './SearchBar';
+export { default as DarkMode } from './DarkMode';

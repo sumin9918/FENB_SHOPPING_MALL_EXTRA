@@ -1,128 +1,75 @@
-import { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Container, Stack, Group, Image, Title } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { useLocation } from 'react-router-dom';
-import { favoritesQuery, productsQuery, verifyQuery } from '../api/query';
-import { Info, Description, CartButton, WishListButton } from '../components/Products';
-import { useAddCartMutation } from '../hooks/carts';
-import { useToggleWishItemMutation } from '../hooks/wishList';
+import { useState } from 'react';
+
+import { Container, Stack, Group, Image, Title, Text } from '@mantine/core';
+
+import { Info, CartButton, WishListButton } from 'components/Products';
+import { useMediaQuery } from 'hooks';
+import { useCurrentProduct, useIsSignInRef } from 'hooks/products';
 
 const MEDIAQUERY_WIDTH = 768;
 
 const Products = () => {
-  const { data: products } = useQuery(productsQuery());
-  const { data: favorites } = useQuery(favoritesQuery());
-  const { data: verify } = useQuery(verifyQuery());
-  const { pathname } = useLocation();
-
-  const { mutateAsync: addCart } = useAddCartMutation();
-  const { mutate: toggleFavorite } = useToggleWishItemMutation();
-
-  const getIdfromPath = pathname => +pathname.split('/').at(-1);
-
-  const currentProduct = products?.find(product => product.id === getIdfromPath(pathname));
-
-  const { id, name, brand, description, imgURL } = currentProduct;
-
-  const [currentSelectedSize, setCurrentSelectedSize] = useState(-1);
-  const [isSizeSelected, setIsSizeSelected] = useState(null);
-
-  const isSignInUserRef = useRef(null);
-  const [hasStock, setHasStock] = useState(true);
-
-  const [isFavorite, setIsFavorite] = useState(verify ? favorites.some(product => product.id === id) : false);
-
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
 
-  useEffect(() => {
-    setHasStock(true);
-  }, [currentSelectedSize]);
+  const currentProduct = useCurrentProduct();
+  const { imgURL, description, brand, name } = currentProduct;
 
-  useEffect(() => {
-    isSignInUserRef.current = verify;
-  }, [verify]);
+  const [currentSelectedSize, setCurrentSelectedSize] = useState(-1);
+  const [isSizeSelected, setIsSizeSelected] = useState(true);
 
-  const handleIsSizeSelected = () => {
-    setIsSizeSelected(!!isSizeSelected);
-  };
-
-  const handleSizeClick = selectedSize => {
-    setCurrentSelectedSize(selectedSize);
-    setIsSizeSelected(true);
-  };
-
-  const handleCartClick = async selectedSize => {
-    try {
-      await addCart({ id, selectedSize, currentProduct });
-    } catch (e) {
-      setHasStock(selectedSize !== currentSelectedSize);
-    }
-  };
-
-  const handleWishListToggle = () => {
-    setIsFavorite(!isFavorite);
-
-    toggleFavorite({ id, isFavorite, currentProduct });
-  };
+  const isSignInRef = useIsSignInRef();
 
   return (
-    <Container size="120rem" p="0 0 5rem 0">
+    <Container p="0 0 5rem 0" size="120rem">
       {matches ? (
-        <Group position="center" align="flex-start" noWrap="nowrap">
-          <Stack m="4.8rem 0 0.8rem" p="0 2.4rem 0 4.8rem" maw="60rem">
-            <Image src={imgURL} />
-            <Description>{description}</Description>
+        <Group align="flex-start" noWrap="nowrap" position="center">
+          <Stack m="4.8rem 0 0.8rem" maw="60rem" p="0 2.4rem 0 4.8rem">
+            <Image alt={name} src={imgURL} />
+            <Text fw="500" fz="1.6rem" lh="3.2rem" mt="1.5rem">
+              {description}
+            </Text>
           </Stack>
-          <Stack m="4.8rem 0.8rem 0 0" p="0 4.8rem 0 2.4rem" miw="40rem" fz="1.6rem" spacing={0}>
+          <Stack fz="1.6rem" m="4.8rem 0.8rem 0 0" miw="40rem" p="0 4.8rem 0 2.4rem" spacing={0}>
             <Title>{`[${brand.kr}] ${name}`}</Title>
             <Info
               currentProduct={currentProduct}
-              isSizeSelected={isSizeSelected}
               currentSelectedSize={currentSelectedSize}
-              handleSizeClick={handleSizeClick}
+              isSizeSelected={isSizeSelected}
+              setCurrentSelectedSize={setCurrentSelectedSize}
+              setIsSizeSelected={setIsSizeSelected}
             />
             <CartButton
               currentProduct={currentProduct}
+              currentSelectedSize={currentSelectedSize}
+              isSignInRef={isSignInRef}
               isSizeSelected={isSizeSelected}
-              isSignInUserRef={isSignInUserRef}
-              hasStock={hasStock}
-              handleCartClick={() => handleCartClick(currentSelectedSize)}
-              handleIsSizeSelected={handleIsSizeSelected}
+              setIsSizeSelected={setIsSizeSelected}
             />
-            <WishListButton
-              currentProduct={currentProduct}
-              isSignInUserRef={isSignInUserRef}
-              isFavorite={isFavorite}
-              handleWishListToggle={handleWishListToggle}
-            />
+            <WishListButton currentProduct={currentProduct} isSignInRef={isSignInRef} />
           </Stack>
         </Group>
       ) : (
-        <Stack m="4.8rem 0.8rem 0 0" p="0 5rem" miw="45rem" fz="1.6rem" spacing={0}>
+        <Stack fz="1.6rem" m="4.8rem 0.8rem 0 0" miw="45rem" p="0 5rem" spacing={0}>
           <Title>{`[${brand.kr}] ${name}`}</Title>
-          <Image src={imgURL} />
+          <Image alt={name} src={imgURL} />
           <Info
             currentProduct={currentProduct}
-            isSizeSelected={isSizeSelected}
             currentSelectedSize={currentSelectedSize}
-            handleSizeClick={handleSizeClick}
+            isSizeSelected={isSizeSelected}
+            setCurrentSelectedSize={setCurrentSelectedSize}
+            setIsSizeSelected={setIsSizeSelected}
           />
           <CartButton
             currentProduct={currentProduct}
+            currentSelectedSize={currentSelectedSize}
+            isSignInRef={isSignInRef}
             isSizeSelected={isSizeSelected}
-            isSignInUserRef={isSignInUserRef}
-            hasStock={hasStock}
-            handleCartClick={() => handleCartClick(currentSelectedSize)}
-            handleIsSizeSelected={handleIsSizeSelected}
+            setIsSizeSelected={setIsSizeSelected}
           />
-          <WishListButton
-            currentProduct={currentProduct}
-            isSignInUserRef={isSignInUserRef}
-            isFavorite={isFavorite}
-            handleWishListToggle={handleWishListToggle}
-          />
-          <Description>{description}</Description>
+          <WishListButton currentProduct={currentProduct} isSignInRef={isSignInRef} />
+          <Text fw="500" fz="1.6rem" lh="3.2rem" mt="1.5rem">
+            {description}
+          </Text>
         </Stack>
       )}
     </Container>

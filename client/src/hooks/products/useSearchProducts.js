@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { productsQuery } from '../../api/query';
+
+import { productsQuery } from 'api/query';
 
 const useSearchProducts = () => {
   const { data: searchProducts } = useQuery(
@@ -8,7 +9,7 @@ const useSearchProducts = () => {
     })
   );
 
-  return { searchProducts };
+  return searchProducts;
 };
 
 export default useSearchProducts;

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { productsQuery } from '../../api/query';
+
+import { productsQuery } from 'api/query';
 
 const useCategory = () => {
   const { data: categories } = useQuery(
@@ -13,7 +14,7 @@ const useCategory = () => {
     })
   );
 
-  return { categories };
+  return categories;
 };
 
 export default useCategory;

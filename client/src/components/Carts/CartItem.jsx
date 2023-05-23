@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Stack, Group, Image, Title, Text, ActionIcon, NumberInput, useMantineColorScheme, rem } from '@mantine/core';
+import { Stack, Group, Image, Title, Text, ActionIcon, NumberInput, useMantineColorScheme } from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
-import { useChangeCartQuantityMutation, useRemoveCartMutation, useGetStocks } from '../../hooks/carts';
+import { useGetStocks } from '../../hooks/carts';
+import { useChangeCartQuantityMutation, useRemoveCartMutation } from '../../hooks/mutation';
 import { PATH } from '../../constants';
 
-const CartItem = ({ cart }) => {
+const CartItem = ({ cart: { id, category, color, name, price, imgURL, selectedSize, quantity } }) => {
   const { colorScheme } = useMantineColorScheme();
 
-  const { id, category, color, name, price, imgURL, selectedSize, quantity } = cart;
   const stocks = useGetStocks(id);
 
   const handlers = useRef();
@@ -17,6 +17,11 @@ const CartItem = ({ cart }) => {
   const { mutate: removeCart } = useRemoveCartMutation();
 
   const maxQuantity = stocks?.find(({ size }) => size === selectedSize).stock;
+
+  const handleDecreaseClick = () => handlers.current.decrement();
+  const handleIncreaseClick = () => handlers.current.increment();
+  const handleChangeCartQuantityClick = quantity => changeCartQuantity({ id, selectedSize, quantity });
+  const handleRemoveCartClick = () => removeCart({ id, selectedSize });
 
   return (
     <Stack
@@ -28,10 +33,10 @@ const CartItem = ({ cart }) => {
       <Group align="flex-start" sx={{ flexWrap: 'nowrap' }}>
         <div
           style={{
-            width: '180px',
-            height: '180px',
-            minWidth: '180px',
-            paddingRight: '16px',
+            width: '18rem',
+            height: '18rem',
+            minWidth: '18rem',
+            paddingRight: '1.6rem',
           }}>
           <Link to={`${PATH.PRODUCTS}/${id}`} state={id}>
             <Image src={imgURL} alt={name} withPlaceholder />
@@ -55,12 +60,7 @@ const CartItem = ({ cart }) => {
               <Text>사이즈 {selectedSize}</Text>
               <Group spacing="0.4rem" mb="0.8rem">
                 <Text sx={{ verticalAlign: 'bottom' }}>수량</Text>
-                <ActionIcon
-                  size={rem(42)}
-                  fz={rem(24)}
-                  fw="bold"
-                  variant="transparent"
-                  onClick={() => handlers.current.decrement()}>
+                <ActionIcon size="2.6rem" fz="1.6rem" fw="bold" variant="transparent" onClick={handleDecreaseClick}>
                   –
                 </ActionIcon>
                 <NumberInput
@@ -71,9 +71,9 @@ const CartItem = ({ cart }) => {
                   disabled={true}
                   handlersRef={handlers}
                   value={quantity}
-                  onChange={e => changeCartQuantity({ id, selectedSize, quantity: e })}
+                  onChange={handleChangeCartQuantityClick}
                   ta="center"
-                  w={rem(54)}
+                  w="3.2rem"
                   sx={{
                     'input:disabled': {
                       backgroundColor: 'transparent',
@@ -85,12 +85,7 @@ const CartItem = ({ cart }) => {
                     },
                   }}
                 />
-                <ActionIcon
-                  size={rem(42)}
-                  fz={rem(24)}
-                  fw="bold"
-                  variant="transparent"
-                  onClick={() => handlers.current.increment()}>
+                <ActionIcon size="2.6rem" fz="1.6rem" fw="bold" variant="transparent" onClick={handleIncreaseClick}>
                   +
                 </ActionIcon>
               </Group>
@@ -110,8 +105,8 @@ const CartItem = ({ cart }) => {
           </Group>
           <div style={{ marginTop: '1.6rem' }}>
             <BiTrash
-              style={{ width: '24px', height: '24px', verticalAlign: 'top', cursor: 'pointer' }}
-              onClick={() => removeCart({ id, selectedSize })}
+              style={{ width: '2.4px', height: '2.4px', verticalAlign: 'top', cursor: 'pointer' }}
+              onClick={handleRemoveCartClick}
             />
           </div>
         </Stack>

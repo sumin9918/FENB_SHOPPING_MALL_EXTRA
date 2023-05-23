@@ -1,10 +1,10 @@
-import { useGenericMutation } from '../index';
-import { addCart } from '../../api/fetch';
-import { CARTS_QUERY_KEY } from '../../constants';
+import { addCart } from 'api/fetch';
+import { useGenericMutation } from 'hooks/mutation';
+import { QUERY_KEY } from 'constants';
 
 const useAddCartMutation = () =>
   useGenericMutation({
-    queryKey: CARTS_QUERY_KEY,
+    queryKey: QUERY_KEY.CARTS,
     mutationFn: addCart,
     onMutate({ selectedSize, currentProduct }) {
       return carts =>

@@ -1,6 +1,6 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
-const useGenericMutation = ({ queryKey, mutationFn, onMutate: expected }) => {
+const useGenericMutation = ({ queryKey, mutationFn, onMutate }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -11,7 +11,7 @@ const useGenericMutation = ({ queryKey, mutationFn, onMutate: expected }) => {
 
       const previousValues = queryClient.getQueryData(queryKey);
 
-      queryClient.setQueryData(queryKey, expected(variables));
+      queryClient.setQueryData(queryKey, onMutate(variables));
 
       return { previousValues };
     },

@@ -1,30 +1,41 @@
 import { Container, Select, Flex, useMantineColorScheme } from '@mantine/core';
-import { CATEGORIES } from '../../constants';
 
-const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption }) => {
+import { useCategory } from 'hooks/products';
+
+const SORT_OPTIONS = [
+  { value: 'favorite', label: '추천순' },
+  { value: 'new', label: '최신순' },
+  { value: 'high', label: '높은 가격순' },
+  { value: 'low', label: '낮은 가격순' },
+];
+
+const Header = ({ sortOption, searchValue, productCount, handleSelectSortOptionClick }) => {
   const { colorScheme } = useMantineColorScheme();
+
+  const categories = useCategory();
+
+  const filteredCategories = categories.reduce((acc, cur) => {
+    acc[cur.en] = cur.kr;
+    return acc;
+  }, {});
 
   return (
     <Flex
-      justify="space-between"
       align="center"
-      pos="sticky"
-      top="0"
       bg={colorScheme === 'dark' ? 'dark.7' : 'white'}
-      sx={{ zIndex: 99 }}>
-      <Container m="0" p="1.5rem 1rem" fz="2.4rem" fw="600">
-        {CATEGORIES[searchValue] ? `${CATEGORIES[searchValue]}` : `${searchValue}`} {`(${productCount})`}
+      justify="space-between"
+      pos="sticky"
+      sx={{ zIndex: 9999 }}
+      top="0">
+      <Container fw="600" fz="2.4rem" m="0" p="1.5rem 1rem">
+        {filteredCategories[searchValue] ? `${filteredCategories[searchValue]}` : `${searchValue}`}
+        {` (${productCount})`}
       </Container>
       <Select
-        size="xl"
+        data={SORT_OPTIONS}
         maxDropdownHeight={500}
+        size="xl"
         value={sortOption}
-        data={[
-          { value: 'favorite', label: '추천순' },
-          { value: 'new', label: '최신순' },
-          { value: 'high', label: '높은 가격순' },
-          { value: 'low', label: '낮은 가격순' },
-        ]}
         styles={theme => ({
           input: {
             fontSize: '1.5rem',
@@ -41,7 +52,7 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOption 
             },
           },
         })}
-        onChange={e => handleSelectSortOption(e)}
+        onChange={handleSelectSortOptionClick}
       />
     </Flex>
   );

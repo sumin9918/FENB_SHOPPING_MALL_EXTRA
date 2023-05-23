@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { cartsQuery } from '../../api/query';
+
+import { cartsQuery } from 'api/query';
 
 const useTotalCartItems = () => {
   const { data: totalCartItems } = useQuery(

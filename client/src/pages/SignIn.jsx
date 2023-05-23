@@ -1,15 +1,19 @@
-import axios from 'axios';
 import { useMantineColorScheme, Image, Stack, Center, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSetRecoilState } from 'recoil';
-import { CustomButton, CustomLink, FormInput } from '../components';
+import { CustomButton, CustomLink } from '../components';
+import { FormInput } from '../components/Sign';
 import { signinSchema } from '../schema';
 import { userState } from '../recoil/atoms';
+import { requestSignIn } from '../api/fetch';
+import { MEDIAQUERY_WIDTH, PATH } from '../constants';
+import { useMediaQuery } from '../hooks';
 
 const SignIn = () => {
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const { colorScheme } = useMantineColorScheme();
   const setUser = useSetRecoilState(userState);
 
@@ -20,34 +24,31 @@ const SignIn = () => {
     resolver: zodResolver(signinSchema),
   });
 
-  const handleSignIn = async data => {
+  const handleSignIn = async signInInfo => {
     try {
-      const response = await axios.post('/api/auth/signin', {
-        email: data.email,
-        password: data.password,
-      });
+      const data = await requestSignIn({ email: signInInfo.email, password: signInInfo.password });
 
-      setUser(response.data);
+      setUser(data);
 
       notifications.show({
         color: 'blue',
         autoClose: 2000,
         title: '알림',
-        message: `${response.data.username}님 환영합니다.`,
+        message: `${data.username}님 환영합니다.`,
         sx: { div: { fontSize: '1.5rem' } },
       });
 
       if (state) {
         navigate(state);
       } else {
-        navigate('/');
+        navigate(PATH.MAIN);
       }
-    } catch (error) {
+    } catch (e) {
       notifications.show({
         color: 'red',
         autoClose: 2000,
         title: '알림',
-        message: error.response.data.message ? error.response.data.message : error.message,
+        message: e.response.data.message ? e.response.data.message : e.message,
         sx: { div: { fontSize: '1.5rem' } },
       });
     }
@@ -57,8 +58,8 @@ const SignIn = () => {
     <Stack
       align="center"
       h="75.5rem"
+      ml="3rem"
       sx={{
-        marginLeft: '3rem',
         input: {
           padding: '0',
           fontSize: '1.6rem',
@@ -106,20 +107,12 @@ const SignIn = () => {
           formState={formState}
         />
         <FormInput inputType="password" id="password" name="비밀번호" register={register} formState={formState} />
-        <CustomButton
-          type="submit"
-          w="40rem"
-          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-          sx={{
-            '@media (max-width: 765px)': {
-              width: '100vw',
-            },
-          }}>
+        <CustomButton type="submit" w={matches ? '40rem' : '100vw'} color={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
           로그인
         </CustomButton>
         <Center mt="2rem">
           회원이 아니신가요?
-          <CustomLink to={'/signup'}>회원가입</CustomLink>
+          <CustomLink to={PATH.SIGNIN}>회원가입</CustomLink>
         </Center>
       </form>
     </Stack>

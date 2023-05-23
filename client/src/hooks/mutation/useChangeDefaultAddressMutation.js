@@ -1,10 +1,10 @@
-import { useGenericMutation } from '../index';
-import { changeDefaultAddress } from '../../api/fetch';
-import { ADDRESS_QUERY_KEY } from '../../constants';
+import { changeDefaultAddress } from 'api/fetch';
+import { useGenericMutation } from 'hooks/mutation';
+import { QUERY_KEY } from 'constants';
 
 const useChangeDefaultAddressMutation = () =>
   useGenericMutation({
-    queryKey: ADDRESS_QUERY_KEY,
+    queryKey: QUERY_KEY.ADDRESS,
     mutationFn: changeDefaultAddress,
     onMutate(id) {
       return user => ({

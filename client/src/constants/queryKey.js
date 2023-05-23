@@ -1,10 +1,14 @@
-export const PRODUCTS_QUERY_KEY = ['products'];
-export const PAGE_PRODUCTS_QUERY_KEY = ['page', 'products'];
-export const WISHLIST_QUERY_KEY = ['wishList'];
-export const USER_QUERY_KEY = ['user'];
-export const AUTH_QUERY_KEY = ['auth'];
-export const SLIDES_QUERY_KEY = ['slides'];
-export const COUPONS_QUERY_KEY = ['coupons'];
-export const HISTORY_QUERY_KEY = ['history'];
-export const ADDRESS_QUERY_KEY = ['address'];
-export const CARTS_QUERY_KEY = ['carts'];
+const QUERY_KEY = {
+  PRODUCTS: ['products'],
+  PAGE_PRODUCTS: ['page', 'products'],
+  WISHLIST: ['wishList'],
+  USER: ['user'],
+  AUTH: ['auth'],
+  SLIDES: ['slides'],
+  COUPONS: ['coupons'],
+  HISTORY: ['history'],
+  ADDRESS: ['address'],
+  CARTS: ['carts'],
+};
+
+export default QUERY_KEY;

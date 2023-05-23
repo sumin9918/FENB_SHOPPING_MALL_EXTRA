@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+
 import {
   Title,
   Container,
@@ -13,51 +14,44 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { BiTrash } from 'react-icons/bi';
-import { favoritesQuery } from '../api/query';
-import { useToggleWishItemMutation } from '../hooks/wishList';
-import { PATH } from '../constants';
-import { NoProduct } from '../components';
+
+import { NoProduct } from 'components/common';
+import { favoritesQuery } from 'api/query';
+import { useMediaQuery } from 'hooks';
+import { useToggleWishItemMutation } from 'hooks/mutation';
+import { MEDIAQUERY_WIDTH, PATH } from 'constants';
 
 const WishList = () => {
-  const { data: favorites } = useQuery(favoritesQuery());
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const theme = useMantineTheme();
+
   const navigate = useNavigate();
 
-  const { mutate } = useToggleWishItemMutation();
+  const { data: favorites } = useQuery(favoritesQuery());
 
-  const handleRemoveWishItemClick = id => {
-    mutate({ id, isFavorite: true });
+  const { mutate: removeWishItem } = useToggleWishItemMutation();
+
+  const handleRemoveWishItemClick = id => () => {
+    removeWishItem({ id, isFavorite: true });
   };
 
-  const handleClickProduct = id => {
+  const handleProductClick = id => () => {
     navigate(`${PATH.PRODUCTS}/${id}`);
   };
 
   return (
     <Container size="120rem">
       <Title p="0.8rem 0 0 0.8rem">관심상품 목록</Title>
-      {!favorites.length ? (
-        <NoProduct pageName={'관심상품 목록'} />
-      ) : (
-        <Flex p="3.5rem 0 0 1rem" align="center" maw="120rem" m="auto" justify="" gap="xl" wrap="wrap">
+      {favorites.length ? (
+        <Flex align="center" gap="xl" m="auto" maw="120rem" p="3.5rem 0 0 1rem" wrap="wrap">
           {favorites.map(({ id, imgURL, name, brand, price, feature }) => (
-            <Card
-              key={id}
-              padding="lg"
-              maw="35rem"
-              fz="1.6rem"
-              withBorder
-              sx={{
-                '@media (max-width: 768px)': {
-                  width: '20rem',
-                },
-              }}>
+            <Card key={id} fz="1.6rem" maw={matches ? '35rem' : '20rem'} padding="lg" withBorder>
               <Card.Section>
-                <Image src={imgURL} alt="product" sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)} />
+                <Image alt={name} src={imgURL} sx={{ cursor: 'pointer' }} onClick={handleProductClick(id)} />
               </Card.Section>
 
-              <Group position="apart" mt="md" mb="xs">
-                <Text weight={500} sx={{ cursor: 'pointer' }} onClick={() => handleClickProduct(id)}>
+              <Group mb="xs" mt="md" position="apart">
+                <Text sx={{ cursor: 'pointer' }} weight={500} onClick={handleProductClick(id)}>
                   {name}
                 </Text>
                 <Badge color="skyblue" h="2rem" variant="light">
@@ -65,22 +59,21 @@ const WishList = () => {
                 </Badge>
               </Group>
 
-              <Text align="left" size="1.4rem" color="dimmed">
+              <Text align="left" color="dimmed" size="1.4rem">
                 {brand.kr} / {feature}
               </Text>
 
-              <Group position="apart" my="md">
-                <Text fw="500">{`${price.toLocaleString()} 원`}</Text>
-                <UnstyledButton sx={{ cursor: 'pointer' }} onClick={() => handleRemoveWishItemClick(id)}>
-                  <BiTrash
-                    size="2.5rem"
-                    color={theme.colorScheme === 'dark' ? theme.colors.gray[6] : 'rgb(117,117,117)'}
-                  />
+              <Group my="md" position="apart">
+                <Text fw="500">{`${price.toLocaleString('ko-KR')} 원`}</Text>
+                <UnstyledButton sx={{ cursor: 'pointer' }} onClick={handleRemoveWishItemClick(id)}>
+                  <BiTrash color={theme.colors.gray[6]} size="2.5rem" />
                 </UnstyledButton>
               </Group>
             </Card>
           ))}
         </Flex>
+      ) : (
+        <NoProduct pageName={'관심상품 목록'} />
       )}
     </Container>
   );

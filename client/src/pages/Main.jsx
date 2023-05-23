@@ -1,17 +1,20 @@
 import { useState } from 'react';
-import { useDisclosure } from '@mantine/hooks';
+
 import { Container } from '@mantine/core';
-import { Carousel, Modal, Products, Loading } from '../components/Main';
+import { useDisclosure } from '@mantine/hooks';
+
+import { Carousel, Modal, Products, Loading } from 'components/Main';
 
 const Main = () => {
-  const [title, setTitle] = useState('');
   const [modalIsOpen, { open, close }] = useDisclosure(false);
 
+  const [title, setTitle] = useState('');
+
   return (
-    <Container fluid p="0" mt="-4rem">
+    <Container mt="-4rem" p="0" fluid>
       <Carousel modalOpen={open} setModalTitle={setTitle} />
       <Products />
-      <Modal title={title} modalIsOpen={modalIsOpen} modalClose={close} />
+      <Modal modalClose={close} modalIsOpen={modalIsOpen} title={title} />
       <Loading />
     </Container>
   );

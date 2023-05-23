@@ -2,6 +2,9 @@ import { useMantineColorScheme, Button } from '@mantine/core';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import CustomFormInput from '../CustomFormInput';
 
+const WIDTH = 500;
+const HEIGHT = 600;
+
 const FormZoneCodeInput = ({
   inputType,
   id,
@@ -12,8 +15,6 @@ const FormZoneCodeInput = ({
   register,
   formState,
 }) => {
-  const width = 500;
-  const height = 600;
   const { colorScheme } = useMantineColorScheme();
 
   const open = useDaumPostcodePopup();
@@ -47,8 +48,8 @@ const FormZoneCodeInput = ({
   const handleClick = () => {
     open({
       onComplete: handleComplete,
-      left: window.screen.width / 2 - width / 2,
-      top: window.screen.height / 2 - height / 2,
+      left: window.screen.width / 2 - WIDTH / 2,
+      top: window.screen.height / 2 - HEIGHT / 2,
     });
   };
 
@@ -65,11 +66,11 @@ const FormZoneCodeInput = ({
       rightSection={
         <Button
           variant="outline"
+          w="12rem"
+          h="3rem"
           m="-0.5rem 6rem 0 0"
           color={colorScheme === 'dark' ? 'gray.6' : 'gray'}
           sx={{
-            width: '12rem',
-            height: '3rem',
             borderRadius: '3rem',
             ':hover': { border: '1px solid #228be6', color: '#228be6' },
             '.mantine-Button-inner': { fontSize: '1.4rem' },

@@ -1,15 +1,4 @@
 import {
-  PRODUCTS_QUERY_KEY,
-  PAGE_PRODUCTS_QUERY_KEY,
-  WISHLIST_QUERY_KEY,
-  AUTH_QUERY_KEY,
-  SLIDES_QUERY_KEY,
-  COUPONS_QUERY_KEY,
-  HISTORY_QUERY_KEY,
-  ADDRESS_QUERY_KEY,
-  CARTS_QUERY_KEY,
-} from '../constants';
-import {
   requestVerify,
   fetchSlides,
   fetchCoupons,
@@ -20,20 +9,21 @@ import {
   fetchUser,
   fetchFavorites,
   fetchCarts,
-} from './fetch';
+} from 'api/fetch';
+import { QUERY_KEY } from 'constants';
+
+const PAGE_SIZE = 12;
 
 export const productsQuery = options => ({
-  queryKey: PRODUCTS_QUERY_KEY,
+  queryKey: QUERY_KEY.PRODUCTS,
   queryFn: fetchProducts,
   retry: 0,
   staleTime: 3000,
   ...options,
 });
 
-const PAGE_SIZE = 12;
-
 export const pageProductsQuery = search => ({
-  queryKey: [...PAGE_PRODUCTS_QUERY_KEY, search].filter(str => str),
+  queryKey: [...QUERY_KEY.PAGE_PRODUCTS, search].filter(str => str),
   queryFn: ({ pageParam = 1 }) => fetchPageProducts(pageParam, PAGE_SIZE),
   getNextPageParam: (lastPage, allPages) => (lastPage.products.length === PAGE_SIZE ? allPages.length + 1 : undefined),
   retry: 0,
@@ -41,14 +31,14 @@ export const pageProductsQuery = search => ({
 });
 
 export const filteredProductsQuery = (search, searchValue) => ({
-  queryKey: [...PAGE_PRODUCTS_QUERY_KEY, searchValue],
+  queryKey: [...QUERY_KEY.PAGE_PRODUCTS, searchValue],
   queryFn: fetchFilteredProducts(search),
   retry: 0,
   staleTime: 3000,
 });
 
 export const slidesQuery = options => ({
-  queryKey: SLIDES_QUERY_KEY,
+  queryKey: QUERY_KEY.SLIDES,
   queryFn: fetchSlides,
   retry: 0,
   staleTime: 3000,
@@ -56,7 +46,7 @@ export const slidesQuery = options => ({
 });
 
 export const verifyQuery = options => ({
-  queryKey: AUTH_QUERY_KEY,
+  queryKey: QUERY_KEY.AUTH,
   queryFn: requestVerify,
   retry: 0,
   staleTime: 3000,
@@ -64,7 +54,7 @@ export const verifyQuery = options => ({
 });
 
 export const favoritesQuery = options => ({
-  queryKey: WISHLIST_QUERY_KEY,
+  queryKey: QUERY_KEY.WISHLIST,
   queryFn: fetchFavorites,
   retry: 0,
   // staleTime: 3000,
@@ -72,7 +62,7 @@ export const favoritesQuery = options => ({
 });
 
 export const cartsQuery = options => ({
-  queryKey: CARTS_QUERY_KEY,
+  queryKey: QUERY_KEY.CARTS,
   queryFn: fetchCarts,
   retry: 0,
   // staleTime: 3000,
@@ -80,7 +70,7 @@ export const cartsQuery = options => ({
 });
 
 export const userQuery = options => ({
-  queryKey: ADDRESS_QUERY_KEY,
+  queryKey: QUERY_KEY.ADDRESS,
   queryFn: fetchUser,
   retry: 0,
   staleTime: 3000,
@@ -88,7 +78,7 @@ export const userQuery = options => ({
 });
 
 export const couponsQuery = options => ({
-  queryKey: COUPONS_QUERY_KEY,
+  queryKey: QUERY_KEY.COUPONS,
   queryFn: fetchCoupons,
   retry: 0,
   staleTime: 3000,
@@ -96,7 +86,7 @@ export const couponsQuery = options => ({
 });
 
 export const historyQuery = ({ queryKey, ...options } = {}) => ({
-  queryKey: [...HISTORY_QUERY_KEY, queryKey],
+  queryKey: [...QUERY_KEY.HISTORY, queryKey],
   queryFn: fetchHistory,
   retry: 0,
   staleTime: 3000,

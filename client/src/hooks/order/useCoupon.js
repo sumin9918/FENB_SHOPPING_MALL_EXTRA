@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { checkCoupon } from '../../api/fetch';
+
+import { checkCoupon } from 'api/fetch';
 
 const useCoupon = totalPrice => {
   const [discount, setDiscount] = useState({ discountAmount: 0, discountedTotalPrice: totalPrice });

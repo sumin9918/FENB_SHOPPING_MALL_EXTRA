@@ -1,23 +1,29 @@
 import { useRef, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Carousel as MantineCarousel } from '@mantine/carousel';
+
 import { Container, Image } from '@mantine/core';
+import { Carousel as MantineCarousel } from '@mantine/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
-import { PATH } from '../../constants';
-import { addCoupon } from '../../api/fetch';
-import { slidesQuery, verifyQuery } from '../../api/query';
+
+import { addCoupon } from 'api/fetch';
+import { slidesQuery, verifyQuery } from 'api/query';
+import { PATH } from 'constants';
 
 const Carousel = ({ modalOpen, setModalTitle }) => {
-  const { data: slides } = useQuery(slidesQuery());
-  const { data: verify } = useQuery(verifyQuery());
-  const autoplay = useRef(Autoplay({ delay: 2000 }));
-  const [carouselIdx, setCarouselIdx] = useState(0);
-  const currentBackgroundColor = slides.find((_, idx) => idx === carouselIdx).sideBackgroundColor;
   const navigate = useNavigate();
 
-  const handleCarouselClick = async couponId => {
+  const { data: slides } = useQuery(slidesQuery());
+  const { data: verify } = useQuery(verifyQuery());
+
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const autoplay = useRef(Autoplay({ delay: 2000 }));
+
+  const currentBackgroundColor = slides.find((_, idx) => idx === carouselIdx).sideBackgroundColor;
+
+  const handleCarouselClick = couponId => async () => {
     if (!verify) navigate(PATH.SIGNIN);
 
     try {
@@ -33,42 +39,39 @@ const Carousel = ({ modalOpen, setModalTitle }) => {
 
   return (
     <Container
-      w="100%"
+      bg={currentBackgroundColor}
       maw="100%"
       pos="relative"
-      bg={currentBackgroundColor}
+      w="100%"
       sx={{
         transition: 'all .1s ',
       }}>
       <MantineCarousel
-        mx="auto"
         maw="120rem"
-        withIndicators
-        loop
+        mx="auto"
+        nextControlIcon={<SlArrowRight color="white" size="5rem" />}
         plugins={[autoplay.current]}
-        previousControlIcon={<SlArrowLeft size="5rem" color="white" />}
-        nextControlIcon={<SlArrowRight size="5rem" color="white" />}
-        onMouseEnter={autoplay.current.stop}
-        onMouseLeave={autoplay.current.reset}
-        onSlideChange={setCarouselIdx}
         pos="static"
-        sx={{
-          '.mantine-Carousel-control': {
+        previousControlIcon={<SlArrowLeft color="white" size="5rem" />}
+        styles={() => ({
+          control: {
             border: 'none',
             backgroundColor: 'transparent',
             boxShadow: 'none',
           },
-          '.mantine-Carousel-indicator': {
+          indicator: {
             width: '1rem',
             height: '1rem',
           },
-        }}>
+        })}
+        loop
+        withIndicators
+        onMouseEnter={autoplay.current.stop}
+        onMouseLeave={autoplay.current.reset}
+        onSlideChange={setCarouselIdx}>
         {slides.map(({ couponId, imgURL, alt }) => (
-          <MantineCarousel.Slide
-            key={couponId}
-            onClick={() => handleCarouselClick(couponId)}
-            sx={{ cursor: 'pointer' }}>
-            <Image src={imgURL} alt={alt} fit="contain" height="45rem" />
+          <MantineCarousel.Slide key={couponId} sx={{ cursor: 'pointer' }} onClick={handleCarouselClick(couponId)}>
+            <Image alt={alt} fit="contain" height="45rem" src={imgURL} />
           </MantineCarousel.Slide>
         ))}
       </MantineCarousel>

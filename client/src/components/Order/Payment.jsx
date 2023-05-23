@@ -6,7 +6,7 @@ import { useMediaQuery } from '../../hooks';
 import { useOrderInfo } from '../../hooks/order';
 import { useGetAddresses } from '../../hooks/address';
 import { postOrder } from '../../api/fetch';
-import { CARTS_QUERY_KEY, INIT_FIELD, MEDIAQUERY_WIDTH, PATH } from '../../constants';
+import { QUERY_KEY, INIT_FIELD, MEDIAQUERY_WIDTH, PATH } from '../../constants';
 import Address from './Address';
 import Coupons from './Coupons';
 import SelectPaymentMethod from './SelectPaymentMethod';
@@ -55,7 +55,7 @@ const Payment = ({ changeDiscount }) => {
           disabled={!field.info}
           color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
           onClick={async () => {
-            queryClient.removeQueries(CARTS_QUERY_KEY);
+            queryClient.removeQueries(QUERY_KEY.CARTS);
 
             await postOrder(getOrderInfo());
 

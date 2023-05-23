@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Group, Stack, Title, Text, useMantineColorScheme } from '@mantine/core';
 import CartItem from './CartItem';
-import NoProduct from '../NoProduct';
+import { NoProduct } from '../common';
 import { cartsQuery } from '../../api/query';
 import { useMediaQuery } from '../../hooks';
 import { useTotalCartItems, useTotalPrice } from '../../hooks/carts';

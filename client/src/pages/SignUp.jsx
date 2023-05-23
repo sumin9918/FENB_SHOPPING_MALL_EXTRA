@@ -1,21 +1,17 @@
-import axios from 'axios';
 import { useMantineColorScheme, Stack, Title, Center } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  FormInput,
-  FormMainAddressInput,
-  FormZoneCodeInput,
-  FormEmailInput,
-  FormPhoneInput,
-  CustomButton,
-  CustomLink,
-} from '../components';
+import { CustomButton, CustomLink } from '../components';
+import { FormInput, FormEmailInput, FormPhoneInput, FormZoneCodeInput, FormMainAddressInput } from '../components/Sign';
 import { signupSchema } from '../schema';
+import { requestSignUp } from '../api/fetch';
+import { MEDIAQUERY_WIDTH, PATH } from '../constants';
+import { useMediaQuery } from '../hooks';
 
 const SignUp = () => {
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
   const { colorScheme } = useMantineColorScheme();
 
   const navigate = useNavigate();
@@ -24,33 +20,33 @@ const SignUp = () => {
     resolver: zodResolver(signupSchema),
   });
 
-  const handleSignUp = async data => {
+  const handleSignUp = async signUpInfo => {
     try {
-      const response = await axios.post('/api/auth/signup', {
-        email: data.email,
-        name: data.name,
-        phone: data.phone,
-        password: data.password,
-        mainAddress: data.mainAddress,
-        detailAddress: data.detailAddress,
-        postcode: data.postcode,
+      const { message } = await requestSignUp({
+        email: signUpInfo.email,
+        name: signUpInfo.name,
+        phone: signUpInfo.phone,
+        password: signUpInfo.password,
+        mainAddress: signUpInfo.mainAddress,
+        detailAddress: signUpInfo.detailAddress,
+        postcode: signUpInfo.postcode,
       });
 
       notifications.show({
         color: 'blue',
         autoClose: 2000,
         title: '알림',
-        message: response.data.message,
+        message,
         sx: { div: { fontSize: '1.5rem' } },
       });
 
-      navigate('/signin');
-    } catch (error) {
+      navigate(PATH.SIGNIN);
+    } catch (e) {
       notifications.show({
         color: 'red',
         autoClose: 2000,
         title: '알림',
-        message: error.response.data.message ? error.response.data.message : error.message,
+        message: e.response.data.message ? e.response.data.message : e.message,
         sx: { div: { fontSize: '1.5rem' } },
       });
     }
@@ -60,8 +56,8 @@ const SignUp = () => {
     <Stack
       align="center"
       h="100rem"
+      ml="3rem"
       sx={{
-        marginLeft: '3rem',
         input: {
           padding: '0',
           fontSize: '1.6rem',
@@ -154,20 +150,12 @@ const SignUp = () => {
           register={register}
           formState={formState}
         />
-        <CustomButton
-          type="submit"
-          w="40rem"
-          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-          sx={{
-            '@media (max-width: 765px)': {
-              width: '100vw',
-            },
-          }}>
+        <CustomButton type="submit" w={matches ? '40rem' : '100vw'} color={colorScheme === 'dark' ? 'gray.6' : 'dark'}>
           가입하기
         </CustomButton>
         <Center mt="2rem">
           회원이신가요?
-          <CustomLink to={'/signin'}>로그인</CustomLink>
+          <CustomLink to={PATH.SIGNIN}>로그인</CustomLink>
         </Center>
       </form>
     </Stack>

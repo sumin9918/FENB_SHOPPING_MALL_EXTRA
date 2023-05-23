@@ -1,43 +1,39 @@
-import { Badge, Card, Container, Flex, Group, Image, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
-import { usePageProducts } from '../../hooks/products';
-import { PATH } from '../../constants';
+
+import { Badge, Card, Container, Flex, Group, Image, Text } from '@mantine/core';
+
+import { useMediaQuery } from 'hooks';
+import { usePageProducts } from 'hooks/products';
+import { MEDIAQUERY_WIDTH, PATH } from 'constants';
 
 const Products = () => {
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
+
   const { products } = usePageProducts();
 
   return (
-    <Container p="0" maw="120rem" pos="relative">
-      <Flex gap="xl" justify="center" align="center" direction="row" wrap="wrap" m="5rem 0">
+    <Container maw="120rem" p="0" pos="relative">
+      <Flex align="center" direction="row" gap="xl" justify="center" m="5rem 0" wrap="wrap">
         {products.map(({ id, name, price, imgURL, brand, feature }) => (
-          <Link to={`${PATH.PRODUCTS}/${id}`} key={id}>
-            <Card
-              fz="1.6rem"
-              padding="lg"
-              w="28rem"
-              withBorder
-              sx={{
-                '@media (max-width: 768px)': {
-                  width: '20rem',
-                },
-              }}>
+          <Link key={id} to={`${PATH.PRODUCTS}/${id}`}>
+            <Card fz="1.6rem" padding="lg" w={matches ? '28rem' : '20rem'} withBorder>
               <Card.Section pos="relative">
-                <Image src={imgURL} alt={name} />
+                <Image alt={name} src={imgURL} />
               </Card.Section>
 
-              <Group position="apart" mt="md" mb="xs" noWrap>
+              <Group mb="xs" mt="md" position="apart" noWrap>
                 <Text weight={500} truncate>
                   {name}
                 </Text>
-                <Badge color="skyblue" size="xl" variant="light" sx={{ flexShrink: 0 }}>
+                <Badge color="skyblue" size="xl" sx={{ flexShrink: 0 }} variant="light">
                   무료배송
                 </Badge>
               </Group>
 
-              <Text align="left" size="1.4rem" color="dimmed">
+              <Text align="left" color="dimmed" size="1.4rem">
                 {brand.kr} / {feature}
               </Text>
-              <Text fw={500} size="1.5rem" m="1rem 0">
+              <Text fw={500} m="1rem 0" size="1.5rem">
                 {`${price.toLocaleString('ko-KR')} 원`}
               </Text>
             </Card>

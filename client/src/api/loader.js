@@ -1,5 +1,4 @@
-import { queryClient } from '../components/GlobalProvider';
-import { getDecodeSearch } from '../utils/location';
+import { queryClient } from 'components/GlobalProvider';
 import {
   cartsQuery,
   couponsQuery,
@@ -11,7 +10,8 @@ import {
   slidesQuery,
   userQuery,
   verifyQuery,
-} from './query';
+} from 'api/query';
+import { getDecodeSearch } from 'utils';
 
 export const productsLoader = async () => {
   const { queryKey, queryFn } = productsQuery();

@@ -1,6 +1,6 @@
 import { Button, Stack, Text, Group, Container, CloseButton, useMantineColorScheme } from '@mantine/core';
 import { FaHome } from 'react-icons/fa';
-import { useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../../hooks/address';
+import { useChangeDefaultAddressMutation, useRemoveAddressMutation } from '../../hooks/mutation';
 import { INIT_FIELD } from '../../constants';
 
 const EditAddressItem = ({ address, setFiled, selectedAddress, changeSelectedAddress }) => {

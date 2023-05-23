@@ -1,15 +1,3 @@
-export { default as FormInput } from './Sign/FormInput';
-export { default as FormEmailInput } from './Sign/FormEmailInput';
-export { default as FormPhoneInput } from './Sign/FormPhoneInput';
-export { default as FormMainAddressInput } from './Sign/FormMainAddressInput';
-export { default as FormZoneCodeInput } from './Sign/FormZoneCodeInput';
-export { default as NavigationBar } from './NavigationBar';
-export { default as Footer } from './Footer';
-export { default as SwitchingPageScrollToTop } from './SwitchingPageScrollToTop';
-export { default as SadIcon } from './Icon';
-export { default as NoProduct } from './NoProduct';
-export { default as SizeButton } from './SizeButton';
-export { default as DarkMode } from './DarkMode';
 export { default as CustomButton } from './CustomButton';
 export { default as CustomFormInput } from './CustomFormInput';
 export { default as CustomLink } from './CustomLink';
