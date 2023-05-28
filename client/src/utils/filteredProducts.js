@@ -2,7 +2,7 @@ import { FILTER } from 'constants';
 
 const { PRICES, SIZES, COLORS, GENDER, BRANDS } = FILTER;
 
-const checkFiltersHasTrue = filters => filters.some(filter => filter === true);
+const checkFiltersHasTrue = filters => filters.some(filter => filter);
 
 const filteredProducts = (products, newFilters) => {
   const { priceFilters, sizeFilters, colorFilters, genderFilters, brandFilters } = newFilters;

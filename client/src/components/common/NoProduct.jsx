@@ -7,10 +7,10 @@ import { SadIcon } from 'components/common';
 import { PATH } from 'constants';
 
 const NoProduct = ({ pageName }) => {
-  const { colorShceme } = useMantineColorScheme();
+  const { colorScheme } = useMantineColorScheme();
 
   return (
-    <Container align="center" c={colorShceme === 'dark' ? 'gray.6' : 'gray.9'} fz="1.6rem" py="4rem">
+    <Container align="center" c={colorScheme === 'dark' ? 'gray.6' : 'gray.9'} fz="1.6rem" py="4rem">
       <SadIcon />
       <Space h="xl" />
       <Title>{pageName}에 상품이 없습니다</Title>
@@ -21,7 +21,7 @@ const NoProduct = ({ pageName }) => {
             style={{ verticalAlign: 'middle', transform: 'transLate3d(0, -1px, 0)', marginRight: '4px' }}
           />
           <Text weight="bold" span>
-            FENB
+            486
           </Text>
           의 신발들을 둘러보세요
         </Text>

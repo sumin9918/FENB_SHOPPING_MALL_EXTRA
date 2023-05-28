@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -8,8 +8,8 @@ import { Container, Flex } from '@mantine/core';
 import { FiltersContainer, Header, ResultProducts } from 'components/Category';
 import { filteredProductsQuery } from 'api/query';
 import { useMediaQuery } from 'hooks';
-import { filteredProducts, getDecodeSearch, sortProducts } from 'utils';
-import { MEDIAQUERY_WIDTH, FILTER } from 'constants';
+import { filteredProducts, getDecodeSearch, sortProducts, setSessionStorage, getSessionStorage } from 'utils';
+import { MEDIAQUERY_WIDTH, FILTER, SESSION_KEY } from 'constants';
 
 const { PRICES, SIZES, COLORS, GENDER, BRANDS } = FILTER;
 
@@ -33,41 +33,44 @@ const Category = () => {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [sortOption, setSortOption] = useState(INITIAL_SORT);
 
-  const newProducts = sortProducts(filteredProducts(products, filters), sortOption);
+  const newProducts = useMemo(
+    () => sortProducts(filteredProducts(products, filters), sortOption),
+    [products, filters, sortOption]
+  );
 
   const handleResetFiltersClick = () => {
     setFilters(INITIAL_FILTERS);
     setSortOption(INITIAL_SORT);
 
-    sessionStorage.setItem('filters', JSON.stringify(INITIAL_FILTERS));
-    sessionStorage.setItem('sortOption', JSON.stringify(INITIAL_SORT));
+    setSessionStorage(SESSION_KEY.FILTERS, INITIAL_FILTERS);
+    setSessionStorage(SESSION_KEY.SORT_OPTION, INITIAL_SORT);
   };
 
   const handleSelectSortOptionClick = selectedSortOption => {
     setSortOption(selectedSortOption);
 
-    sessionStorage.setItem('sortOption', JSON.stringify(selectedSortOption));
+    setSessionStorage(SESSION_KEY.SORT_OPTION, selectedSortOption);
   };
 
   const handleCheckFiltersClick =
     ({ rangeIdx, size, color, gender, brand }) =>
     () => {
       const newFilters = {
-        priceFilters: filters.priceFilters.map((filter, i) => (rangeIdx === PRICES.at(i).rangeIdx ? !filter : filter)),
-        sizeFilters: filters.sizeFilters.map((filter, i) => (size === SIZES.at(i) ? !filter : filter)),
-        colorFilters: filters.colorFilters.map((filter, i) => (color === COLORS.at(i).en ? !filter : filter)),
-        genderFilters: filters.genderFilters.map((filter, i) => (gender === GENDER.at(i).en ? !filter : filter)),
-        brandFilters: filters.brandFilters.map((filter, i) => (brand === BRANDS.at(i).en ? !filter : filter)),
+        priceFilters: filters.priceFilters.map((filter, i) => (rangeIdx === PRICES[i].rangeIdx ? !filter : filter)),
+        sizeFilters: filters.sizeFilters.map((filter, i) => (size === SIZES[i] ? !filter : filter)),
+        colorFilters: filters.colorFilters.map((filter, i) => (color === COLORS[i].en ? !filter : filter)),
+        genderFilters: filters.genderFilters.map((filter, i) => (gender === GENDER[i].en ? !filter : filter)),
+        brandFilters: filters.brandFilters.map((filter, i) => (brand === BRANDS[i].en ? !filter : filter)),
       };
 
       setFilters({ ...filters, ...newFilters });
 
-      sessionStorage.setItem('filters', JSON.stringify({ ...filters, ...newFilters }));
+      setSessionStorage(SESSION_KEY.FILTERS, { ...filters, ...newFilters });
     };
 
   useEffect(() => {
-    setSortOption(JSON.parse(sessionStorage.getItem('sortOption')) ?? sortOption);
-    setFilters(JSON.parse(sessionStorage.getItem('filters')) ?? filters);
+    setSortOption(getSessionStorage(SESSION_KEY.SORT_OPTION) ?? sortOption);
+    setFilters(getSessionStorage(SESSION_KEY.FILTERS) ?? filters);
   }, [filters, sortOption]);
 
   return (

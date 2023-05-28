@@ -25,8 +25,8 @@ const Header = ({ sortOption, searchValue, productCount, handleSelectSortOptionC
       bg={colorScheme === 'dark' ? 'dark.7' : 'white'}
       justify="space-between"
       pos="sticky"
-      sx={{ zIndex: 9999 }}
-      top="0">
+      sx={{ zIndex: 99 }}
+      top={-1}>
       <Container fw="600" fz="2.4rem" m="0" p="1.5rem 1rem">
         {filteredCategories[searchValue] ? `${filteredCategories[searchValue]}` : `${searchValue}`}
         {` (${productCount})`}
