@@ -1,14 +1,16 @@
-import { Stack, Title, Radio, Group, Image, Text, useMantineTheme } from '@mantine/core';
+import { Group, Image, Radio, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 
 import { PAYMENT_METHODS } from 'constants';
 
-const PaymentMethod = ({ changePaymentMethod }) => {
+const PaymentMethod = ({ form: { paymentMethod }, updateForm }) => {
   const { colorScheme } = useMantineTheme();
+
+  const handlePaymentMethodChange = paymentMethod => updateForm({ paymentMethod });
 
   return (
     <Stack>
       <Title py="1.2rem">결제</Title>
-      <Radio.Group defaultValue={PAYMENT_METHODS[0].value} name="paymentMethods" onChange={changePaymentMethod}>
+      <Radio.Group name="paymentMethods" value={paymentMethod} onChange={handlePaymentMethodChange}>
         <Stack mt="xs" spacing="0.8rem">
           {PAYMENT_METHODS.map(({ value, label, labelStyle }) => (
             <Radio
@@ -19,7 +21,7 @@ const PaymentMethod = ({ changePaymentMethod }) => {
                 <Group fz="1.6rem" px="0.4rem">
                   <Image
                     alt={value}
-                    src={`images/payments/${colorScheme === 'dark' ? `${value}Dark` : value}.svg`}
+                    src={`images/payments/${value}${colorScheme === 'dark' ? 'Dark' : ''}.svg`}
                     {...labelStyle}
                   />
                   <Text span>{label}</Text>

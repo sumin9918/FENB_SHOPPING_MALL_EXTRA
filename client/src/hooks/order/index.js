@@ -1,2 +1,1 @@
-export { default as useCoupon } from './useCoupon';
-export { default as useOrderInfo } from './useOrderInfo';
+export { default as useOrder } from './useOrder';

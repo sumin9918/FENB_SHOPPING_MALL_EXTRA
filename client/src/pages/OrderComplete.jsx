@@ -1,19 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
-import { Container, Stack, Title, useMantineColorScheme } from '@mantine/core';
+import { Button, Container, Stack, Title, useMantineTheme } from '@mantine/core';
 
-import { CustomButton } from 'components';
 import { OrderInfo, OrderProducts } from 'components/OrderComplete';
 import { historyQuery } from 'api/query';
 import { PATH } from 'constants';
 
 const OrderComplete = () => {
-  const { data: history } = useQuery(historyQuery());
-
-  const { colorScheme } = useMantineColorScheme();
+  const { colorScheme } = useMantineTheme();
 
   const navigate = useNavigate();
+
+  const { data: history } = useQuery(historyQuery());
+
+  const handleMainClick = () => navigate(PATH.MAIN);
 
   return (
     <Container fz="1.6rem" size="1200px" w="100%">
@@ -23,9 +24,20 @@ const OrderComplete = () => {
       <Stack align="center" justify="center" mih="5rem" px="0.8rem" spacing={0}>
         <OrderInfo history={history} />
         <OrderProducts products={history.products} />
-        <CustomButton color={colorScheme === 'dark' ? 'gray.6' : 'dark'} w="20rem" onClick={() => navigate(PATH.MAIN)}>
+        <Button
+          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+          fz="1.6rem"
+          h="6rem"
+          hw="bold"
+          mt="2rem"
+          p="1.8rem 2.4rem"
+          w="20rem"
+          sx={{
+            borderRadius: '30px',
+          }}
+          onClick={handleMainClick}>
           확인
-        </CustomButton>
+        </Button>
       </Stack>
     </Container>
   );

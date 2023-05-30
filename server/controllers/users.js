@@ -89,6 +89,8 @@ const createUser = ({ email, name, phone, password, createAt, postcode, ...addre
 const getAddress = (email, addressId) =>
   users.find(user => user.email === email).addresses.find(address => address.id === addressId);
 
+const getAddresses = email => users.find(user => user.email === email).addresses;
+
 // 추가
 const addAddress = (email, { isDefault = false, ...address }) => {
   const id = uuidv4();
@@ -174,6 +176,7 @@ module.exports = {
   createUser,
   addAddress,
   getAddress,
+  getAddresses,
   getUser,
   confirmUser,
   checkDuplicateEmail,

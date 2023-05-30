@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Stack, Title, Group, Text, useMantineTheme } from '@mantine/core';
+import { Stack, Title, Group, Text, useMantineTheme, Button, Center } from '@mantine/core';
 
 import { MEDIAQUERY_WIDTH, PATH } from '../../constants';
 import { useMediaQuery } from '../../hooks';
 import { useCountCarts, useTotalPrice } from '../../hooks/carts';
-import CustomButton from '../CustomButton';
 
 // Link 사용? navigate() 사용?
 
@@ -43,12 +42,23 @@ const OrderHistory = () => {
         <Text>총 결제 금액</Text>
         <Text>{totalPrice.toLocaleString('ko-KR')} 원</Text>
       </Group>
-      <CustomButton
-        color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
-        disabled={!countCarts}
-        onClick={handleOrderButtonClick}>
-        주문결제
-      </CustomButton>
+      <Center>
+        <Button
+          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+          disabled={!countCarts}
+          fz="1.6rem"
+          h="6rem"
+          hw="bold"
+          mt="2rem"
+          p="1.8rem 2.4rem"
+          w={matches ? '100%' : '30rem'}
+          sx={{
+            borderRadius: '30px',
+          }}
+          onClick={handleOrderButtonClick}>
+          확인
+        </Button>
+      </Center>
     </Stack>
   );
 };

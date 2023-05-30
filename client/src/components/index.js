@@ -1,1 +1,2 @@
-export { default as CustomButton } from './CustomButton';
+export { default as GlobalProvider } from './GlobalProvider';
+export { default as PrivateRoute } from './PrivateRoute';

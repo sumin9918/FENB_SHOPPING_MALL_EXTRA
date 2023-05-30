@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { Stack, Title, Accordion, Radio, Group, Text, useMantineTheme } from '@mantine/core';
+import { Accordion, Group, Radio, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 
 import { couponsQuery } from 'api/query';
 import { useTotalPrice } from 'hooks/carts';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-const expirationDate = endTime => Math.floor((Date.parse(endTime) - Date.parse(new Date())) / ONE_DAY);
+const expirationDate = endTime => Math.floor((new Date(endTime) - new Date()) / ONE_DAY);
 
-const Coupons = ({ changeCouponId }) => {
+const Coupon = ({ handleCouponIdUpdate }) => {
   const { colors } = useMantineTheme();
 
   const { data: coupons } = useQuery(couponsQuery());
@@ -22,7 +22,7 @@ const Coupons = ({ changeCouponId }) => {
         <Accordion.Item value="coupons">
           <Accordion.Control fz="1.6rem">쿠폰을 선택하세요</Accordion.Control>
           <Accordion.Panel>
-            <Radio.Group name="coupons" onChange={changeCouponId}>
+            <Radio.Group name="coupons" onChange={handleCouponIdUpdate}>
               <Stack mt="xs">
                 {coupons.map(({ id, title, endTime, minimumPrice }) => (
                   <Radio
@@ -54,4 +54,4 @@ const Coupons = ({ changeCouponId }) => {
   );
 };
 
-export default Coupons;
+export default Coupon;

@@ -4,10 +4,10 @@ import { QUERY_KEY } from 'constants';
 
 const useRemoveAddressMutation = () =>
   useGenericMutation({
-    queryKey: QUERY_KEY.ADDRESS,
+    queryKey: QUERY_KEY.ADDRESSES,
     mutationFn: removeAddress,
     onMutate(id) {
-      return user => ({ ...user, addresses: user.addresses.filter(address => address.id !== id) });
+      return addresses => addresses.filter(address => address.id !== id);
     },
   });
 

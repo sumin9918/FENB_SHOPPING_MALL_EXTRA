@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const {
   getUser,
+  getAddresses,
   addAddress,
   updateDefaultAddress,
   updateAddress,
@@ -17,6 +18,12 @@ router.get('/me', authCheck, (req, res) => {
   const { email: myEmail, name, phone, addresses } = getUser(email);
 
   res.send({ email: myEmail, name, phone, addresses });
+});
+
+router.get('/me/addresses', authCheck, (req, res) => {
+  const { email } = req.locals;
+
+  res.send(getAddresses(email));
 });
 
 router.post('/me/address', authCheck, (req, res) => {

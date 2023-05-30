@@ -1,1 +1,1 @@
-export { default as useGetAddresses } from './useGetAddresses';
+export { default as useAddresses } from './useAddresses';

@@ -8,7 +8,7 @@ import {
   pageProductsQuery,
   productsQuery,
   slidesQuery,
-  userQuery,
+  addressesQuery,
   verifyQuery,
 } from 'api/query';
 import { getDecodeSearch } from 'utils';
@@ -85,8 +85,8 @@ export const cartsLoader = async () => {
   }
 };
 
-export const userLoader = async () => {
-  const { queryKey, queryFn } = userQuery();
+export const addressesLoader = async () => {
+  const { queryKey, queryFn } = addressesQuery();
 
   try {
     return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));

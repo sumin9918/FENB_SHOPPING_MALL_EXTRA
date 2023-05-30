@@ -3,10 +3,9 @@ import { useSetRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Image, Stack, Center, Title, useMantineTheme, Text } from '@mantine/core';
+import { Image, Stack, Center, Title, useMantineTheme, Text, Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
-import { CustomButton } from 'components';
 import { FormInput } from 'components/Sign';
 import { signIn } from 'api/fetch';
 import { signinSchema } from 'schema';
@@ -74,9 +73,20 @@ const SignIn = () => {
           register={register}
           type="password"
         />
-        <CustomButton color={colorScheme === 'dark' ? 'gray.6' : 'dark'} type="submit" w="40rem">
+        <Button
+          color={colorScheme === 'dark' ? 'gray.6' : 'dark'}
+          fz="1.6rem"
+          h="6rem"
+          hw="bold"
+          mt="2rem"
+          p="1.8rem 2.4rem"
+          type="submit"
+          w="40rem"
+          sx={{
+            borderRadius: '30px',
+          }}>
           로그인
-        </CustomButton>
+        </Button>
         <Center fz="1.6rem" pt="2rem">
           회원이 아니신가요?
           <Text

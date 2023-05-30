@@ -6,9 +6,9 @@ import {
   fetchHistory,
   fetchPageProducts,
   fetchProducts,
-  fetchUser,
   fetchFavorites,
   fetchCarts,
+  fetchAddresses,
 } from 'api/fetch';
 import { QUERY_KEY } from 'constants';
 
@@ -67,9 +67,9 @@ export const cartsQuery = options => ({
   ...options,
 });
 
-export const userQuery = options => ({
-  queryKey: QUERY_KEY.ADDRESS,
-  queryFn: fetchUser,
+export const addressesQuery = options => ({
+  queryKey: QUERY_KEY.ADDRESSES,
+  queryFn: fetchAddresses,
   ...defaultOptions,
   ...options,
 });
@@ -81,8 +81,8 @@ export const couponsQuery = options => ({
   ...options,
 });
 
-export const historyQuery = ({ queryKey, ...options } = {}) => ({
-  queryKey: [...QUERY_KEY.HISTORY, queryKey],
+export const historyQuery = (options = {}) => ({
+  queryKey: QUERY_KEY.HISTORY,
   queryFn: fetchHistory,
   ...defaultOptions,
   ...options,

@@ -85,7 +85,7 @@ router.get('/history', authCheck, (req, res) => {
 
   res.send({
     ...history[0],
-    products: history[0].products?.map(product => ({ ...product, color: COLORS[product.color] })),
+    products: history[0].products.map(product => ({ ...product, color: COLORS[product.color] })),
   });
 });
 

@@ -4,13 +4,10 @@ import { QUERY_KEY } from 'constants';
 
 const useChangeDefaultAddressMutation = () =>
   useGenericMutation({
-    queryKey: QUERY_KEY.ADDRESS,
+    queryKey: QUERY_KEY.ADDRESSES,
     mutationFn: changeDefaultAddress,
     onMutate(id) {
-      return user => ({
-        ...user,
-        addresses: user.addresses.map(address => ({ ...address, isDefault: address.id === id })),
-      });
+      return addresses => addresses.map(address => ({ ...address, isDefault: address.id === id }));
     },
   });
 

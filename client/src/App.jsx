@@ -1,4 +1,18 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
+
+import PrivateRoute from 'components/PrivateRoute';
+import {
+  slidesLoader,
+  cartsLoader,
+  couponsLoader,
+  favoritesLoader,
+  filteredProductsLoader,
+  historyLoader,
+  pageProductsLoader,
+  productsLoader,
+  addressesLoader,
+} from 'api/loader';
+import { PATH } from 'constants';
 import {
   Root,
   Cart,
@@ -12,19 +26,6 @@ import {
   WishList,
   NotFound,
 } from './pages';
-import { PATH } from './constants';
-import {
-  slidesLoader,
-  cartsLoader,
-  couponsLoader,
-  favoritesLoader,
-  filteredProductsLoader,
-  historyLoader,
-  pageProductsLoader,
-  productsLoader,
-  userLoader,
-} from './api/loader';
-import PrivateRoute from './components/PrivateRoute';
 
 const router = createHashRouter([
   {
@@ -51,14 +52,14 @@ const router = createHashRouter([
       {
         path: PATH.CART,
         loader: cartsLoader,
-        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<Cart />} />,
-        errorElement: <PrivateRoute redirectTo={PATH.SIGNIN} element={<Cart />} />,
+        element: <PrivateRoute element={<Cart />} redirectTo={PATH.SIGNIN} />,
+        errorElement: <PrivateRoute element={<Cart />} redirectTo={PATH.SIGNIN} />,
       },
       {
         path: PATH.WISHLIST,
         loader: favoritesLoader,
-        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<WishList />} />,
-        errorElement: <PrivateRoute redirectTo={PATH.SIGNIN} element={<WishList />} />,
+        element: <PrivateRoute element={<WishList />} redirectTo={PATH.SIGNIN} />,
+        errorElement: <PrivateRoute element={<WishList />} redirectTo={PATH.SIGNIN} />,
       },
       {
         path: PATH.CATEGORY,
@@ -73,16 +74,16 @@ const router = createHashRouter([
       {
         path: PATH.ORDER,
         loader: async () => ({
-          user: await userLoader(),
+          addresses: await addressesLoader(),
           carts: await cartsLoader(),
           coupons: await couponsLoader(),
         }),
-        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<Order />} />,
+        element: <PrivateRoute element={<Order />} redirectTo={PATH.SIGNIN} />,
       },
       {
         path: PATH.ORDER_COMPLETE,
         loader: historyLoader,
-        element: <PrivateRoute redirectTo={PATH.SIGNIN} element={<OrderComplete />} />,
+        element: <PrivateRoute element={<OrderComplete />} redirectTo={PATH.SIGNIN} />,
       },
       {
         path: '/*',

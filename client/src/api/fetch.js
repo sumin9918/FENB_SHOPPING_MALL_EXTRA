@@ -39,8 +39,8 @@ export const fetchCarts = async () => {
   return data;
 };
 
-export const fetchUser = async () => {
-  const { data } = await axios.get('api/users/me');
+export const fetchAddresses = async () => {
+  const { data } = await axios.get('api/users/me/addresses');
   return data;
 };
 
@@ -49,7 +49,7 @@ export const fetchCoupons = async () => {
   return data;
 };
 
-export const checkCoupon = async id => {
+export const applyCoupon = async id => {
   const { data } = await axios.get(`/api/order/coupons/${id}`);
   return data;
 };
@@ -101,13 +101,19 @@ export const addCart = async ({ id, selectedSize }) => {
   await axios.post(`/api/carts/me/${id}`, { selectedSize });
 };
 
-export const addAddress = async newAddress => {
-  const { data } = await axios.post('/api/users/me/address', { ...newAddress });
+export const addAddress = async ({ name, phone, mainAddress, detailAddress, postcode }) => {
+  const { data } = await axios.post('/api/users/me/address', {
+    recipient: name,
+    recipientPhone: phone,
+    mainAddress,
+    detailAddress,
+    postcode,
+  });
   return data;
 };
 
-export const order = async paymentInfo => {
-  await axios.post('/api/order/pay', { ...paymentInfo });
+export const order = async form => {
+  await axios.post('/api/order/pay', form);
 };
 
 export const changeCartQuantity = async ({ id, selectedSize, quantity }) => {
