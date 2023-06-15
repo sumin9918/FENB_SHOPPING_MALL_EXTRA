@@ -9,6 +9,7 @@ import {
   fetchFavorites,
   fetchCarts,
   fetchAddresses,
+  fetchUser,
 } from 'api/fetch';
 import { QUERY_KEY } from 'constants';
 
@@ -42,6 +43,13 @@ export const filteredProductsQuery = (search, searchValue) => ({
 export const slidesQuery = options => ({
   queryKey: QUERY_KEY.SLIDES,
   queryFn: fetchSlides,
+  ...defaultOptions,
+  ...options,
+});
+
+export const userQuery = options => ({
+  queryKey: QUERY_KEY.USER,
+  queryFn: fetchUser,
   ...defaultOptions,
   ...options,
 });

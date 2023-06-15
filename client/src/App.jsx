@@ -1,6 +1,5 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 
-import PrivateRoute from 'components/PrivateRoute';
 import {
   slidesLoader,
   cartsLoader,
@@ -11,8 +10,10 @@ import {
   pageProductsLoader,
   productsLoader,
   addressesLoader,
-} from 'api/loader';
-import { PATH } from 'constants';
+  userLoader,
+} from './api/loader';
+import PrivateRoute from './components/PrivateRoute';
+import { PATH } from './constants';
 import {
   Root,
   Cart,
@@ -25,6 +26,11 @@ import {
   SignUp,
   WishList,
   NotFound,
+  MyPage,
+  History,
+  Account,
+  Address,
+  Withdrawal,
 } from './pages';
 
 const router = createHashRouter([
@@ -84,6 +90,31 @@ const router = createHashRouter([
         path: PATH.ORDER_COMPLETE,
         loader: historyLoader,
         element: <PrivateRoute element={<OrderComplete />} redirectTo={PATH.SIGNIN} />,
+      },
+      {
+        path: PATH.MYPAGE,
+        element: <PrivateRoute element={<MyPage />} redirectTo={PATH.SIGNIN} />,
+        children: [
+          {
+            path: PATH.ACCOUNT,
+            loader: userLoader,
+            element: <PrivateRoute element={<Account />} redirectTo={PATH.SIGNIN} />,
+          },
+          {
+            path: PATH.WITHDRAWAL,
+            element: <PrivateRoute element={<Withdrawal />} redirectTo={PATH.SIGNIN} />,
+          },
+          {
+            path: PATH.ADDRESS,
+            loader: userLoader,
+            element: <PrivateRoute element={<Address />} redirectTo={PATH.SIGNIN} />,
+          },
+          {
+            path: PATH.HISTORY,
+            loader: historyLoader,
+            element: <PrivateRoute element={<History />} redirectTo={PATH.SIGNIN} />,
+          },
+        ],
       },
       {
         path: '/*',

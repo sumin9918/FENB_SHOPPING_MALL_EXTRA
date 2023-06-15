@@ -8,3 +8,4 @@ export { default as useToggleWishItemMutation } from './useToggleWishItemMutatio
 export { default as useAddAddressMutation } from './useAddAddressMutation';
 export { default as usePessimisticMutation } from './usePessimisticMutation';
 export { default as useOrderMutation } from './useOrderMutation';
+export { default as useUpdateUserInfoMutation } from './useUpdateUserInfoMutation';

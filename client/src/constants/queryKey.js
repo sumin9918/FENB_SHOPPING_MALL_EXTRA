@@ -9,6 +9,7 @@ const QUERY_KEY = {
   ADDRESS: ['address'],
   CARTS: ['carts'],
   ADDRESSES: ['addresses'],
+  USER: ['user'],
 };
 
 export default QUERY_KEY;

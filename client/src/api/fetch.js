@@ -20,6 +20,11 @@ export const fetchSlides = async () => {
   return data;
 };
 
+export const fetchUser = async () => {
+  const { data } = await axios.get('api/users/me');
+  return data;
+};
+
 export const signOut = async () => {
   await axios.get('api/auth/signout');
 };
@@ -116,6 +121,12 @@ export const order = async form => {
   await axios.post('/api/order/pay', form);
 };
 
+export const checkCorrespondPassword = async currentPassword => {
+  const { data } = await axios.post('/api/users/me/password', currentPassword);
+
+  return data;
+};
+
 export const changeCartQuantity = async ({ id, selectedSize, quantity }) => {
   await axios.patch(`/api/carts/me/${id}`, { selectedSize, quantity });
 };
@@ -124,10 +135,18 @@ export const changeDefaultAddress = async id => {
   await axios.patch(`/api/users/me/address/default/${id}`);
 };
 
+export const updateUserInfo = async newUserInfo => {
+  await axios.patch('/api/users/me', newUserInfo);
+};
+
 export const removeCart = async ({ id, selectedSize }) => {
   await axios.delete(`/api/carts/me/${id}?selectedSize=${selectedSize}`);
 };
 
 export const removeAddress = async id => {
   await axios.delete(`/api/users/me/address/${id}`);
+};
+
+export const removeUser = async () => {
+  await axios.delete('/api/users/me');
 };

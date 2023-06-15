@@ -9,3 +9,8 @@ export { default as Products } from './Products';
 export { default as Order } from './Order';
 export { default as OrderComplete } from './OrderComplete';
 export { default as NotFound } from './NotFound';
+export { default as MyPage } from './MyPage';
+export { default as Account } from './Account';
+export { default as Withdrawal } from './Withdrawal';
+export { default as Address } from './Address';
+export { default as History } from './History';

@@ -16,15 +16,17 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core';
+import { BiPackage } from 'react-icons/bi';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
+import { IoReceiptOutline, IoSettingsSharp } from 'react-icons/io5';
 import { SlHandbag } from 'react-icons/sl';
 
 import { SearchBar, DarkMode } from 'components/NavigationBar';
 import { signOut } from 'api/fetch';
+import { userState } from 'recoil/atoms';
 import { useMediaQuery } from 'hooks';
 import { getDecodeSearch } from 'utils';
 import { QUERY_KEY, MEDIAQUERY_WIDTH, PATH } from 'constants';
-import { userState } from 'recoil/atoms';
 
 const Main = () => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
@@ -119,6 +121,29 @@ const SimpleUtilArea = ({ user, handleSignOutClick, redirectTo }) => {
               </ActionIcon>
             </Tooltip>
           </Link>
+          <Menu shadow="md" transitionProps={{ transition: 'rotate-right', duration: 150 }} width="20rem">
+            <Menu.Target>
+              <Avatar radius="xl" size="5rem" sx={{ cursor: 'pointer' }} />
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Link state={redirectTo} to={PATH.HISTORY}>
+                <Menu.Item fw="bold" fz="1.6rem" icon={<IoReceiptOutline size="2rem" />}>
+                  구매내역
+                </Menu.Item>
+              </Link>
+              <Link state={redirectTo} to={PATH.ADDRESS}>
+                <Menu.Item fw="bold" fz="1.6rem" icon={<BiPackage size="2rem" />}>
+                  배송지
+                </Menu.Item>
+              </Link>
+              <Link state={redirectTo} to={PATH.ACCOUNT}>
+                <Menu.Item fw="bold" fz="1.6rem" icon={<IoSettingsSharp size="2rem" />}>
+                  계정정보
+                </Menu.Item>
+              </Link>
+            </Menu.Dropdown>
+          </Menu>
         </Flex>
       </Navbar.Section>
     </Stack>
@@ -136,6 +161,18 @@ const UtilArea = ({ user, handleSignOutClick, redirectTo }) => {
 
   const handleMoveToCartClick = () => {
     navigate(PATH.CART);
+  };
+
+  const handleMoveToHistoryClick = () => {
+    navigate(PATH.HISTORY);
+  };
+
+  const handleMoveToAddressClick = () => {
+    navigate(PATH.ADDRESS);
+  };
+
+  const handleMoveToAccountClick = () => {
+    navigate(PATH.ACCOUNT);
   };
 
   return (
@@ -166,6 +203,30 @@ const UtilArea = ({ user, handleSignOutClick, redirectTo }) => {
             icon={<SlHandbag size="2rem" />}
             onClick={handleMoveToCartClick}>
             장바구니
+          </Menu.Item>
+          <Menu.Item
+            disabled={!user}
+            fw="bold"
+            fz="1.6rem"
+            icon={<IoReceiptOutline size="2rem" />}
+            onClick={handleMoveToHistoryClick}>
+            구매내역
+          </Menu.Item>
+          <Menu.Item
+            disabled={!user}
+            fw="bold"
+            fz="1.6rem"
+            icon={<BiPackage size="2rem" />}
+            onClick={handleMoveToAddressClick}>
+            배송지
+          </Menu.Item>
+          <Menu.Item
+            disabled={!user}
+            fw="bold"
+            fz="1.6rem"
+            icon={<IoSettingsSharp size="2rem" />}
+            onClick={handleMoveToAccountClick}>
+            계정정보
           </Menu.Item>
           <Menu.Divider />
           {user ? (

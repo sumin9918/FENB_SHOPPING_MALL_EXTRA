@@ -10,6 +10,7 @@ import {
   slidesQuery,
   addressesQuery,
   verifyQuery,
+  userQuery,
 } from 'api/query';
 import { getDecodeSearch } from 'utils';
 
@@ -47,6 +48,16 @@ export const filteredProductsLoader = async params => {
 
 export const slidesLoader = async () => {
   const { queryKey, queryFn } = slidesQuery();
+
+  try {
+    return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const userLoader = async () => {
+  const { queryKey, queryFn } = userQuery();
 
   try {
     return queryClient.getQueryData(queryKey) ?? (await queryClient.fetchQuery({ queryKey, queryFn }));

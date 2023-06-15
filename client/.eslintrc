@@ -94,7 +94,7 @@
           { "pattern": "{pages,pages/**}", "group": "internal", "position": "before" },
           { "pattern": "{components,components/**}", "group": "internal", "position": "before" },
           { "pattern": "{api,api/**}", "group": "internal", "position": "before" },
-          { "pattern": "{recoil/**}", "group": "internal", "position": "before" },
+          { "pattern": "recoil/**", "group": "internal", "position": "before" },
           { "pattern": "{hooks,hooks/**}", "group": "internal", "position": "before" },
           { "pattern": "{utils,utils/**}", "group": "internal", "position": "before" },
           { "pattern": "{schema,schema/**}", "group": "internal", "position": "before" },

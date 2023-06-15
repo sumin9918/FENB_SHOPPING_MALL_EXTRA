@@ -9,7 +9,7 @@ const useAddCartMutation = () =>
     onMutate({ selectedSize, currentProduct }) {
       return carts =>
         carts
-          ? [...carts, { ...currentProduct, selectedSize, quantity: 1 }]
+          ? [{ ...currentProduct, selectedSize, quantity: 1 }, ...carts]
           : [{ ...currentProduct, selectedSize, quantity: 1 }];
     },
   });

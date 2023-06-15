@@ -8,6 +8,11 @@ const PATH = {
   ORDER: '/order',
   ORDER_COMPLETE: '/order/ordercomplete',
   WISHLIST: '/wishlist',
+  MYPAGE: '/myPage',
+  ACCOUNT: '/myPage/account',
+  WITHDRAWAL: '/myPage/withdrawal',
+  ADDRESS: '/myPage/address',
+  HISTORY: '/myPage/history',
 };
 
 export default PATH;
