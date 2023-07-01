@@ -1,14 +1,12 @@
 import { useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
-import { getIdFromPath } from 'utils';
-
 const useCurrentItem = queryFn => {
   const { pathname } = useLocation();
 
   const { data: items } = useQuery(queryFn());
 
-  const currentItem = items?.find(item => item.id === getIdFromPath(pathname));
+  const currentItem = items?.find(item => `${item.id}` === pathname.split('/').at(-1));
 
   return currentItem;
 };

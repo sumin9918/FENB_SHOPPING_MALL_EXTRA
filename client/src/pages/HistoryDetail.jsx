@@ -1,19 +1,15 @@
-import { useLocation } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-
 import { Group, Image, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 import { RxDividerVertical } from 'react-icons/rx';
 
 import { ProductItem } from 'components/History';
 import { historyQuery } from 'api/query';
+import { useCurrentItem } from 'hooks';
 import { PAYMENT_METHODS } from 'constants';
 
 const HistoryDetail = () => {
   const { colors, colorScheme } = useMantineTheme();
 
-  const { pathname } = useLocation();
-  const { data: histories } = useQuery(historyQuery());
-  const currentHistory = histories?.find(history => history.id === pathname.split('/').at(-1));
+  const currentHistory = useCurrentItem(historyQuery);
 
   const {
     id,
