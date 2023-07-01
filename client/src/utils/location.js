@@ -8,3 +8,5 @@ export const getDecodeSearch = search => {
     searchValue,
   };
 };
+
+export const getIdFromPath = pathname => +pathname.split('/').at(-1);

@@ -2,16 +2,17 @@ import { useState } from 'react';
 
 import { Container, Stack, Group, Image, Title, Text } from '@mantine/core';
 
+import { productsQuery } from 'src/api/query';
 import { Info, CartButton, WishListButton } from 'components/Products';
-import { useMediaQuery } from 'hooks';
-import { useCurrentProduct, useIsSignInRef } from 'hooks/products';
+import { useMediaQuery, useCurrentItem } from 'hooks';
+import { useIsSignInRef } from 'hooks/products';
 
 const MEDIAQUERY_WIDTH = 768;
 
 const Products = () => {
   const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
 
-  const currentProduct = useCurrentProduct();
+  const currentProduct = useCurrentItem(productsQuery);
   const { imgURL, description, brand, name } = currentProduct;
 
   const [currentSelectedSize, setCurrentSelectedSize] = useState(-1);
