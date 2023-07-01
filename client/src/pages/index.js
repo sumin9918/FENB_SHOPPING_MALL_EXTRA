@@ -14,3 +14,4 @@ export { default as Account } from './Account';
 export { default as Withdrawal } from './Withdrawal';
 export { default as Address } from './Address';
 export { default as History } from './History';
+export { default as HistoryDetail } from './HistoryDetail';

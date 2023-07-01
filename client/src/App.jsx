@@ -31,6 +31,7 @@ import {
   Account,
   Address,
   Withdrawal,
+  HistoryDetail,
 } from './pages';
 
 const router = createHashRouter([
@@ -113,6 +114,11 @@ const router = createHashRouter([
             path: PATH.HISTORY,
             loader: historyLoader,
             element: <PrivateRoute element={<History />} redirectTo={PATH.SIGNIN} />,
+          },
+          {
+            path: `${PATH.HISTORY}/:id`,
+            loader: historyLoader,
+            element: <PrivateRoute element={<HistoryDetail />} redirectTo={PATH.SIGNIN} />,
           },
         ],
       },
