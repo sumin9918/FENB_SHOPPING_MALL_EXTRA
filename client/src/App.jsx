@@ -107,7 +107,7 @@ const router = createHashRouter([
           },
           {
             path: PATH.ADDRESS,
-            loader: userLoader,
+            loader: addressesLoader,
             element: <PrivateRoute element={<Address />} redirectTo={PATH.SIGNIN} />,
           },
           {
