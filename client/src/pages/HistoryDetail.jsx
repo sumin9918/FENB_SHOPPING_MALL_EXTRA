@@ -27,12 +27,16 @@ const HistoryDetail = () => {
 
   return (
     <Stack pb="2rem" px="0.8rem" spacing="3.2rem" w="100%">
-      <Title fz="2.4rem" mb="3.2rem" pb="2rem" sx={{ borderBottom: `2px solid ${colors.gray[8]}` }}>
-        구매내역
+      <Title
+        fz="2.4rem"
+        mb="3.2rem"
+        pb="2rem"
+        sx={{ borderBottom: `2px solid ${colorScheme === 'dark' ? colors.gray[6] : colors.gray[8]}` }}>
+        구매상세
       </Title>
 
       <Stack spacing={0}>
-        <Group c={colors.gray[7]} fw="bold" fz="1.8rem" pb="3.2rem">
+        <Group c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'} fw="bold" fz="1.8rem" pb="3.2rem">
           <Text>{customOrderDate}</Text>
           <RxDividerVertical />
           <Text>주문번호 : {id}</Text>

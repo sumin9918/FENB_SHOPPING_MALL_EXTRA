@@ -4,7 +4,7 @@ import { Filter, Product } from 'components/History';
 import { useFilteredHistories } from 'hooks/history';
 
 const History = () => {
-  const { colors } = useMantineTheme();
+  const { colors, colorScheme } = useMantineTheme();
 
   const { filteredHistories, setMonth } = useFilteredHistories();
 
@@ -14,7 +14,11 @@ const History = () => {
 
   return (
     <Stack pb="2rem" px="0.8rem" spacing="3.2rem" w="100%">
-      <Title fz="2.4rem" mb="3.2rem" pb="2rem" sx={{ borderBottom: `2px solid ${colors.gray[8]}` }}>
+      <Title
+        fz="2.4rem"
+        mb="3.2rem"
+        pb="2rem"
+        sx={{ borderBottom: `2px solid ${colorScheme === 'dark' ? colors.gray[6] : colors.gray[8]}` }}>
         구매내역
       </Title>
       <Filter handleMonthClick={handleMonthClick} />

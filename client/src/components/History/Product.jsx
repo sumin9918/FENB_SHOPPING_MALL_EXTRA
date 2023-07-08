@@ -18,8 +18,12 @@ const Product = ({ history: { id, orderDate, discountedTotalPrice, products } })
   };
 
   return (
-    <Stack py="1.2rem" spacing="3.2rem" sx={{ borderBottom: `1px solid ${colors.gray[4]}` }} w="100%">
-      <Group c={colors.gray[7]} fz="1.4rem">
+    <Stack
+      py="1.2rem"
+      spacing="3.2rem"
+      sx={{ borderBottom: `1px solid ${colorScheme === 'dark' ? colors.gray[6] : colors.gray[4]}` }}
+      w="100%">
+      <Group c={colorScheme === 'dark' ? 'gray.5' : 'gray.7'} fz="1.4rem">
         <Text>{customOrderDate}</Text>
         <RxDividerVertical />
         <Text>주문번호 : {id}</Text>
@@ -27,7 +31,7 @@ const Product = ({ history: { id, orderDate, discountedTotalPrice, products } })
         <Text>{discountedTotalPrice} 원</Text>
       </Group>
       {products.map(product => (
-        <Group key={`${product.id}-${product.selectedSize}`} align="flex-start" position="apart" pr="2rem">
+        <Group key={`${product.id}-${product.selectedSize}`} align="flex-start" pb="2rem" position="apart" pr="2rem">
           <ProductItem product={product} />
           <Button
             color={colorScheme === 'dark' ? 'gray.2' : 'dark'}
