@@ -15,10 +15,9 @@ import {
   Center,
   Container,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { FaHome } from 'react-icons/fa';
 
-import { addressSchema } from 'src/schema';
 import { FormAddressInput, FormInput, FormPhoneInput } from 'components/Sign';
 import { useAddresses } from 'hooks/address';
 import {
@@ -27,6 +26,8 @@ import {
   useRemoveAddressMutation,
   useUpdateAddress,
 } from 'hooks/mutation';
+import { addressSchema } from 'schema';
+import { MEDIAQUERY_WIDTH } from 'constants';
 
 const Address = () => {
   const { colors, colorScheme } = useMantineTheme();
@@ -178,8 +179,10 @@ const Address = () => {
   );
 };
 
+// Order page의 Address component와 유사함
 const InputAddress = ({ close, addressId, resetAddressId }) => {
-  const { colors, colorScheme } = useMantineTheme();
+  const { colors } = useMantineTheme();
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
 
   const currentAddress =
     useAddresses({ select: addresses => addresses.find(({ id }) => id === addressId.current) }) ?? {};
@@ -208,7 +211,7 @@ const InputAddress = ({ close, addressId, resetAddressId }) => {
   };
 
   return (
-    <Container miw="45rem">
+    <Container miw={matches ? '45rem' : '32rem'}>
       <form noValidate onSubmit={handleSubmit(handleAddressSubmit)}>
         <FormInput
           formState={formState}

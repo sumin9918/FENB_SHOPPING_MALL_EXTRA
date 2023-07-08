@@ -3,11 +3,12 @@ import { RxDividerVertical } from 'react-icons/rx';
 
 import { ProductItem } from 'components/History';
 import { historyQuery } from 'api/query';
-import { useCurrentItem } from 'hooks';
-import { PAYMENT_METHODS } from 'constants';
+import { useCurrentItem, useMediaQuery } from 'hooks';
+import { PAYMENT_METHODS, MEDIAQUERY_WIDTH } from 'constants';
 
 const HistoryDetail = () => {
   const { colors, colorScheme } = useMantineTheme();
+  const matches = useMediaQuery(`(min-width: ${MEDIAQUERY_WIDTH}px)`);
 
   const currentHistory = useCurrentItem(historyQuery);
 
@@ -36,13 +37,21 @@ const HistoryDetail = () => {
       </Title>
 
       <Stack spacing={0}>
-        <Group c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'} fw="bold" fz="1.8rem" pb="3.2rem">
-          <Text>{customOrderDate}</Text>
-          <RxDividerVertical />
-          <Text>주문번호 : {id}</Text>
-          <RxDividerVertical />
-          <Text>{discountedTotalPrice} 원</Text>
-        </Group>
+        {matches ? (
+          <Group c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'} fw="bold" fz="1.8rem" pb="3.2rem">
+            <Text>{customOrderDate}</Text>
+            <RxDividerVertical />
+            <Text>주문번호 : {id}</Text>
+            <RxDividerVertical />
+            <Text>{discountedTotalPrice} 원</Text>
+          </Group>
+        ) : (
+          <Stack c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'} fw="bold" fz="1.6rem" pb="2.4rem">
+            <Text>{customOrderDate}</Text>
+            <Text>주문번호 : {id}</Text>
+            <Text>{discountedTotalPrice} 원</Text>
+          </Stack>
+        )}
 
         <Stack
           py="3.2rem"
