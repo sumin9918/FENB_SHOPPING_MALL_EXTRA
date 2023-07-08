@@ -36,7 +36,11 @@ const Withdrawal = () => {
 
   return (
     <Stack pb="2rem" px="0.8rem" spacing="3.2rem" w="100%">
-      <Title fz="2.4rem" mb="3.2rem" pb="2rem" sx={{ borderBottom: `2px solid ${colors.gray[8]}` }}>
+      <Title
+        fz="2.4rem"
+        mb="3.2rem"
+        pb="2rem"
+        sx={{ borderBottom: `2px solid ${colorScheme === 'dark' ? colors.gray[6] : colors.gray[8]}` }}>
         회원탈퇴
       </Title>
       <Stack spacing="3rem">
