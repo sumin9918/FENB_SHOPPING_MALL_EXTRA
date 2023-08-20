@@ -100,14 +100,13 @@
 </div>
 
 - form validation
-
 - 로그인한 유저만 접근가능한 페이지 : 장바구니, 관심상품, 결제 페이지
 - 로그인한 유저만 접근가능한 기능 : 쿠폰 발급, 장바구니 상품 추가, 관심상품 추가, 결제 진행
 
 ## Sign up
 
 <div>
-  <img width="100%" alt="회원가입 페이지" src="https://github.com/tenenger7125/FENB_SHOPPING_MALL_EXTRA/assets/88726990/ff32bd18-2b97-4ee8-ac43-184efb40d965" /> 
+  <img width="100%" alt="회원가입 페이지" src="https://github.com/tenenger7125/FENB_SHOPPING_MALL_EXTRA/assets/88726990/52d9765e-1432-4192-89d4-8c21393c7e74" /> 
 </div>
 
 - form validation
